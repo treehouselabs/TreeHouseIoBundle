@@ -18,9 +18,9 @@
     "php":                                ">=5.5",
     "psr/log":                            "~1.0",
     "symfony/symfony":                    "~2.6",
+    "symfony/monolog-bundle":             "~2.6",
     "doctrine/orm":                       "~2.3",
     "doctrine/doctrine-bundle":           "~1.2",
-    "symfony/monolog-bundle":             "~2.6",
     "pk/command-extra-bundle":            "~1.0",
     "treehouselabs/feeder":               "dev-master as 1.0"
   },
