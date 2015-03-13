@@ -64,13 +64,11 @@ abstract class AbstractScraperType implements ScraperTypeInterface
             'number_locale',
             'default_values',
         ]);
-        $resolver->setAllowedValues([
-            'date_locale'   => ['en', 'nl'],
-            'number_locale' => ['en', 'nl'],
-        ]);
-        $resolver->setAllowedTypes([
-            'default_values' => 'array',
-        ]);
+
+        $resolver->setAllowedValues('date_locale', ['en', 'nl']);
+        $resolver->setAllowedValues('number_locale', ['en', 'nl']);
+        $resolver->setAllowedTypes('default_values', 'array');
+
         $resolver->setDefaults([
             'date_locale'    => 'en',
             'number_locale'  => 'en',

@@ -3,7 +3,7 @@
 namespace TreeHouse\IoBundle\Bridge\WorkerBundle\Tests\Executor;
 
 use Psr\Log\LogLevel;
-use Symfony\Component\HttpKernel\Log\NullLogger;
+use Psr\Log\NullLogger;
 use TreeHouse\IoBundle\Exception\SourceLinkException;
 use TreeHouse\IoBundle\Exception\SourceProcessException;
 use TreeHouse\IoBundle\Bridge\WorkerBundle\Executor\SourceProcessExecutor;

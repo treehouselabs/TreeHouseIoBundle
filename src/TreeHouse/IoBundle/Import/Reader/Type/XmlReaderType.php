@@ -20,12 +20,12 @@ class XmlReaderType implements ReaderTypeInterface
             'remove_control_characters',
             'remove_byte_order_marks',
         ]);
-        $resolver->setAllowedTypes([
-            'forced'                    => 'bool',
-            'partial'                   => 'bool',
-            'remove_control_characters' => 'bool',
-            'remove_byte_order_marks'   => 'bool',
-        ]);
+
+        $resolver->setAllowedTypes('forced', 'bool');
+        $resolver->setAllowedTypes('partial', 'bool');
+        $resolver->setAllowedTypes('remove_control_characters', 'bool');
+        $resolver->setAllowedTypes('remove_byte_order_marks', 'bool');
+
         $resolver->setDefaults([
             'remove_control_characters' => true,
             'remove_byte_order_marks'   => true,

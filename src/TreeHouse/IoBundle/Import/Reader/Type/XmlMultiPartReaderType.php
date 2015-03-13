@@ -46,10 +46,10 @@ class XmlMultiPartReaderType extends XmlReaderType
             'part_size',
             'node_name',
         ]);
-        $resolver->setAllowedTypes([
-            'part_size' => 'integer',
-            'node_name' => 'string',
-        ]);
+
+        $resolver->setAllowedTypes('part_size', 'integer');
+        $resolver->setAllowedTypes('node_name', 'string');
+
         $resolver->setDefaults([
             'part_size' => $this->defaultPartSize,
         ]);

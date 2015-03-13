@@ -45,16 +45,15 @@ abstract class AbstractFeedType implements FeedTypeInterface
             'number_locale',
             'default_values',
         ]);
-        $resolver->setAllowedValues([
-            'date_locale'   => ['en', 'nl'],
-            'number_locale' => ['en', 'nl'],
-        ]);
-        $resolver->setAllowedTypes([
-            'forced'         => 'bool',
-            'origin'         => OriginInterface::class,
-            'feed'           => Feed::class,
-            'default_values' => 'array',
-        ]);
+
+        $resolver->setAllowedValues('date_locale', ['en', 'nl']);
+        $resolver->setAllowedValues('number_locale', ['en', 'nl']);
+
+        $resolver->setAllowedTypes('forced', 'bool');
+        $resolver->setAllowedTypes('origin', OriginInterface::class);
+        $resolver->setAllowedTypes('feed', Feed::class);
+        $resolver->setAllowedTypes('default_values', 'array');
+
         $resolver->setDefaults([
             'forced'         => false,
             'date_locale'    => 'en',
