@@ -1,0 +1,20 @@
+{% extends "TreeHouseIoBundle:Feed:base.xml.twig" %}
+{% from 'TreeHouseIoBundle:Macro:feed.xml.twig' import simple_node, cdata_node %}
+
+{% block body %}
+  {% spaceless %}
+    <episode id="{{ item.id }}">
+      {{ simple_node('number', item.number) }}
+      {{ simple_node('title', item.title) }}
+      {{ simple_node('summary', item.summary) }}
+      {{ cdata_node('body', item.body) }}
+      {{ simple_node('duration', item.duration) }}
+      {{ simple_node('image-url', item.imageUrl) }}
+      {{ simple_node('audio-url', item.audioUrl) }}
+      {{ simple_node('datetime-published', item.datetimePublished) }}
+      <author id="{{ item.author.id|escape('html_attr') }}">
+        {{- item.author.name -}}
+      </author>
+    </episode>
+  {% endspaceless %}
+{% endblock %}

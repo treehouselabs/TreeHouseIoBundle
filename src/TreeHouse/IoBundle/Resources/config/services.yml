@@ -1,0 +1,30 @@
+parameters:
+  tree_house.io.event_dispatcher.class: Symfony\Component\EventDispatcher\EventDispatcher
+  tree_house.io.listener.import_removal.class: TreeHouse\IoBundle\EventListener\ImportRemovalListener
+  tree_house.io.listener.source_modification.class: TreeHouse\IoBundle\EventListener\SourceModificationListener
+  tree_house.io.twig.extension.common.class: TreeHouse\IoBundle\Twig\CommonExtension
+
+services:
+  tree_house.io.event_dispatcher:
+    class: %tree_house.io.event_dispatcher.class%
+
+  tree_house.io.listener.import_removal:
+    class: %tree_house.io.listener.import_removal.class%
+    arguments:
+      - @tree_house.io.import.import_storage
+      - @?tree_house.io.import.item_logger
+    tags:
+      - { name: doctrine.event_listener, event: preRemove, lazy: true }
+
+  tree_house.io.listener.source_modification:
+    class: %tree_house.io.listener.source_modification.class%
+    arguments:
+      - @tree_house.io.source_processor
+      - @tree_house.io.event_dispatcher
+    tags:
+      - { name: doctrine.event_listener, event: onFlush, lazy: true }
+
+  tree_house.io.twig.extension.common:
+    class: %tree_house.io.twig.extension.common.class%
+    tags:
+      - { name: twig.extension }

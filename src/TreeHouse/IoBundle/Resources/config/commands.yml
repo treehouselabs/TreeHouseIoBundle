@@ -1,0 +1,115 @@
+parameters:
+  tree_house.io.command.feed.list.class: TreeHouse\IoBundle\Command\FeedListCommand
+  tree_house.io.command.feed.inspect.class: TreeHouse\IoBundle\Command\FeedInspectCommand
+  tree_house.io.command.import.close.class: TreeHouse\IoBundle\Command\ImportCloseCommand
+  tree_house.io.command.import.run.class: TreeHouse\IoBundle\Command\ImportRunCommand
+  tree_house.io.command.import.part.class: TreeHouse\IoBundle\Command\ImportPartCommand
+  tree_house.io.command.import.schedule.class: TreeHouse\IoBundle\Command\ImportScheduleCommand
+  tree_house.io.command.import.reschedule.class: TreeHouse\IoBundle\Command\ImportRescheduleCommand
+  tree_house.io.command.import.rotate.class: TreeHouse\IoBundle\Command\ImportRotateCommand
+  tree_house.io.command.import.cleanup.class: TreeHouse\IoBundle\Command\ImportCleanupCommand
+  tree_house.io.command.export.create.class: TreeHouse\IoBundle\Command\ExportCreateCommand
+  tree_house.io.command.export.cache_clear.class: TreeHouse\IoBundle\Command\ExportCacheClearCommand
+  tree_house.io.command.source.process.class: TreeHouse\IoBundle\Command\SourceProcessCommand
+  tree_house.io.command.source.cleanup.class: TreeHouse\IoBundle\Command\SourceCleanupCommand
+
+services:
+  tree_house.io.command.feed.list:
+    class: %tree_house.io.command.feed.list.class%
+    arguments:
+      - @doctrine
+    tags:
+      - { name: console.command }
+
+  tree_house.io.command.feed.inspect:
+    class: %tree_house.io.command.feed.inspect.class%
+    tags:
+      - { name: console.command }
+
+  tree_house.io.command.import.close:
+    class: %tree_house.io.command.import.close.class%
+    arguments:
+      - @doctrine
+    tags:
+      - { name: console.command }
+
+  tree_house.io.command.import.run:
+    class: %tree_house.io.command.import.run.class%
+    arguments:
+      - @doctrine
+      - @tree_house.io.import.import_factory
+      - @logger
+    tags:
+      - { name: console.command }
+
+  tree_house.io.command.import.part:
+    class: %tree_house.io.command.import.part.class%
+    arguments:
+      - @doctrine
+      - @tree_house.io.import.import_factory
+      - @logger
+    tags:
+      - { name: console.command }
+
+  tree_house.io.command.import.schedule:
+    class: %tree_house.io.command.import.schedule.class%
+    arguments:
+      - @tree_house.io.import.import_factory
+      - @tree_house.io.import.import_scheduler
+    tags:
+      - { name: console.command }
+
+  tree_house.io.command.import.reschedule:
+    class: %tree_house.io.command.import.reschedule.class%
+    arguments:
+      - @tree_house.io.import.import_scheduler
+      - @tree_house.io.import.processor.posix
+    tags:
+      - { name: console.command }
+
+  tree_house.io.command.import.rotate:
+    class: %tree_house.io.command.import.rotate.class%
+    arguments:
+      - @doctrine
+      - @tree_house.io.import.import_rotator
+    tags:
+      - { name: console.command }
+
+  tree_house.io.command.import.cleanup:
+    class: %tree_house.io.command.import.cleanup.class%
+    arguments:
+      - @doctrine
+      - @tree_house.io.import.import_rotator
+    tags:
+      - { name: console.command }
+
+  tree_house.io.command.export.create:
+    class: %tree_house.io.command.export.create.class%
+    arguments:
+      - @tree_house.io.export.feed_exporter
+    tags:
+      - { name: console.command }
+
+  tree_house.io.command.export.cache_clear:
+    class: %tree_house.io.command.export.cache_clear.class%
+    arguments:
+      - @tree_house.io.export.feed_exporter
+    tags:
+      - { name: console.command }
+
+  tree_house.io.command.source.process:
+    class: %tree_house.io.command.source.process.class%
+    arguments:
+      - @tree_house.io.source_manager
+      - @tree_house.io.source_processor
+    tags:
+      - { name: console.command }
+
+  tree_house.io.command.source.cleanup:
+    class: %tree_house.io.command.source.cleanup.class%
+    arguments:
+      - @tree_house.io.source_cleaner
+      - @tree_house.io.origin_manager
+      - @logger
+    tags:
+      - { name: console.command }

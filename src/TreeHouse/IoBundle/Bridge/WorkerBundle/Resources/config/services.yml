@@ -1,0 +1,40 @@
+parameters:
+  tree_house.io.worker.listener.source_modification.class: TreeHouse\IoBundle\Bridge\WorkerBundle\EventListener\SourceModificationListener
+  tree_house.io.queue.executor.export_item.class: TreeHouse\IoBundle\Bridge\WorkerBundle\Executor\ExportItemExecutor
+  tree_house.io.queue.executor.import_part.class: TreeHouse\IoBundle\Bridge\WorkerBundle\Executor\ImportPartExecutor
+  tree_house.io.queue.executor.source_process.class: TreeHouse\IoBundle\Bridge\WorkerBundle\Executor\SourceProcessExecutor
+
+services:
+  tree_house.io.worker.listener.source_modification:
+    class: %tree_house.io.worker.listener.source_modification.class%
+    arguments:
+      - @fm_worker.queue_manager
+    tags:
+      - { name: tree_house.io.event_listener, event: io.source.process }
+
+  tree_house.io.worker.executor.export_item:
+    class: %tree_house.io.queue.executor.export_item.class%
+    arguments:
+      - @tree_house.io.export.feed_exporter
+      - @doctrine
+    tags:
+      - { name: fm_worker.queue.job_executor }
+
+  tree_house.io.worker.executor.import_part:
+    class: %tree_house.io.queue.executor.import_part.class%
+    arguments:
+      - @doctrine
+      - @tree_house.io.import.import_factory
+      - @logger
+    tags:
+      - { name: fm_worker.queue.job_executor }
+
+  tree_house.io.worker.executor.source_process:
+    class: %tree_house.io.queue.executor.source_process.class%
+    arguments:
+      - @tree_house.io.source_manager
+      - @tree_house.io.source_processor
+      - @logger
+    tags:
+      - { name: fm_worker.queue.job_executor }
+      - { name: monolog.logger, channel: source_process }

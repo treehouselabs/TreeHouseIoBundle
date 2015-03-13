@@ -1,0 +1,14 @@
+{% from 'TreeHouseIoBundle:Macro:feed.xml.twig' import simple_node, multiple_node %}
+{% autoescape false %}
+{% block body %}
+{#
+
+Example:
+
+  <item id="{{ item.id }}">
+    {{ simple_node('status', item.status) }}
+    {{ multiple_node('groups', 'group', item.groups) }}
+  </item>
+#}
+{% endblock %}
+{% endautoescape %}

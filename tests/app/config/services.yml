@@ -1,0 +1,37 @@
+services:
+  origin_manager:
+    class: TreeHouse\IoIntegrationBundle\Origin\OriginManager
+    arguments:
+      - @doctrine
+
+  source_manager:
+    class: TreeHouse\IoIntegrationBundle\Source\SourceManager
+    arguments:
+      - @doctrine
+
+  source_processor:
+    class: TreeHouse\IoIntegrationBundle\Source\SourceProcessor
+    arguments:
+      - @doctrine
+    tags:
+      - { name: tree_house.io.source_processor }
+
+  feed_type_itunes_podcast:
+    class: TreeHouse\IoIntegrationBundle\Import\Feed\Type\ItunesPodcastFeedType
+    arguments:
+      - @doctrine
+      - @tree_house.io.source.manager.import
+    tags:
+      - { name: tree_house.io.feed_type, alias: itunes_podcast }
+
+  export_type:
+    class: TreeHouse\IoIntegrationBundle\Export\Feed\Type\PodcastFeedType
+    arguments:
+      - @doctrine
+    tags:
+      - { name: tree_house.io.export.feed_type, alias: podcast }
+
+  redis:
+    class: Redis
+    calls:
+      - ['connect', ['localhost']]

@@ -1,0 +1,56 @@
+{
+  "name": "treehouselabs/io-bundle",
+  "type": "symfony-bundle",
+  "description": "Bundle that facilitates importing/exporting data",
+  "keywords": ["import","export","feed"],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Peter Kruithof",
+      "email": "peter@treehouse.nl"
+    },
+    {
+      "name": "Jeroen Fiege",
+      "email": "jeroen@treehouse.nl"
+    }
+  ],
+  "require": {
+    "php":                                ">=5.5",
+    "psr/log":                            "~1.0",
+    "symfony/symfony":                    "~2.6",
+    "doctrine/orm":                       "~2.3",
+    "doctrine/doctrine-bundle":           "~1.2",
+    "symfony/monolog-bundle":             "~2.6",
+    "pk/command-extra-bundle":            "~1.0",
+    "treehouselabs/feeder":               "dev-master as 1.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit":                    "~4.1",
+    "doctrine/doctrine-fixtures-bundle":  "~2.2",
+    "sensio/distribution-bundle":         "~3.0",
+    "predis/predis":                      "~1.0",
+    "pixel418/markdownify":               "~2.1",
+    "ezyang/htmlpurifier":                "~4.5",
+    "fm/worker-bundle":                   "~0.3"
+  },
+  "suggest": {
+    "pk/markdownify-bundle":        "To integrate Markdownify in your Symfony application",
+    "exercise/htmlpurifier-bundle": "To integrate HtmlPurifier in your Symfony application"
+  },
+  "autoload": {
+    "psr-4": {
+      "TreeHouse\\IoBundle\\": "src/TreeHouse/IoBundle/"
+    }
+  },
+  "scripts": {
+    "post-install-cmd": [
+      "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap"
+    ],
+    "post-update-cmd": [
+      "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap"
+    ]
+  },
+  "extra": {
+    "symfony-app-dir": "tests/app"
+  }
+}

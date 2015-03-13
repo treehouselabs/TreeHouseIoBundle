@@ -1,0 +1,78 @@
+
+### feed
+###
+feed:
+  fields:
+    id: ID
+    type: Type
+    url: Url
+    transport_config: Url
+    number_locale: Prijsnotatie
+    frequency: Frequentie
+    partial: Feed aanbod
+    handler: Indeling
+    origin: Bron
+    supplier: Leverancier
+    reader_type: Reader type
+    importer_type: Importer type
+  choices:
+    handler:
+    partial:
+      0: Compleet
+      1: Gedeeltelijk
+    number_locale:
+      nl: "Nederlands (€ 1.234,56)"
+      en: "Engels (€ 1,234.56)"
+    frequency:
+      0:  Nooit
+      1:  Elk uur
+      2:  Elke 2 uur
+      4:  Elke 4 uur
+      6:  Elke 6 uur
+      8:  Elke 8 uur
+      12: Elke 12 uur
+      24: Elke 24 uur
+
+
+### import
+###
+import:
+  fields:
+    id: Id
+    origin: Bron
+    feed: Bron
+    total_number_of_items: Totaal
+    number_of_processed_items: Verwerkt
+    number_of_skipped_items: Overgeslagen
+    number_of_successful_items: Success
+    number_of_failed_items: Mislukt
+    datetime_scheduled: Gepland
+    datetime_started: Gestart op
+    datetime_ended: Geëindigd op
+
+
+### origin
+###
+origin:
+  fields:
+    id:       ID
+    name:     Naam
+    title:    Titel
+    priority: Prioriteit
+    realtor:  Makelaar
+
+
+### source
+###
+source:
+  fields:
+    id: ID
+    origin: Bron
+    original_id: Bron-id
+    original_url: Original url
+    data: Geïmporteerde data
+    blocked: Geblokkeerd
+    property: Woning
+    listing: Advertentie
+    datetime_modified: Laatst bewerkt
+    datetime_last_visited: Laatst bezocht

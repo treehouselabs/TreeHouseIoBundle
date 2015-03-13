@@ -1,0 +1,8 @@
+/composer.phar
+/composer.lock
+/tests/app/cache
+/tests/app/logs
+/tests/app/var
+/tests/app/bootstrap.php.cache
+/tests/app/data.db3
+/vendor/

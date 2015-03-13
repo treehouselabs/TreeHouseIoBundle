@@ -1,0 +1,55 @@
+{% macro simple_node(node_name, value) %}
+{% from _self import node_value %}
+{% spaceless %}
+{% autoescape false %}
+  {% if value is null %}
+    <{{ node_name }} xsi:nil="true"/>
+  {% else %}
+    <{{ node_name }}>
+      {{- node_value(value) -}}
+    </{{ node_name }}>
+  {% endif %}
+{% endautoescape %}
+{% endspaceless %}
+{% endmacro %}
+
+{% macro multiple_node(node_name, item_name, value, mapper) %}
+{% from _self import node_value %}
+{% spaceless %}
+{% autoescape false %}
+  {% if value is null %}
+    <{{ node_name }} xsi:nil="true"/>
+  {% elseif value|length == 0 %}
+    <{{ node_name }}/>
+  {% else %}
+    <{{ node_name }}>
+      {% for val in value %}
+        <{{ item_name }}>
+        {{- node_value(val) -}}
+        </{{ item_name }}>
+      {% endfor %}
+    </{{ node_name }}>
+  {% endif %}
+{% endautoescape %}
+{% endspaceless %}
+{% endmacro %}
+
+{% macro cdata_node(node_name, value) %}
+{% from _self import node_value %}
+{% spaceless %}
+{% autoescape false %}
+  <{{ node_name }}>
+    <![CDATA[ {{- node_value(value) -}} ]]>
+  </{{ node_name }}>
+{% endautoescape %}
+{% endspaceless %}
+{% endmacro %}
+
+{% macro node_value(value) %}
+{% spaceless %}
+  {% if value is date %}
+    {% set value = value|date('c') %}
+  {% endif %}
+  {{ value }}
+{% endspaceless %}
+{% endmacro %}

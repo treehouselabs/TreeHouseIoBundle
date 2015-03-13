@@ -1,0 +1,53 @@
+imports:
+  - { resource: services.yml }
+  - { resource: parameters.yml }
+
+framework:
+  secret:          %secret%
+  router:          { resource: "%kernel.root_dir%/config/routing_test.yml" }
+  form:            true
+  csrf_protection: true
+  validation:      { enable_annotations: true }
+  templating:      { engines: ['twig'] }
+  profiler:        { only_exceptions: false }
+  test:            ~
+  session:
+    storage_id:    session.storage.filesystem
+
+twig:
+  debug:            %kernel.debug%
+  strict_variables: %kernel.debug%
+
+# Doctrine Configuration
+doctrine:
+  dbal:
+    driver:   pdo_sqlite
+    dbname:   io
+    logging:  %kernel.debug%
+    path:     "%kernel.root_dir%/data.db3"
+    charset:  UTF8
+
+  orm:
+    auto_mapping: true
+    naming_strategy: doctrine.orm.naming_strategy.underscore
+    resolve_target_entities:
+      TreeHouse\IoBundle\Model\OriginInterface: TreeHouse\IoIntegrationBundle\Entity\Origin
+      TreeHouse\IoBundle\Model\SourceInterface: TreeHouse\IoIntegrationBundle\Entity\Source
+
+monolog:
+  handlers:
+    main:
+      type:  stream
+      path:  %kernel.logs_dir%/%kernel.environment%.log
+      level: debug
+    console:
+      type:     console
+      channels: !doctrine
+
+tree_house_io:
+  origin_manager_id: origin_manager
+  source_manager_id: source_manager
+  import:
+    item_logger:
+      type: redis
+      client: redis
