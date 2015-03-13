@@ -14,11 +14,18 @@ class HtmlToMarkdownTransformer implements TransformerInterface
     protected $converter;
 
     /**
-     * @param Converter $converter
+     * @var \HTMLPurifier
      */
-    public function __construct(Converter $converter)
+    protected $purifier;
+
+    /**
+     * @param Converter     $converter
+     * @param \HTMLPurifier $purifier
+     */
+    public function __construct(Converter $converter, \HTMLPurifier $purifier)
     {
         $this->converter = $converter;
+        $this->purifier  = $purifier;
     }
 
     /**
@@ -39,6 +46,9 @@ class HtmlToMarkdownTransformer implements TransformerInterface
                 sprintf('Expected a string to transform, got %s instead', json_encode($value))
             );
         }
+
+        // purify the html first
+        $value = $this->purifier->purify($value);
 
         // replace non-breaking spaces, somehow this results in a question mark when markdownifying
         $value = str_replace(['&nbsp;', "\xC2\xA0"], ' ', $value);

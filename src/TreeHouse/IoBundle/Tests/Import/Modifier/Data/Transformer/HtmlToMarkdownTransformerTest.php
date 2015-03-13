@@ -4,7 +4,6 @@ namespace TreeHouse\IoBundle\Tests\Import\Modifier\Data\Transformer;
 
 use Markdownify\ConverterExtra;
 use Symfony\Component\Finder\Finder;
-use Symfony\Component\Yaml\Yaml;
 use TreeHouse\IoBundle\Item\Modifier\Data\Transformer\HtmlToMarkdownTransformer;
 
 class HtmlToMarkdownTransformerTest extends \PHPUnit_Framework_TestCase
@@ -15,25 +14,13 @@ class HtmlToMarkdownTransformerTest extends \PHPUnit_Framework_TestCase
     public function testTransform($markdownPath, $htmlPath)
     {
         $markdownify = new ConverterExtra(false, false, false);
-        $transformer = new HtmlToMarkdownTransformer($markdownify);
+        $purifier    = new \HTMLPurifier($this->getPurifierConfig());
+
+        $transformer = new HtmlToMarkdownTransformer($markdownify, $purifier);
 
         $html = trim(file_get_contents($htmlPath));
         $expected = trim(file_get_contents($markdownPath));
 
-        $config = Yaml::parse(<<<YAML
-Attr.AllowedClasses: []
-AutoFormat.AutoParagraph: true
-AutoFormat.RemoveEmpty: true
-AutoFormat.RemoveEmpty.RemoveNbsp: true
-AutoFormat.RemoveSpansWithoutAttributes: true
-Core.RemoveProcessingInstructions: true
-Cache.SerializerPermissions: 0775
-HTML.Allowed: 'div,p,span,br,em,strong,b,i,small,cite,blockquote,q,code,var,samp,kbd,dfn,abbr,sup,sub,h1,h2,h3,ul,li'
-HTML.Doctype: 'HTML 4.01 Strict'
-YAML
-        );
-
-        $html = (new \HTMLPurifier($config))->purify($html);
         $actual = $transformer->transform($html);
 
         $this->assertEquals($expected, $actual);
@@ -56,5 +43,23 @@ YAML
         }
 
         return $retval;
+    }
+
+    /**
+     * @return array
+     */
+    protected function getPurifierConfig()
+    {
+        return [
+            'Attr.AllowedClasses'                     => [],
+            'AutoFormat.AutoParagraph'                => true,
+            'AutoFormat.RemoveEmpty'                  => true,
+            'AutoFormat.RemoveEmpty.RemoveNbsp'       => true,
+            'AutoFormat.RemoveSpansWithoutAttributes' => true,
+            'Core.RemoveProcessingInstructions'       => true,
+            'Cache.SerializerPermissions'             => 0775,
+            'HTML.Allowed'                            => 'div,p,span,br,em,strong,b,i,small,cite,blockquote,q,code,var,samp,kbd,dfn,abbr,sup,sub,h1,h2,h3,ul,li',
+            'HTML.Doctype'                            => 'HTML 4.01 Strict',
+        ];
     }
 }

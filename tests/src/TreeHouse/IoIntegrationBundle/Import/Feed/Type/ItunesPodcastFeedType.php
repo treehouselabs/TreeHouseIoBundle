@@ -15,6 +15,7 @@ use TreeHouse\IoBundle\Import\Feed\FeedBuilderInterface;
 use TreeHouse\IoBundle\Import\Feed\FeedItemBag;
 use TreeHouse\IoBundle\Import\Feed\Type\DefaultFeedType;
 use TreeHouse\IoBundle\Item\Modifier\Data\Transformer\HtmlToMarkdownTransformer;
+use TreeHouse\IoBundle\Item\Modifier\Data\Transformer\PurifiedHtmlTransformer;
 use TreeHouse\IoIntegrationBundle\Entity\Author;
 
 class ItunesPodcastFeedType extends DefaultFeedType
@@ -103,7 +104,7 @@ class ItunesPodcastFeedType extends DefaultFeedType
 
         $this->addTransformerBetween(
             $builder,
-            new HtmlToMarkdownTransformer(new ConverterExtra()),
+            new HtmlToMarkdownTransformer(new ConverterExtra(), new \HTMLPurifier($this->getPurifierConfig())),
             'body',
             3000,
             3500
@@ -201,5 +202,23 @@ class ItunesPodcastFeedType extends DefaultFeedType
     protected function getEntityMetadata()
     {
         return $this->doctrine->getManager()->getClassMetadata('TreeHouseIoIntegrationBundle:Episode');
+    }
+
+    /**
+     * @return array
+     */
+    protected function getPurifierConfig()
+    {
+        return [
+            'Attr.AllowedClasses'                     => [],
+            'AutoFormat.AutoParagraph'                => true,
+            'AutoFormat.RemoveEmpty'                  => true,
+            'AutoFormat.RemoveEmpty.RemoveNbsp'       => true,
+            'AutoFormat.RemoveSpansWithoutAttributes' => true,
+            'Core.RemoveProcessingInstructions'       => true,
+            'Cache.SerializerPermissions'             => 0775,
+            'HTML.Allowed'                            => 'div,p,span,br,em,strong,b,i,small,cite,blockquote,q,code,var,samp,kbd,dfn,abbr,sup,sub,h1,h2,h3,ul,li',
+            'HTML.Doctype'                            => 'HTML 4.01 Strict',
+        ];
     }
 }
