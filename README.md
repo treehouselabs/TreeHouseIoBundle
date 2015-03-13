@@ -4,6 +4,8 @@ io-bundle
 Bundle that facilitates importing/exporting data
 
 [![Build Status](https://travis-ci.org/treehouselabs/TreeHouseIoBundle.svg)](https://travis-ci.org/treehouselabs/TreeHouseIoBundle)
+[![Code Coverage](https://scrutinizer-ci.com/g/treehouselabs/TreeHouseIoBundle/badges/coverage.png)](https://scrutinizer-ci.com/g/treehouselabs/TreeHouseIoBundle/)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/treehouselabs/TreeHouseIoBundle/badges/quality-score.png)](https://scrutinizer-ci.com/g/treehouselabs/TreeHouseIoBundle/)
 
 ## Documentation
 
