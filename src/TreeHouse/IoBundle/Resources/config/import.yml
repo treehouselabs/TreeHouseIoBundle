@@ -49,6 +49,7 @@ services:
     class: %tree_house.io.import.feed_type.class%
     abstract: true
     arguments:
+      - @doctrine
       - @tree_house.io.source.manager.import
 
   tree_house.io.import.handler.doctrine:

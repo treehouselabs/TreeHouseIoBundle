@@ -8,6 +8,8 @@ parameters:
 services:
   tree_house.io.event_dispatcher:
     class: %tree_house.io.event_dispatcher.class%
+    arguments:
+      - @service_container
 
   tree_house.io.listener.import_removal:
     class: %tree_house.io.listener.import_removal.class%
