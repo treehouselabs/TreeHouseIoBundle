@@ -4,6 +4,7 @@ namespace TreeHouse\IoBundle\Command;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use TreeHouse\IoBundle\Entity\ImportPart;
 use TreeHouse\IoBundle\Import\ImportScheduler;
@@ -39,7 +40,8 @@ class ImportRescheduleCommand extends Command
     protected function configure()
     {
         $this->setName('io:import:reschedule');
-        $this->setDescription('Reschedules import parts that have started, but not finished.');
+        $this->addOption('import', 'i', InputOption::VALUE_OPTIONAL, 'A specific import you want to reschedule parts for');
+        $this->setDescription('Reschedules eligible import parts');
     }
 
     /**
@@ -47,13 +49,19 @@ class ImportRescheduleCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln('Rescheduling parts that have started, but not finished');
-        $parts = $this->scheduler->findUnfinishedParts();
-        $this->scheduleParts($parts, $output);
+        if ($importId = $input->getOption('import')) {
+            $output->writeln(sprintf('Rescheduling parts for import <info>%s</info>', $importId));
+            $parts = $this->scheduler->findPartsByImportId($importId);
+            $this->scheduleParts($parts, $output);
+        } else {
+            $output->writeln('Rescheduling parts that have started, but not finished');
+            $parts = $this->scheduler->findUnfinishedParts();
+            $this->scheduleParts($parts, $output);
 
-        $output->writeln('Rescheduling parts that should have started, but didn\'t');
-        $parts = $this->scheduler->findOverdueParts();
-        $this->scheduleParts($parts, $output);
+            $output->writeln('Rescheduling parts that should have started, but didn\'t');
+            $parts = $this->scheduler->findOverdueParts();
+            $this->scheduleParts($parts, $output);
+        }
     }
 
     /**
