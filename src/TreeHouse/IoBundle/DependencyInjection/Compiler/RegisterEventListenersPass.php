@@ -4,7 +4,6 @@ namespace TreeHouse\IoBundle\DependencyInjection\Compiler;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Reference;
 
 class RegisterEventListenersPass implements CompilerPassInterface
 {
@@ -34,7 +33,7 @@ class RegisterEventListenersPass implements CompilerPassInterface
                     $event['method'] = 'on'.str_replace(' ', '', ucwords(strtr(preg_replace('/^tree_house.io\./', '', $event['event']), '_-.', '   ')));
                 }
 
-                $definition->addMethodCall('addListener', [$event['event'], [new Reference($id), $event['method']]]);
+                $definition->addMethodCall('addListenerService', [$event['event'], [$id, $event['method']]]);
             }
         }
     }
