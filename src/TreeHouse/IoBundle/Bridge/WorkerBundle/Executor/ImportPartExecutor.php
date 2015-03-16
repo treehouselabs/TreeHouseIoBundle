@@ -8,6 +8,7 @@ use FM\WorkerBundle\Queue\JobExecutor;
 use FM\WorkerBundle\Queue\ObjectPayloadInterface;
 use Psr\Log\LoggerInterface;
 use TreeHouse\IoBundle\Entity\ImportPart;
+use TreeHouse\IoBundle\EventListener\ImportLoggingSubscriber;
 use TreeHouse\IoBundle\Import\ImportFactory;
 
 /**
@@ -42,6 +43,8 @@ class ImportPartExecutor extends JobExecutor implements LoggerAggregate, ObjectP
         $this->doctrine      = $doctrine;
         $this->importFactory = $importFactory;
         $this->logger        = $logger;
+
+        $importFactory->getEventDispatcher()->addSubscriber(new ImportLoggingSubscriber($logger));
     }
 
     /**

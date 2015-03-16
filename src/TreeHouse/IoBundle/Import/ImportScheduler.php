@@ -41,6 +41,8 @@ class ImportScheduler
     }
 
     /**
+     * Finds a feed by id
+     *
      * @param integer $id
      *
      * @return Feed
@@ -51,6 +53,8 @@ class ImportScheduler
     }
 
     /**
+     * Finds all feeds, with id's as keys and priorities as values
+     *
      * @return array<integer, integer>
      */
     public function findAll()
@@ -66,6 +70,8 @@ class ImportScheduler
     }
 
     /**
+     * Finds given feeds, with id's as keys and priorities as values
+     *
      * @param array $ids
      *
      * @return array<integer, integer>
@@ -84,6 +90,8 @@ class ImportScheduler
     }
 
     /**
+     * Finds eligible feeds, with id's as keys and priorities as values
+     *
      * @param integer $minutes
      *
      * @return array<integer, integer>
@@ -132,7 +140,7 @@ class ImportScheduler
         $delta = ($cycleMinutes - $totalTime) / $importsInCycle;
         if ($diff < $delta) {
             // delta not yet passed
-            return;
+            return null;
         }
 
         // how many should we import?
@@ -145,6 +153,14 @@ class ImportScheduler
 
         // return the number of feeds we can schedule
         return array_slice($feeds, 0, $numberOfFeeds, true);
+    }
+
+    /**
+     * @return ImportPart[]
+     */
+    public function findPartsByImportId($importId)
+    {
+        return $this->getImportPartRepository()->findBy(['import' => $importId]);
     }
 
     /**
