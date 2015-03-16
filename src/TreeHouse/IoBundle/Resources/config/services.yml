@@ -2,6 +2,7 @@ parameters:
   tree_house.io.event_dispatcher.class: Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher
   tree_house.io.listener.import_removal.class: TreeHouse\IoBundle\EventListener\ImportRemovalListener
   tree_house.io.listener.source_modification.class: TreeHouse\IoBundle\EventListener\SourceModificationListener
+  tree_house.io.listener.source_raw_data.class: TreeHouse\IoBundle\EventListener\SourceRawDataListener
   tree_house.io.twig.extension.common.class: TreeHouse\IoBundle\Twig\CommonExtension
 
 services:
@@ -23,6 +24,13 @@ services:
       - @tree_house.io.event_dispatcher
     tags:
       - { name: doctrine.event_listener, event: onFlush, lazy: true }
+
+  tree_house.io.listener.source_raw_data:
+    class: %tree_house.io.listener.source_raw_data.class%
+    tags:
+      - { name: tree_house.io.event_listener, event: feeder.feed.resource_pre_serialize, method: onResourcePreSerialize }
+      - { name: tree_house.io.event_listener, event: io.import.item.success, method: onItemSuccess }
+      - { name: tree_house.io.event_listener, event: io.import.item.finish, method: onItemFinish }
 
   tree_house.io.twig.extension.common:
     class: %tree_house.io.twig.extension.common.class%

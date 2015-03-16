@@ -78,20 +78,20 @@ interface SourceInterface
     public function getData();
 
     /**
-     * Set source data
+     * Set raw source data
      *
-     * @param string $data
+     * @param string $rawData
      *
      * @return SourceInterface
      */
-    public function setSourceData($data);
+    public function setRawData($rawData);
 
     /**
-     * Get source data
+     * Get raw source data
      *
      * @return array
      */
-    public function getSourceData();
+    public function getRawData();
 
     /**
      * Set messages
@@ -124,6 +124,13 @@ interface SourceInterface
      * @return Feed
      */
     public function getFeed();
+
+    /**
+     * Get origin
+     *
+     * @return OriginInterface
+     */
+    public function getOrigin();
 
     /**
      * Set datetimeCreated

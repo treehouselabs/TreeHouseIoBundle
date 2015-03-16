@@ -34,9 +34,9 @@ class SourceMock implements SourceInterface
     protected $data;
 
     /**
-     * @var string $sourceData
+     * @var string $rawData
      */
-    protected $sourceData;
+    protected $rawData;
 
     /**
      * @var array $messages
@@ -161,9 +161,9 @@ class SourceMock implements SourceInterface
     /**
      * @inheritdoc
      */
-    public function setSourceData($data)
+    public function setRawData($data)
     {
-        $this->sourceData = $data;
+        $this->rawData = $data;
 
         return $this;
     }
@@ -171,9 +171,9 @@ class SourceMock implements SourceInterface
     /**
      * @inheritdoc
      */
-    public function getSourceData()
+    public function getRawData()
     {
-        return $this->sourceData;
+        return $this->rawData;
     }
 
     /**
@@ -264,5 +264,13 @@ class SourceMock implements SourceInterface
     public function getFeed()
     {
         return $this->feed;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getOrigin()
+    {
+        return $this->feed->getOrigin();
     }
 }

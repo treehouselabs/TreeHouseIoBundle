@@ -57,7 +57,7 @@ class Source implements SourceInterface
      *
      * @ORM\Column(type="text", nullable=true)
      */
-    protected $sourceData;
+    protected $rawData;
 
     /**
      * @var array
@@ -67,6 +67,8 @@ class Source implements SourceInterface
     protected $messages;
 
     /**
+     * @var Feed
+     *
      * @ORM\ManyToOne(targetEntity="TreeHouse\IoBundle\Entity\Feed", inversedBy="sources")
      */
     protected $feed;
@@ -196,9 +198,9 @@ class Source implements SourceInterface
     /**
      * @inheritdoc
      */
-    public function setSourceData($sourceData)
+    public function setRawData($rawData)
     {
-        $this->sourceData = $sourceData;
+        $this->rawData = $rawData;
 
         return $this;
     }
@@ -206,9 +208,9 @@ class Source implements SourceInterface
     /**
      * @inheritdoc
      */
-    public function getSourceData()
+    public function getRawData()
     {
-        return $this->sourceData;
+        return $this->rawData;
     }
 
     /**
@@ -245,6 +247,14 @@ class Source implements SourceInterface
     public function getFeed()
     {
         return $this->feed;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getOrigin()
+    {
+        return $this->feed->getOrigin();
     }
 
     /**

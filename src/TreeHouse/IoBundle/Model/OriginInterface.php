@@ -19,7 +19,7 @@ interface OriginInterface
      *
      * @param string $name
      *
-     * @return OriginInterface
+     * @return $this
      */
     public function setName($name);
 
@@ -35,7 +35,7 @@ interface OriginInterface
      *
      * @param string $title
      *
-     * @return OriginInterface
+     * @return $this
      */
     public function setTitle($title);
 
@@ -51,7 +51,7 @@ interface OriginInterface
      *
      * @param integer $priority
      *
-     * @return OriginInterface
+     * @return $this
      */
     public function setPriority($priority);
 
@@ -67,7 +67,7 @@ interface OriginInterface
      *
      * @param Feed $feeds
      *
-     * @return OriginInterface
+     * @return $this
      */
     public function addFeed(Feed $feeds);
 
@@ -86,29 +86,4 @@ interface OriginInterface
      * @return Collection|Feed[]
      */
     public function getFeeds();
-
-    /**
-     * Add sources
-     *
-     * @param SourceInterface $sources
-     *
-     * @return OriginInterface
-     */
-    public function addSource(SourceInterface $sources);
-
-    /**
-     * Remove sources
-     *
-     * @param SourceInterface $sources
-     *
-     * @return void
-     */
-    public function removeSource(SourceInterface $sources);
-
-    /**
-     * Get sources
-     *
-     * @return Collection|SourceInterface[]
-     */
-    public function getSources();
 }

@@ -6,7 +6,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use TreeHouse\IoBundle\Entity\Feed;
 use TreeHouse\IoBundle\Model\OriginInterface;
-use TreeHouse\IoBundle\Model\SourceInterface;
 
 /**
  * @ORM\Entity
@@ -51,19 +50,11 @@ class Origin implements OriginInterface
     protected $feeds;
 
     /**
-     * @var ArrayCollection|Source[]
-     *
-     * @ORM\OneToMany(targetEntity="TreeHouse\IoIntegrationBundle\Entity\Source", mappedBy="origin", cascade={"persist", "remove"})
-     */
-    protected $sources;
-
-    /**
      * Constructor
      */
     public function __construct()
     {
         $this->feeds   = new ArrayCollection();
-        $this->sources = new ArrayCollection();
     }
 
     /**
@@ -164,31 +155,5 @@ class Origin implements OriginInterface
     public function getFeeds()
     {
         return $this->feeds;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function addSource(SourceInterface $sources)
-    {
-        $this->sources[] = $sources;
-
-        return $this;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function removeSource(SourceInterface $sources)
-    {
-        $this->sources->removeElement($sources);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getSources()
-    {
-        return $this->sources;
     }
 }

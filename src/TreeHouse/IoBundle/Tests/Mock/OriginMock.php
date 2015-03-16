@@ -6,7 +6,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use TreeHouse\IoBundle\Entity\Feed;
 use TreeHouse\IoBundle\Model\OriginInterface;
-use TreeHouse\IoBundle\Model\SourceInterface;
 
 class OriginMock implements OriginInterface
 {
@@ -36,22 +35,16 @@ class OriginMock implements OriginInterface
     protected $feeds;
 
     /**
-     * @var Collection|SourceInterface[]
-     */
-    protected $sources;
-
-    /**
      * @param integer $id
      */
     public function __construct($id)
     {
         $this->id      = $id;
         $this->feeds   = new ArrayCollection();
-        $this->sources = new ArrayCollection();
     }
 
     /**
-     * @inherit
+     * @inheritdoc
      */
     public function getId()
     {
@@ -59,7 +52,7 @@ class OriginMock implements OriginInterface
     }
 
     /**
-     * @inherit
+     * @inheritdoc
      */
     public function setName($name)
     {
@@ -69,7 +62,7 @@ class OriginMock implements OriginInterface
     }
 
     /**
-     * @inherit
+     * @inheritdoc
      */
     public function getName()
     {
@@ -77,7 +70,7 @@ class OriginMock implements OriginInterface
     }
 
     /**
-     * @inherit
+     * @inheritdoc
      */
     public function setTitle($title)
     {
@@ -87,7 +80,7 @@ class OriginMock implements OriginInterface
     }
 
     /**
-     * @inherit
+     * @inheritdoc
      */
     public function getTitle()
     {
@@ -95,7 +88,7 @@ class OriginMock implements OriginInterface
     }
 
     /**
-     * @inherit
+     * @inheritdoc
      */
     public function setPriority($priority)
     {
@@ -105,7 +98,7 @@ class OriginMock implements OriginInterface
     }
 
     /**
-     * @inherit
+     * @inheritdoc
      */
     public function getPriority()
     {
@@ -113,7 +106,7 @@ class OriginMock implements OriginInterface
     }
 
     /**
-     * @inherit
+     * @inheritdoc
      */
     public function addFeed(Feed $feeds)
     {
@@ -123,7 +116,7 @@ class OriginMock implements OriginInterface
     }
 
     /**
-     * @inherit
+     * @inheritdoc
      */
     public function removeFeed(Feed $feeds)
     {
@@ -131,36 +124,10 @@ class OriginMock implements OriginInterface
     }
 
     /**
-     * @inherit
+     * @inheritdoc
      */
     public function getFeeds()
     {
         return $this->feeds;
-    }
-
-    /**
-     * @inherit
-     */
-    public function addSource(SourceInterface $sources)
-    {
-        $this->sources[] = $sources;
-
-        return $this;
-    }
-
-    /**
-     * @inherit
-     */
-    public function removeSource(SourceInterface $sources)
-    {
-        $this->sources->removeElement($sources);
-    }
-
-    /**
-     * @inherit
-     */
-    public function getSources()
-    {
-        return $this->sources;
     }
 }
