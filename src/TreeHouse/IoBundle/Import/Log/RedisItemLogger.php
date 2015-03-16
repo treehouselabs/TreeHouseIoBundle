@@ -2,6 +2,8 @@
 
 namespace TreeHouse\IoBundle\Import\Log;
 
+use TreeHouse\IoBundle\Entity\Import;
+
 class RedisItemLogger extends AbstractItemLogger
 {
     /**
@@ -15,6 +17,23 @@ class RedisItemLogger extends AbstractItemLogger
     public function __construct(\Redis $redis)
     {
         $this->redis = $redis;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getImportedItems(Import $import)
+    {
+        $ident = $this->getLogIdent($import);
+
+        $cursor = null;
+        do {
+            $items = $this->redis->hScan($ident, $cursor);
+
+            foreach ($items as $item) {
+                yield json_decode($item, true);
+            }
+        } while ($cursor > 0);
     }
 
     /**

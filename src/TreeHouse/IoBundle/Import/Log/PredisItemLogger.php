@@ -3,6 +3,7 @@
 namespace TreeHouse\IoBundle\Import\Log;
 
 use Predis\Client as Predis;
+use TreeHouse\IoBundle\Entity\Import;
 
 class PredisItemLogger extends AbstractItemLogger
 {
@@ -17,6 +18,23 @@ class PredisItemLogger extends AbstractItemLogger
     public function __construct(Predis $predis)
     {
         $this->predis = $predis;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getImportedItems(Import $import)
+    {
+        $ident = $this->getLogIdent($import);
+
+        $cursor = null;
+        do {
+            $items = $this->predis->hscan($ident, $cursor);
+
+            foreach ($items as $item) {
+                yield json_decode($item, true);
+            }
+        } while ($cursor > 0);
     }
 
     /**

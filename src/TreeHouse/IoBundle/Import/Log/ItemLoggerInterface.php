@@ -29,4 +29,11 @@ interface ItemLoggerInterface extends EventSubscriberInterface
      * @param Import $import
      */
     public function removeLog(Import $import);
+
+    /**
+     * @param Import $import
+     *
+     * @return \Generator
+     */
+    public function getImportedItems(Import $import);
 }
