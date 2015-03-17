@@ -47,14 +47,16 @@ class HtmlToMarkdownTransformer implements TransformerInterface
             );
         }
 
-        // purify the html first
-        $value = $this->purifier->purify($value);
-
         // replace non-breaking spaces, somehow this results in a question mark when markdownifying
         $value = str_replace(['&nbsp;', "\xC2\xA0"], ' ', $value);
 
+        // remove leading spaces/tabs
+        $value = preg_replace('/^[ \t]+/m', '', $value);
+
+        // purify the html first
+        $value = $this->purifier->purify($value);
+
         $replacements = [
-            ['/^[ \t]+/m',                       ''],             # remove leading spaces/tabs
             [['/>\s+</', '/\s+<\//'],            ['><', '</']],   # remove whitespace/newlines between tags: this can cause
                                                                   # trailing whitespace after markdownifying
             [['/\s+<br\/?>/', '/<br\/?>\s+/'],   '<br>'],         # also remove whitespace/newlines around <br> tags
