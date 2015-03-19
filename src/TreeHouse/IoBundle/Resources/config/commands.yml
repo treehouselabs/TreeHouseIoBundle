@@ -10,6 +10,8 @@ parameters:
   tree_house.io.command.import.cleanup.class: TreeHouse\IoBundle\Command\ImportCleanupCommand
   tree_house.io.command.export.create.class: TreeHouse\IoBundle\Command\ExportCreateCommand
   tree_house.io.command.export.cache_clear.class: TreeHouse\IoBundle\Command\ExportCacheClearCommand
+  tree_house.io.command.export.inspect.class: TreeHouse\IoBundle\Command\ExportInspectCommand
+  tree_house.io.command.export.validate.class: TreeHouse\IoBundle\Command\ExportValidateCommand
   tree_house.io.command.source.process.class: TreeHouse\IoBundle\Command\SourceProcessCommand
   tree_house.io.command.source.cleanup.class: TreeHouse\IoBundle\Command\SourceCleanupCommand
 
@@ -92,6 +94,20 @@ services:
 
   tree_house.io.command.export.cache_clear:
     class: %tree_house.io.command.export.cache_clear.class%
+    arguments:
+      - @tree_house.io.export.feed_exporter
+    tags:
+      - { name: console.command }
+
+  tree_house.io.command.export.inspect:
+    class: %tree_house.io.command.export.inspect.class%
+    arguments:
+      - @tree_house.io.export.feed_exporter
+    tags:
+      - { name: console.command }
+
+  tree_house.io.command.export.validate:
+    class: %tree_house.io.command.export.validate.class%
     arguments:
       - @tree_house.io.export.feed_exporter
     tags:
