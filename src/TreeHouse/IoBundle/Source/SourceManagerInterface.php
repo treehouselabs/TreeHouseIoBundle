@@ -3,6 +3,7 @@
 namespace TreeHouse\IoBundle\Source;
 
 use TreeHouse\IoBundle\Entity\Feed;
+use TreeHouse\IoBundle\Entity\Scraper;
 use TreeHouse\IoBundle\Entity\SourceRepository;
 use TreeHouse\IoBundle\Model\SourceInterface;
 
@@ -23,14 +24,24 @@ interface SourceManagerInterface
     public function findById($sourceId);
 
     /**
-     * Finds source object for a given original id
+     * Finds source object for a given feed and original id
      *
      * @param Feed    $feed
      * @param integer $originalId
      *
      * @return SourceInterface
      */
-    public function findSource(Feed $feed, $originalId);
+    public function findSourceByFeed(Feed $feed, $originalId);
+
+    /**
+     * Finds source object for a given scraper and original url
+     *
+     * @param Scraper $scraper
+     * @param string  $originalId
+     *
+     * @return SourceInterface
+     */
+    public function findSourceByScraper(Scraper $scraper, $originalId);
 
     /**
      * Finds source object for a given original id, optionally creates a new one if a source cannot be found
@@ -41,7 +52,18 @@ interface SourceManagerInterface
      *
      * @return SourceInterface
      */
-    public function findSourceOrCreate(Feed $feed, $originalId, $originalUrl = null);
+    public function findSourceByFeedOrCreate(Feed $feed, $originalId, $originalUrl = null);
+
+    /**
+     * Finds source object for a given original id, optionally creates a new one if a source cannot be found
+     *
+     * @param Scraper $scraper
+     * @param string  $originalId
+     * @param string  $originalUrl
+     *
+     * @return SourceInterface
+     */
+    public function findSourceByScraperOrCreate(Scraper $scraper, $originalId, $originalUrl);
 
     /**
      * Persists a (new) source

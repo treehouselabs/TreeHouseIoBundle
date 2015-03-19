@@ -21,6 +21,8 @@
     "symfony/monolog-bundle":             "~2.6",
     "doctrine/orm":                       "~2.3",
     "doctrine/doctrine-bundle":           "~1.2",
+    "guzzlehttp/guzzle":                  "~5.0",
+    "fzaninotto/faker":                   "~1.2",
     "pk/command-extra-bundle":            "~1.0",
     "treehouselabs/feeder":               "dev-master as 1.0"
   },

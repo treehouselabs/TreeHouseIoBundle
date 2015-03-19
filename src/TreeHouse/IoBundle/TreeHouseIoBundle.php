@@ -11,6 +11,9 @@ use TreeHouse\IoBundle\DependencyInjection\Compiler\RegisterImporterTypesPass;
 use TreeHouse\IoBundle\DependencyInjection\Compiler\RegisterImportHandlersPass;
 use TreeHouse\IoBundle\DependencyInjection\Compiler\RegisterImportProcessorsPass;
 use TreeHouse\IoBundle\DependencyInjection\Compiler\RegisterReaderTypesPass;
+use TreeHouse\IoBundle\DependencyInjection\Compiler\RegisterScrapeCrawlersPass;
+use TreeHouse\IoBundle\DependencyInjection\Compiler\RegisterScrapeHandlersPass;
+use TreeHouse\IoBundle\DependencyInjection\Compiler\RegisterScrapeParserTypesPass;
 use TreeHouse\IoBundle\DependencyInjection\Compiler\RegisterSourceCleanersPass;
 use TreeHouse\IoBundle\DependencyInjection\Compiler\RegisterSourceProcessorsPass;
 
@@ -25,6 +28,9 @@ class TreeHouseIoBundle extends Bundle
         $container->addCompilerPass(new RegisterImporterTypesPass());
         $container->addCompilerPass(new RegisterImportHandlersPass());
         $container->addCompilerPass(new RegisterImportProcessorsPass());
+        $container->addCompilerPass(new RegisterScrapeParserTypesPass());
+        $container->addCompilerPass(new RegisterScrapeCrawlersPass());
+        $container->addCompilerPass(new RegisterScrapeHandlersPass());
         $container->addCompilerPass(new RegisterSourceProcessorsPass());
         $container->addCompilerPass(new RegisterSourceCleanersPass());
     }

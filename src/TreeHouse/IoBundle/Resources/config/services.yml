@@ -1,6 +1,6 @@
 parameters:
   tree_house.io.event_dispatcher.class: Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher
-  tree_house.io.listener.import_removal.class: TreeHouse\IoBundle\EventListener\ImportRemovalListener
+  tree_house.io.listener.import_removal.class: TreeHouse\IoBundle\Import\EventListener\ImportRemovalListener
   tree_house.io.listener.source_modification.class: TreeHouse\IoBundle\EventListener\SourceModificationListener
   tree_house.io.listener.source_raw_data.class: TreeHouse\IoBundle\EventListener\SourceRawDataListener
   tree_house.io.twig.extension.common.class: TreeHouse\IoBundle\Twig\CommonExtension

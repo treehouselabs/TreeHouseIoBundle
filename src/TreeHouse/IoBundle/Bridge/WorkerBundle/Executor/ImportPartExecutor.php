@@ -8,7 +8,7 @@ use FM\WorkerBundle\Queue\JobExecutor;
 use FM\WorkerBundle\Queue\ObjectPayloadInterface;
 use Psr\Log\LoggerInterface;
 use TreeHouse\IoBundle\Entity\ImportPart;
-use TreeHouse\IoBundle\EventListener\ImportLoggingSubscriber;
+use TreeHouse\IoBundle\Import\EventListener\ImportLoggingSubscriber;
 use TreeHouse\IoBundle\Import\ImportFactory;
 
 /**

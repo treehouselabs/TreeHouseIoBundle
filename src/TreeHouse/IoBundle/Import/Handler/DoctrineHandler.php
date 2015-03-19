@@ -37,7 +37,7 @@ class DoctrineHandler implements HandlerInterface
     public function handle(FeedItemBag $item)
     {
         // get source and set the data to it
-        $source = $this->sourceManager->findSourceOrCreate(
+        $source = $this->sourceManager->findSourceByFeedOrCreate(
             $item->getFeed(),
             $item->getOriginalId(),
             $item->getOriginalUrl()

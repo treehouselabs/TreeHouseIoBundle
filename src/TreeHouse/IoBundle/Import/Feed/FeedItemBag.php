@@ -26,18 +26,18 @@ class FeedItemBag extends ItemBag
     }
 
     /**
-     * @return Feed
-     */
-    public function getFeed()
-    {
-        return $this->feed;
-    }
-
-    /**
      * @return string
      */
     public function __toString()
     {
         return sprintf('%s:%s', $this->feed->getOrigin()->getName(), $this->originalId);
+    }
+
+    /**
+     * @return Feed
+     */
+    public function getFeed()
+    {
+        return $this->feed;
     }
 }

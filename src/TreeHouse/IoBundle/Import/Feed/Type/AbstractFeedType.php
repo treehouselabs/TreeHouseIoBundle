@@ -14,7 +14,6 @@ use TreeHouse\IoBundle\Item\Modifier\Item\Filter\ModifiedItemFilter;
 use TreeHouse\IoBundle\Item\Modifier\Item\Mapper\FeedItemBagMapper;
 use TreeHouse\IoBundle\Item\Modifier\Item\Transformer as IoTransformer;
 use TreeHouse\IoBundle\Item\Modifier\Item\Validator\OriginIdValidator;
-use TreeHouse\IoBundle\Model\OriginInterface;
 use TreeHouse\IoBundle\Source\Manager\ImportSourceManager;
 
 abstract class AbstractFeedType implements FeedTypeInterface
@@ -39,7 +38,6 @@ abstract class AbstractFeedType implements FeedTypeInterface
     {
         $resolver->setRequired([
             'forced',
-            'origin',
             'feed',
             'date_locale',
             'number_locale',
@@ -50,7 +48,6 @@ abstract class AbstractFeedType implements FeedTypeInterface
         $resolver->setAllowedValues('number_locale', ['en', 'nl']);
 
         $resolver->setAllowedTypes('forced', 'bool');
-        $resolver->setAllowedTypes('origin', OriginInterface::class);
         $resolver->setAllowedTypes('feed', Feed::class);
         $resolver->setAllowedTypes('default_values', 'array');
 
@@ -134,7 +131,7 @@ abstract class AbstractFeedType implements FeedTypeInterface
                 return new \DateTime($date);
             }
 
-            return;
+            return null;
         };
     }
 

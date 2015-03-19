@@ -1,19 +1,15 @@
 <?php
 
-namespace FM\IoBundle\Scrape\Modifier\Item\Mapper;
+namespace TreeHouse\IoBundle\Scrape\Modifier\Item\Mapper;
 
-use FM\IoBundle\Entity\Scraper;
-use FM\IoBundle\Scrape\Model\ScrapedItemBag;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpFoundation\ParameterBag;
+use TreeHouse\Feeder\Exception\TransformationFailedException;
+use TreeHouse\Feeder\Modifier\Item\Mapper\MapperInterface;
+use TreeHouse\IoBundle\Scrape\ScrapedItemBag;
 
-class ScrapedItemBagMapper implements NodeMapperInterface
+class ScrapedItemBagMapper implements MapperInterface, CrawlerAwareInterface
 {
-    /**
-     * @var Scraper
-     */
-    protected $scraper;
-
     /**
      * @var Crawler
      */
@@ -25,29 +21,36 @@ class ScrapedItemBagMapper implements NodeMapperInterface
     protected $originalIdCallback;
 
     /**
+     * @var \Closure
+     */
+    protected $originalUrlCallback;
+
+    /**
      * @var callable
      */
     protected $modificationDateCallback;
 
     /**
-     * @param Scraper  $scraper
-     * @param string   $originalUrl
      * @param callable $originalIdCallback
+     * @param callable $originalUrlCallback
      * @param callable $modificationDateCallback
      */
-    public function __construct(Scraper $scraper, $originalUrl, $originalIdCallback, $modificationDateCallback)
+    public function __construct($originalIdCallback, $originalUrlCallback, $modificationDateCallback)
     {
         if (!is_callable($originalIdCallback)) {
             throw new \InvalidArgumentException('$originalIdCallback must be a callable');
+        }
+
+        if (!is_callable($originalUrlCallback)) {
+            throw new \InvalidArgumentException('$originalUrlCallback must be a callable');
         }
 
         if (!is_callable($modificationDateCallback)) {
             throw new \InvalidArgumentException('$modificationDateCallback must be a callable');
         }
 
-        $this->scraper                  = $scraper;
-        $this->originalUrl              = $originalUrl;
         $this->originalIdCallback       = $originalIdCallback;
+        $this->originalUrlCallback      = $originalUrlCallback;
         $this->modificationDateCallback = $modificationDateCallback;
     }
 
@@ -64,16 +67,26 @@ class ScrapedItemBagMapper implements NodeMapperInterface
      */
     public function map(ParameterBag $item)
     {
-        $bag = new ScrapedItemBag($this->scraper, $this->originalUrl, $item->all());
+        if (null === $this->crawler) {
+            throw new \LogicException('setCrawler() should be called before map()');
+        }
+
+        if (!$item instanceof ScrapedItemBag) {
+            throw new TransformationFailedException(sprintf('Expected a %s instance', ScrapedItemBag::class));
+        }
+
+        if ($url = call_user_func($this->originalUrlCallback, $this->crawler)) {
+            $item->setOriginalUrl($url);
+        }
 
         if ($id = call_user_func($this->originalIdCallback, $this->crawler)) {
-            $bag->setOriginalId($id);
+            $item->setOriginalId($id);
         }
 
         if ($date = call_user_func($this->modificationDateCallback, $this->crawler)) {
-            $bag->setDatetimeModified($date);
+            $item->setDatetimeModified($date);
         }
 
-        return $bag;
+        return $item;
     }
 }

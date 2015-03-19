@@ -14,7 +14,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use TreeHouse\IoBundle\Entity\Feed;
 use TreeHouse\IoBundle\Entity\FeedRepository;
-use TreeHouse\IoBundle\EventListener\ImportOutputSubscriber;
+use TreeHouse\IoBundle\Import\EventListener\ImportOutputSubscriber;
 use TreeHouse\IoBundle\Import\ImportFactory;
 
 class ImportRunCommand extends Command

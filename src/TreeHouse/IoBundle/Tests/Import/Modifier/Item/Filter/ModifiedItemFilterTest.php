@@ -28,13 +28,13 @@ class ModifiedItemFilterTest extends \PHPUnit_Framework_TestCase
         $this->sourceManager = $this
             ->getMockBuilder(ImportSourceManager::class)
             ->disableOriginalConstructor()
-            ->setMethods(['findSource'])
+            ->setMethods(['findSourceByFeed'])
             ->getMock()
         ;
 
         $this->sourceManager
             ->expects($this->any())
-            ->method('findSource')
+            ->method('findSourceByFeed')
             ->will($this->returnValue($this->source))
         ;
     }

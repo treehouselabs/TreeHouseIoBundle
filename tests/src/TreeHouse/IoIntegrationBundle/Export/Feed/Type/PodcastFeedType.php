@@ -48,6 +48,14 @@ class PodcastFeedType extends AbstractFeedType
     /**
      * @inheritdoc
      */
+    public function getItemNode()
+    {
+        return 'episode';
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function supports($entity)
     {
         return $entity instanceof Episode;

@@ -40,10 +40,10 @@ class FeedExporterTest extends \PHPUnit_Framework_TestCase
             ->method('supports')
             ->willReturn(true);
 
-        $exporter->registerType($type);
+        $exporter->registerType($type, 'some_type');
 
         $this->assertTrue($exporter->hasType('some_type'));
-        $this->assertEquals([$type], $exporter->getTypes());
+        $this->assertEquals(['some_type' => $type], $exporter->getTypes());
         $this->assertEquals($type, $exporter->getType('some_type'));
     }
 
@@ -70,7 +70,7 @@ class FeedExporterTest extends \PHPUnit_Framework_TestCase
             ->method('supports')
             ->willReturn(true);
 
-        $exporter->registerType($type);
+        $exporter->registerType($type, 'some_type');
 
         $finder = new Finder();
         $this->assertEquals(0, $finder->files()->in($this->tmpDir)->count());
