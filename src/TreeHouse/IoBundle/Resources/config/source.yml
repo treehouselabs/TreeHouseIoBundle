@@ -33,6 +33,7 @@ services:
       - @logger
     tags:
       - { name: tree_house.io.source_cleaner }
+      - { name: monolog.logger, channel: io }
 
   tree_house.io.source.processor.delegating:
     class: %tree_house.io.source.processor.delegating.class%

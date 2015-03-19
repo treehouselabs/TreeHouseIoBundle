@@ -5,6 +5,7 @@ namespace TreeHouse\IoBundle\Tests\Export;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use TreeHouse\IoBundle\Export\FeedExporter;
+use TreeHouse\IoBundle\Export\FeedType\FeedTypeInterface;
 use TreeHouse\IoBundle\Export\FeedWriter;
 
 class FeedExporterTest extends \PHPUnit_Framework_TestCase
@@ -31,7 +32,7 @@ class FeedExporterTest extends \PHPUnit_Framework_TestCase
     {
         $exporter = $this->getExporter();
 
-        $type = $this->getMockBuilder('TreeHouse\IoBundle\Export\FeedType\AbstractFeedType')->getMockForAbstractClass();
+        $type = $this->getMockBuilder(FeedTypeInterface::class)->getMockForAbstractClass();
         $type->expects($this->any())
             ->method('getName')
             ->willReturn('some_type');
@@ -48,7 +49,7 @@ class FeedExporterTest extends \PHPUnit_Framework_TestCase
 
     public function testCacheItemWritesAFileToDisk()
     {
-        $writer = $this->getMockBuilder('TreeHouse\IoBundle\Export\FeedWriter')
+        $writer = $this->getMockBuilder(FeedWriter::class)
             ->disableOriginalConstructor()->getMock();
         $writer->expects($this->any())
             ->method('renderEntity')
@@ -61,7 +62,7 @@ class FeedExporterTest extends \PHPUnit_Framework_TestCase
 
         $exporter = $this->getExporter(null, null, $writer);
 
-        $type = $this->getMockBuilder('TreeHouse\IoBundle\Export\FeedType\AbstractFeedType')->getMockForAbstractClass();
+        $type = $this->getMockBuilder(FeedTypeInterface::class)->getMockForAbstractClass();
         $type->expects($this->any())
             ->method('getName')
             ->willReturn('some_type');
@@ -90,7 +91,7 @@ class FeedExporterTest extends \PHPUnit_Framework_TestCase
     protected function getExporter($cacheDir = null, $exportDir = null, $writer = null)
     {
         $writer = $writer ?:
-            $this->getMockBuilder('TreeHouse\IoBundle\Export\FeedWriter')
+            $this->getMockBuilder(FeedWriter::class)
                 ->disableOriginalConstructor()->getMock();
 
         $exporter = new FeedExporter($cacheDir ?: $this->tmpDir, $exportDir ?: $this->tmpDir, $writer, new Filesystem());

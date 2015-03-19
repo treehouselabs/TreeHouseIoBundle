@@ -3,11 +3,12 @@
 namespace TreeHouse\IoBundle\Command;
 
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use TreeHouse\IoBundle\Export\FeedExporter;
-use TreeHouse\IoBundle\Export\FeedType\AbstractFeedType;
+use TreeHouse\IoBundle\Export\FeedType\FeedTypeInterface;
 
 class ExportCacheClearCommand extends Command
 {
@@ -32,7 +33,7 @@ class ExportCacheClearCommand extends Command
     protected function configure()
     {
         $this->setName('io:export:cache:clear');
-        $this->addOption('type', 't', InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY, 'The type(s) to export feeds for. If left empty, feeds for all known types are exported.');
+        $this->addArgument('type', InputArgument::OPTIONAL | InputArgument::IS_ARRAY, 'The type(s) to export feeds for. If left empty, feeds for all known types are exported.');
         $this->addOption('where', null, InputOption::VALUE_OPTIONAL, 'Limit the cache to a specific set of the query, use <comment>x</comment> as root alias');
     }
 
@@ -41,7 +42,9 @@ class ExportCacheClearCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $types = $this->getTypes($input->getOption('type'));
+        $types = $this->getTypes($input->getArgument('type'));
+
+        $output->writeln(sprintf('Clearing cache for types: <info>%s</info>', implode(', ', $input->getArgument('type'))));
 
         foreach ($types as $type) {
             $builder = $type->getQueryBuilder('x');
@@ -50,34 +53,48 @@ class ExportCacheClearCommand extends Command
             }
 
             foreach ($builder->getQuery()->iterate() as list($item)) {
+                $output->writeln(sprintf('Clearing cache for <comment>%s</comment>', $this->itemToString($item)));
                 $this->exporter->clearCache($item, [$type]);
+
+                $builder->getEntityManager()->detach($item);
             }
         }
     }
 
     /**
-     * @param array $inputOption
+     * @param array $types
      *
-     * @return AbstractFeedType[]
-     *
-     * @throws \InvalidArgumentException
+     * @return FeedTypeInterface[]
      */
-    protected function getTypes(array $inputOption)
+    protected function getTypes(array $types)
     {
-        $types = $inputOption;
-
-        if ([] === $types) {
-            $types = $this->exporter->getTypes();
-        } else {
-            foreach ($types as &$type) {
-                if (false === $this->exporter->hasType($type)) {
-                    throw new \InvalidArgumentException(sprintf('%s not supported', $type));
-                }
-
-                $type = $this->exporter->getType($type);
-            }
+        if (empty($types)) {
+            return $this->exporter->getTypes();
         }
 
-        return $types;
+        $result = [];
+        foreach ($types as &$type) {
+            $result[] = $this->exporter->getType($type);
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param object $item
+     *
+     * @return string
+     */
+    private function itemToString($item)
+    {
+        if (method_exists($item, '__toString')) {
+            return (string) $item;
+        }
+
+        if (method_exists($item, 'getId')) {
+            return $item->getId();
+        }
+
+        return spl_object_hash($item);
     }
 }

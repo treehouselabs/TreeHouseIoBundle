@@ -156,7 +156,7 @@ class IdleSourceCleaner implements SourceCleanerInterface
     {
         // we can only have a full import when the feed is not partial
         if ($feed->isPartial()) {
-            return;
+            return null;
         }
 
         $imports = $this->getImportRepository()->findCompletedByFeed($feed);
@@ -184,7 +184,7 @@ class IdleSourceCleaner implements SourceCleanerInterface
 
         // if we have no date for this feed, we can't consider it to be fully imported
         if (empty($dates)) {
-            return;
+            return null;
         }
 
         // return the latest of the dates

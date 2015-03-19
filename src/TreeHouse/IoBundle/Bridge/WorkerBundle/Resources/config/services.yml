@@ -55,4 +55,4 @@ services:
       - @logger
     tags:
       - { name: fm_worker.queue.job_executor }
-      - { name: monolog.logger, channel: source_process }
+      - { name: monolog.logger, channel: io }

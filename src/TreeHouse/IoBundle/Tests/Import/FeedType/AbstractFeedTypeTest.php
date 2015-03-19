@@ -10,10 +10,12 @@ use TreeHouse\Feeder\FeedEvents;
 use TreeHouse\Feeder\Reader\ReaderInterface;
 use TreeHouse\IoBundle\Entity\Feed;
 use TreeHouse\IoBundle\Import\Feed\FeedBuilder;
-use TreeHouse\IoBundle\Import\ImportRegistry;
 use TreeHouse\IoBundle\Import\Feed\FeedItemBag;
+use TreeHouse\IoBundle\Import\ImportRegistry;
 use TreeHouse\IoBundle\Import\Reader\ReaderBuilder;
 use TreeHouse\IoBundle\Import\Feed\TransportFactory;
+use TreeHouse\IoBundle\Item\ItemBag;
+use TreeHouse\IoBundle\Tests\Item\ItemFixture;
 use TreeHouse\IoBundle\Tests\TestCase;
 
 /**
@@ -59,7 +61,7 @@ abstract class AbstractFeedTypeTest extends TestCase
     {
         $this->assertEquals(
             $this->getOriginalId($fixture->getExpectedItem()),
-            $this->getOriginalId($fixture->getItem())
+            $this->getOriginalId($fixture->getActualItem())
         );
     }
 
@@ -70,7 +72,7 @@ abstract class AbstractFeedTypeTest extends TestCase
     {
         $this->assertEquals(
             $this->getOriginalUrl($fixture->getExpectedItem()),
-            $this->getOriginalUrl($fixture->getItem())
+            $this->getOriginalUrl($fixture->getActualItem())
         );
     }
 
@@ -83,7 +85,7 @@ abstract class AbstractFeedTypeTest extends TestCase
         $this->assertOriginalUrl($fixture);
 
         $expected = $fixture->getExpectedItem()->all();
-        $actual   = $fixture->getItem()->all();
+        $actual   = $fixture->getActualItem()->all();
 
         foreach ($expected as $key => $expectedValue) {
             $this->assertArrayHasKey(
@@ -182,8 +184,9 @@ abstract class AbstractFeedTypeTest extends TestCase
      * @param string $name       The fixture name
      * @param string $feedType   The feed type
      *
-     * @return FeedItemBag
      * @throws \RuntimeException
+     *
+     * @return ItemBag
      */
     protected function getActualItemFixture(Feed $feedEntity, $name, $feedType)
     {
@@ -198,7 +201,6 @@ abstract class AbstractFeedTypeTest extends TestCase
         $options = $this->getFeedTypeOptions($feedEntity);
         $feed    = $builder->build($type, $reader, $options);
 
-        /** @var FeedItemBag $item */
         if (null === $item = $feed->getNextItem()) {
             throw new \RuntimeException('Expecting a non-filtered feed item, got nothing.');
         }
@@ -305,21 +307,21 @@ abstract class AbstractFeedTypeTest extends TestCase
     }
 
     /**
-     * @param FeedItemBag $item
+     * @param ItemBag $item
      *
      * @return string
      */
-    protected function getOriginalId(FeedItemBag $item)
+    protected function getOriginalId(ItemBag $item)
     {
         return $item->getOriginalId();
     }
 
     /**
-     * @param FeedItemBag $item
+     * @param ItemBag $item
      *
      * @return string
      */
-    protected function getOriginalUrl(FeedItemBag $item)
+    protected function getOriginalUrl(ItemBag $item)
     {
         return $item->getOriginalUrl();
     }

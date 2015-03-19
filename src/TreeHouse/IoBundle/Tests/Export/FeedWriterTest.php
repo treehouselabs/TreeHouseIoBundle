@@ -35,11 +35,11 @@ class FeedWriterTest extends \PHPUnit_Framework_TestCase
     {
         $writer = $this->getWriter();
 
-        $this->assertFalse($writer->isOpen());
+        $this->assertFalse($writer->isStarted());
 
         $writer->open($this->tmpFile);
 
-        $this->assertTrue($writer->isOpen());
+        $this->assertTrue($writer->isStarted());
     }
 
     /**

@@ -4,6 +4,7 @@ namespace TreeHouse\IoBundle\Command;
 
 use PK\CommandExtraBundle\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -11,7 +12,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use TreeHouse\IoBundle\Event\ExportFeedEvent;
 use TreeHouse\IoBundle\Export\ExportEvents;
 use TreeHouse\IoBundle\Export\FeedExporter;
-use TreeHouse\IoBundle\Export\FeedType\AbstractFeedType;
+use TreeHouse\IoBundle\Export\FeedType\FeedTypeInterface;
 
 class ExportCreateCommand extends Command
 {
@@ -36,7 +37,7 @@ class ExportCreateCommand extends Command
     protected function configure()
     {
         $this->setName('io:export:create');
-        $this->addOption('type', 't', InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY, 'The type(s) to export feeds for. If left empty, feeds for all known types are exported.');
+        $this->addArgument('type', InputArgument::OPTIONAL | InputArgument::IS_ARRAY, 'The type(s) to export feeds for. If left empty, feeds for all known types are exported.');
         $this->addOption('force', 'f', InputOption::VALUE_NONE, 'Whether to force generating of the export and ignore cached versions');
 
         $this->isSingleProcessed();
@@ -47,7 +48,7 @@ class ExportCreateCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $types = $this->getTypes($input->getOption('type'));
+        $types = $this->getTypes($input->getArgument('type'));
 
         $progress = new ProgressBar($output);
         $progress->setFormat('verbose');
@@ -97,28 +98,21 @@ class ExportCreateCommand extends Command
     }
 
     /**
-     * @param array $inputOption
+     * @param array $types
      *
-     * @return AbstractFeedType[]
-     *
-     * @throws \InvalidArgumentException
+     * @return FeedTypeInterface[]
      */
-    protected function getTypes(array $inputOption)
+    protected function getTypes(array $types)
     {
-        $types = $inputOption;
-
-        if ([] === $types) {
-            $types = $this->exporter->getTypes();
-        } else {
-            foreach ($types as &$type) {
-                if (false === $this->exporter->hasType($type)) {
-                    throw new \InvalidArgumentException(sprintf('%s not supported', $type));
-                }
-
-                $type = $this->exporter->getType($type);
-            }
+        if (empty($types)) {
+            return $this->exporter->getTypes();
         }
 
-        return $types;
+        $result = [];
+        foreach ($types as &$type) {
+            $result[] = $this->exporter->getType($type);
+        }
+
+        return $result;
     }
 }

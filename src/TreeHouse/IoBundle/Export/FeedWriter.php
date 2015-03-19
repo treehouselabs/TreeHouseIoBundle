@@ -12,14 +12,19 @@ class FeedWriter
     protected $templating;
 
     /**
-     * @var null|resource
+     * @var string
      */
-    protected $pointer;
+    protected $rootNode;
 
     /**
      * @var string
      */
-    protected $rootNode;
+    protected $itemNode;
+
+    /**
+     * @var null|resource
+     */
+    protected $pointer;
 
     /**
      * @param EngineInterface $templating
@@ -31,14 +36,19 @@ class FeedWriter
 
     /**
      * @param string $filename
+     * @param string $rootNode
+     * @param string $itemNode
      *
      * @throws \RuntimeException
      */
-    public function open($filename)
+    public function start($filename, $rootNode, $itemNode)
     {
-        if ($this->isOpen()) {
-            throw new \RuntimeException('Writer is already open');
+        if ($this->isStarted()) {
+            throw new \RuntimeException('Writer has already started');
         }
+
+        $this->rootNode = $rootNode;
+        $this->itemNode = $itemNode;
 
         $this->pointer = fopen($filename, 'w');
     }
@@ -46,7 +56,7 @@ class FeedWriter
     /**
      * @return boolean
      */
-    public function isOpen()
+    public function isStarted()
     {
         return is_resource($this->pointer);
     }
@@ -54,10 +64,10 @@ class FeedWriter
     /**
      * @throws \RuntimeException
      */
-    public function close()
+    public function finish()
     {
-        if (!$this->isOpen()) {
-            throw new \RuntimeException('Writer is already closed');
+        if (!$this->isStarted()) {
+            throw new \RuntimeException('Writer has not yet started');
         }
 
         fclose($this->pointer);
@@ -66,14 +76,44 @@ class FeedWriter
     }
 
     /**
-     * @param object $item
-     * @param string $template
+     * Writes the XML prolog
      *
-     * @return string
+     * @param string $namespaces
      */
-    public function renderItem($item, $template)
+    public function writeStart($namespaces = '')
     {
-        return $this->templating->render($template, ['item' => $item]);
+        $this->writeContent('<?xml version="1.0" encoding="UTF-8"?>');
+        $this->writeContent(sprintf('<%s%s>', $this->rootNode, rtrim(' ' . $namespaces)));
+    }
+
+    /**
+     * Writes the end part of the XML, closing the rootnode.
+     *
+     * @throws \RuntimeException If open() is not called yet
+     */
+    public function writeEnd()
+    {
+        if (!$this->isStarted()) {
+            throw new \RuntimeException('Writer has not yet started');
+        }
+
+        $this->writeContent(sprintf('</%s>', $this->rootNode));
+
+        $this->rootNode = null;
+    }
+
+    /**
+     * @param string $content
+     *
+     * @throws \RuntimeException
+     */
+    public function writeContent($content)
+    {
+        if (!$this->isStarted()) {
+            throw new \RuntimeException('Writer has not yet started');
+        }
+
+        fwrite($this->pointer, $content);
     }
 
     /**
@@ -88,49 +128,13 @@ class FeedWriter
     }
 
     /**
-     * @param string $content
+     * @param object $item
+     * @param string $template
      *
-     * @throws \RuntimeException
+     * @return string
      */
-    public function writeContent($content)
+    public function renderItem($item, $template)
     {
-        if (!$this->isOpen()) {
-            throw new \RuntimeException('Writer is not open');
-        }
-
-        fwrite($this->pointer, $content);
-    }
-
-    /**
-     * Writes the end part of the XML, closing the rootnode.
-     *
-     * @throws \RuntimeException If open() is not called yet
-     */
-    public function writeEnd()
-    {
-        if (!$this->rootNode) {
-            throw new \RuntimeException('Call writeStart() first');
-        }
-
-        $this->writeContent(sprintf('</%s>', $this->rootNode));
-
-        $this->rootNode = null;
-    }
-
-    /**
-     * Writes the start of the XML: containing the prolog, root node and legend as a comment block
-     *
-     * @param string $rootNode
-     * @param string $namespaces
-     */
-    public function writeStart($rootNode, $namespaces = null)
-    {
-        $this->rootNode = $rootNode;
-
-        // prolog
-        $this->writeContent('<?xml version="1.0" encoding="UTF-8" ?>');
-
-        // root node
-        $this->writeContent(sprintf('<%s%s>', $this->rootNode, rtrim(' ' . $namespaces)));
+        return $this->templating->render($template, ['item' => $item, 'itemNode' => $this->itemNode]);
     }
 }

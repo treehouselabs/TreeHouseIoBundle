@@ -3,7 +3,7 @@
 namespace TreeHouse\IoBundle\Event;
 
 use Symfony\Component\EventDispatcher\Event;
-use TreeHouse\IoBundle\Export\FeedType\AbstractFeedType;
+use TreeHouse\IoBundle\Export\FeedType\FeedTypeInterface;
 
 class ExportFeedEvent extends Event
 {
@@ -18,16 +18,16 @@ class ExportFeedEvent extends Event
     protected $total;
 
     /**
-     * @var AbstractFeedType
+     * @var FeedTypeInterface
      */
     protected $type;
 
     /**
      * @param string           $file
-     * @param AbstractFeedType $type
+     * @param FeedTypeInterface $type
      * @param integer          $total
      */
-    public function __construct($file, AbstractFeedType $type, $total)
+    public function __construct($file, FeedTypeInterface $type, $total)
     {
         $this->file = $file;
         $this->type = $type;
@@ -51,7 +51,7 @@ class ExportFeedEvent extends Event
     }
 
     /**
-     * @return AbstractFeedType
+     * @return FeedTypeInterface
      */
     public function getType()
     {

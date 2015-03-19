@@ -47,8 +47,9 @@ class ImportRegistry
         if (!array_key_exists($name, $this->readerTypes)) {
             throw new \OutOfBoundsException(
                 sprintf(
-                    'Reader type "%s" is not supported. You can add it by creating a service which implements '.
-                    'TreeHouse\IoBundle\Import\ReaderType\ReaderTypeInterface, and tag it with io.reader_type',
+                    'Reader type "%s" is not supported. You can add it by creating a service which implements %s, '.
+                    'and tag it with tree_house.io.reader_type',
+                    ReaderTypeInterface::class,
                     $name
                 )
             );
@@ -88,9 +89,10 @@ class ImportRegistry
         if (!array_key_exists($name, $this->feedTypes)) {
             throw new \OutOfBoundsException(
                 sprintf(
-                    'Feed type "%s" is not supported. You can add it by creating a service which implements '.
-                    'TreeHouse\IoBundle\Import\FeedType\FeedTypeInterface, and tag it with io.feed_type',
-                    $name
+                    'Feed type "%s" is not supported. You can add it by creating a service which implements %s, '.
+                    'and tag it with tree_house.io.feed_type',
+                    $name,
+                    FeedTypeInterface::class
                 )
             );
         }
@@ -129,9 +131,10 @@ class ImportRegistry
         if (!array_key_exists($name, $this->importerTypes)) {
             throw new \OutOfBoundsException(
                 sprintf(
-                    'Importer type "%s" is not supported. You can add it by creating a service which implements '.
-                    'TreeHouse\IoBundle\Import\ImporterType\ImporterTypeInterface, and tag it with io.importer_type',
-                    $name
+                    'Importer type "%s" is not supported. You can add it by creating a service which implements %s, '.
+                    'and tag it with tree_house.io.importer_type',
+                    $name,
+                    ImporterTypeInterface::class
                 )
             );
         }
@@ -170,9 +173,10 @@ class ImportRegistry
         if (!array_key_exists($name, $this->handlers)) {
             throw new \OutOfBoundsException(
                 sprintf(
-                    'Import handler "%s" is not supported. You can add it by creating a service which implements '.
-                    'TreeHouse\IoBundle\Import\Handler\HandlerInterface, and tag it with io.import_handler',
-                    $name
+                    'Import handler "%s" is not supported. You can add it by creating a service which implements %s, '.
+                    'and tag it with tree_house.io.import_handler',
+                    $name,
+                    HandlerInterface::class
                 )
             );
         }
@@ -211,9 +215,10 @@ class ImportRegistry
         if (!array_key_exists($name, $this->processors)) {
             throw new \OutOfBoundsException(
                 sprintf(
-                    'Import processor "%s" is not supported. You can add it by creating a service which implements '.
-                    'TreeHouse\IoBundle\Import\Processor\ProcessorInterface, and tagging it with io.import_processor',
-                    $name
+                    'Import processor "%s" is not supported. You can add it by creating a service which implements %s, '.
+                    'and tagging it with tree_house.io.import_processor',
+                    $name,
+                    ProcessorInterface::class
                 )
             );
         }

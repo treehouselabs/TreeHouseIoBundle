@@ -11,7 +11,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use TreeHouse\IoBundle\Event\ExportFeedEvent;
 use TreeHouse\IoBundle\Event\ExportProgressEvent;
-use TreeHouse\IoBundle\Export\FeedType\AbstractFeedType;
+use TreeHouse\IoBundle\Export\FeedType\FeedTypeInterface;
 
 class FeedExporter
 {
@@ -41,9 +41,14 @@ class FeedExporter
     protected $writer;
 
     /**
-     * @var AbstractFeedType[]
+     * @var FeedTypeInterface[]
      */
     protected $types = [];
+
+    /**
+     * @var array
+     */
+    protected $templateHashes = [];
 
     /**
      * @param string                   $cacheDir
@@ -78,10 +83,9 @@ class FeedExporter
         }
 
         foreach ($types as $type) {
-            $name      = $type->getName();
             $template  = $type->getTemplate();
             $ttl       = $type->getTtl();
-            $cacheFile = $this->getItemCacheFilename($item, $name);
+            $cacheFile = $this->getItemCacheFilename($item, $type);
 
             if (!file_exists($cacheFile) || !$this->isFresh($cacheFile, $ttl)) {
                 $this->filesystem->mkdir(dirname($cacheFile));
@@ -98,8 +102,8 @@ class FeedExporter
     /**
      * Clears cached exports for an item
      *
-     * @param    object   $item
-     * @param array $types
+     * @param object $item
+     * @param array  $types
      */
     public function clearCache($item, array $types = [])
     {
@@ -112,62 +116,52 @@ class FeedExporter
         }
 
         foreach ($types as $type) {
-            $cacheFile = $this->getItemCacheFilename($item, $type->getName());
+            $cacheFile = $this->getItemCacheFilename($item, $type);
             $this->filesystem->remove($cacheFile);
         }
     }
 
     /**
-     * @param AbstractFeedType $type
-     * @param bool             $force
+     * @param FeedTypeInterface $type
+     * @param bool              $force
      *
      * @return bool
      */
-    public function exportFeed(AbstractFeedType $type, $force = false)
+    public function exportFeed(FeedTypeInterface $type, $force = false)
     {
-        $name       = $type->getName();
-        $rootNode   = $type->getRootNode();
-        $namespaces = $type->getNamespaces();
-        $qb         = $type->getQueryBuilder('x');
-        $ttl        = $type->getTtl();
-        $numResults = $this->getNumberOfResults($qb);
-        $query      = $qb->getQuery();
-        $file       = $this->getFeedFilename($name, false);
-        $gzFile     = $this->getFeedFilename($name, true);
-        $tmpFile    = tempnam($this->cacheDir, 'io_feed').'.xml';
-        $gzTmpFile  = $tmpFile.'.gz';
+        $file      = $this->getFeedFilename($type, false);
+        $gzFile    = $this->getFeedFilename($type, true);
+        $tmpFile   = $this->getFeedCacheFilename($type);
+        $gzTmpFile = $tmpFile . '.gz';
 
         // check if we are up-to-date
-        if (false === $force && file_exists($file) && $this->isFresh($file, $ttl)) {
+        if (false === $force && file_exists($file) && $this->isFresh($file, $type->getTtl())) {
             return false;
         }
 
-        $this->dispatch(ExportEvents::PRE_EXPORT_FEED, new ExportFeedEvent($file, $type, $numResults));
+        $qb    = $type->getQueryBuilder('x');
+        $count = $this->getNumberOfResults($qb);
+
+        $this->dispatch(ExportEvents::PRE_EXPORT_FEED, new ExportFeedEvent($file, $type, $count));
 
         $this->filesystem->mkdir(dirname($file));
 
-        $this->writer->open($tmpFile);
-
-        $this->writer->writeStart($rootNode, $namespaces);
+        $this->writer->start($tmpFile, $type->getRootNode(), $type->getItemNode());
+        $this->writer->writeStart($this->getNamespaceAttributes($type));
 
         $num = 0;
-
-        foreach ($query->iterate() as list($item)) {
+        foreach ($qb->getQuery()->iterate() as list($item)) {
             $this->dispatch(
                 ExportEvents::PRE_EXPORT_ITEM,
-                new ExportProgressEvent($num, $numResults)
+                new ExportProgressEvent($num, $count)
             );
-
-            $cacheFile = $this->getItemCacheFilename($item, $name);
 
             $this->cacheItem($item, [$type]);
 
+            $cacheFile = $this->getItemCacheFilename($item, $type);
             $this->writer->writeContent(file_get_contents($cacheFile));
 
-            $this->dispatch(
-                ExportEvents::POST_EXPORT_ITEM,
-                new ExportProgressEvent($num, $numResults)
-            );
+            $this->dispatch(ExportEvents::POST_EXPORT_ITEM, new ExportProgressEvent($num, $count));
 
             if ($num++ % 2000 === 0) {
                 $this->pingDatabase($qb->getEntityManager());
@@ -175,24 +169,24 @@ class FeedExporter
         }
 
         $this->writer->writeEnd();
-
-        $this->writer->close();
+        $this->writer->finish();
 
         $this->gzip($tmpFile, $gzTmpFile);
         rename($tmpFile, $file);
         rename($gzTmpFile, $gzFile);
 
-        $this->dispatch(ExportEvents::POST_EXPORT_FEED, new ExportFeedEvent($file, $type, $numResults));
+        $this->dispatch(ExportEvents::POST_EXPORT_FEED, new ExportFeedEvent($file, $type, $count));
 
         return true;
     }
 
     /**
-     * @param AbstractFeedType $type
+     * @param FeedTypeInterface $type
+     * @param string            $alias
      */
-    public function registerType(AbstractFeedType $type)
+    public function registerType(FeedTypeInterface $type, $alias)
     {
-        $this->types[] = $type;
+        $this->types[$alias] = $type;
     }
 
     /**
@@ -214,37 +208,38 @@ class FeedExporter
     /**
      * @param string $name
      *
-     * @return AbstractFeedType|null
+     * @return FeedTypeInterface
+     *
+     * @throws \OutOfBoundsException when the type is not registered
      */
     public function getType($name)
     {
-        foreach ($this->types as $type) {
-            if ($type->getName() === $name) {
-                return $type;
-            }
+        if (array_key_exists($name, $this->types)) {
+            return $this->types[$name];
         }
 
-        return null;
+        throw new \OutOfBoundsException(
+            sprintf(
+                'Export type "%s" is not supported. You can add it by creating a service which implements %s, '.
+                'and tag it with tree_house.io.export.feed_type',
+                $name,
+                FeedTypeInterface::class
+            )
+        );
     }
 
     /**
-     * @param string $type
+     * @param string $name
      *
-     * @return bool
+     * @return boolean
      */
-    public function hasType($type)
+    public function hasType($name)
     {
-        foreach ($this->types as $typeObj) {
-            if ($typeObj->getName() === $type) {
-                return true;
-            }
-        }
-
-        return false;
+        return array_key_exists($name, $this->types);
     }
 
     /**
-     * @return AbstractFeedType[]
+     * @return FeedTypeInterface[]
      */
     public function getTypes()
     {
@@ -260,16 +255,61 @@ class FeedExporter
     }
 
     /**
-     * @param string $name
-     * @param bool   $gzip
+     * Returns the location of the generated feed file. This is the location where the definitive
+     * exported feed will be cached and served from.
+     *
+     * @param FeedTypeInterface $type
+     * @param bool              $gzip
      *
      * @return string
      */
-    public function getFeedFilename($name, $gzip)
+    public function getFeedFilename(FeedTypeInterface $type, $gzip = false)
     {
         $path = [
             $this->exportDir,
-            sprintf('%s.%s', $name, ($gzip ? 'xml.gz' : 'xml')),
+            sprintf('%s.%s', $type->getName(), ($gzip ? 'xml.gz' : 'xml')),
+        ];
+
+        return implode(DIRECTORY_SEPARATOR, $path);
+    }
+
+    /**
+     * Returns the location of the feed file to export. This is the location where the actual
+     * exporting will take place and where all the separate listing XML files are cached.
+     *
+     * @param FeedTypeInterface $type
+     * @param boolean           $gzip
+     *
+     * @return string
+     */
+    public function getFeedCacheFilename(FeedTypeInterface $type, $gzip = false)
+    {
+        $path = [
+            $this->cacheDir,
+            sprintf('%s.%s', $type->getName(), ($gzip ? 'xml.gz' : 'xml')),
+        ];
+
+        return implode(DIRECTORY_SEPARATOR, $path);
+    }
+
+    /**
+     * @param object            $item
+     * @param FeedTypeInterface $type
+     *
+     * @return string
+     */
+    public function getItemCacheFilename($item, FeedTypeInterface $type)
+    {
+        $class = DoctrineClassUtils::getClass($item);
+
+        $hash = hash('crc32b', sprintf('%s-%d', $class, $item->getId()));
+        $path = [
+            $this->cacheDir,
+            $hash{0},
+            $hash{1},
+            $hash{2},
+            substr($hash, 3),
+            sprintf('%s.xml', $this->getTemplateHash($type)),
         ];
 
         return implode(DIRECTORY_SEPARATOR, $path);
@@ -278,7 +318,7 @@ class FeedExporter
     /**
      * @param object $item
      *
-     * @return AbstractFeedType[]
+     * @return FeedTypeInterface[]
      */
     protected function getTypesForItem($item)
     {
@@ -311,29 +351,6 @@ class FeedExporter
     }
 
     /**
-     * @param object $item
-     * @param string $name
-     *
-     * @return string
-     */
-    protected function getItemCacheFilename($item, $name)
-    {
-        $class = DoctrineClassUtils::getClass($item);
-
-        $hash = hash('crc32b', sprintf('%s-%d', $class, $item->getId()));
-        $path = [
-            $this->cacheDir,
-            $hash{0},
-            $hash{1},
-            $hash{2},
-            substr($hash, 3),
-            sprintf('%s.xml', $name),
-        ];
-
-        return implode(DIRECTORY_SEPARATOR, $path);
-    }
-
-    /**
      * @param QueryBuilder $builder
      *
      * @return integer
@@ -359,6 +376,49 @@ class FeedExporter
         $query = $countQb->select('COUNT('.$rootAlias.')')->getQuery();
 
         return (int) $query->getSingleScalarResult();
+    }
+
+    /**
+     * @param FeedTypeInterface $type
+     *
+     * @return null|string
+     */
+    protected function getNamespaceAttributes(FeedTypeInterface $type)
+    {
+        $namespaces = $type->getNamespaces();
+
+        if (empty($namespaces)) {
+            return null;
+        }
+
+        $str = '';
+        foreach ($namespaces as $name => $schemaLocation) {
+            $str .= sprintf(
+                'xmlns="%s" xmlns:xsi="%s" xsi:schemaLocation="%s %s" ',
+                $name,
+                'http://www.w3.org/2001/XMLSchema-instance',
+                $name,
+                $schemaLocation
+            );
+        }
+
+        return trim($str);
+    }
+
+    /**
+     * @param FeedTypeInterface $type
+     *
+     * @return string
+     */
+    protected function getTemplateHash(FeedTypeInterface $type)
+    {
+        if (!array_key_exists($type->getName(), $this->templateHashes)) {
+            // TODO find a way to get the template contents, so the hash changes when the template does
+            $hash = md5($type->getItemNode() . $type->getTemplate());
+            $this->templateHashes[$type->getName()] = $hash;
+        }
+
+        return $this->templateHashes[$type->getName()];
     }
 
     /**
