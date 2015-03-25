@@ -20,7 +20,7 @@ abstract class AbstractCrawler implements CrawlerInterface
     protected $client;
 
     /**
-     * A logger where crawled
+     * A logger that remembers crawled requests
      *
      * @var RequestLoggerInterface
      */
