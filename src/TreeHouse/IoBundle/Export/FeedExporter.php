@@ -68,7 +68,7 @@ class FeedExporter
 
     /**
      * @param object $item
-     * @param array  $types
+     * @param FeedTypeInterface[]  $types
      *
      * @return bool
      */
@@ -103,7 +103,7 @@ class FeedExporter
      * Clears cached exports for an item
      *
      * @param object $item
-     * @param array  $types
+     * @param FeedTypeInterface[]  $types
      */
     public function clearCache($item, array $types = [])
     {

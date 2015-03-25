@@ -129,7 +129,7 @@ class ParserBuilder implements ParserBuilderInterface
     /**
      * Removes modifier at an existing position
      *
-     * @param $position
+     * @param integer $position
      *
      * @throws \OutOfBoundsException If modifier does not exist
      */
