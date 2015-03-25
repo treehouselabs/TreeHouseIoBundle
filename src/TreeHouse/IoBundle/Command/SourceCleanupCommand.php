@@ -11,6 +11,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use TreeHouse\IoBundle\Event\SourceEvent;
 use TreeHouse\IoBundle\IoEvents;
+use TreeHouse\IoBundle\Model\OriginInterface;
 use TreeHouse\IoBundle\Origin\OriginManagerInterface;
 use TreeHouse\IoBundle\Source\Cleaner\DelegatingSourceCleaner;
 use TreeHouse\IoBundle\Source\Cleaner\IdleSourceCleaner;
@@ -56,10 +57,10 @@ class SourceCleanupCommand extends Command
         $this
             ->setName('io:source:cleanup')
             ->addOption(
-                'origin',
-                'o',
+                'feed',
+                null,
                 InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY,
-                'Select origins to cleanup for, defaults to all'
+                'Select feeds to cleanup for, defaults to all'
             )
             ->addOption('force', 'f', InputOption::VALUE_NONE, 'Skip checks for remove threshold')
             ->setDescription('Cleans up database by removing idle sources.')
@@ -71,7 +72,7 @@ class SourceCleanupCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $origin      = $input->getOption('origin');
+        $feeds       = $input->getOption('feeds');
         $force       = $input->getOption('force');
         $interactive = $input->isInteractive();
         $dispatcher  = $this->sourceCleaner->getEventDispatcher();
@@ -87,29 +88,14 @@ class SourceCleanupCommand extends Command
             }
         );
 
-        if ($force) {
-            $voter = new ThresholdVoter(
-                function () {
-                    return true;
-                },
-                $dispatcher
-            );
+        $function = $this->getThresholdVotingFunction($input, $output, $force, $interactive);
+        $voter    = new ThresholdVoter($function, $dispatcher);
+
+        if (!empty($feeds)) {
+            $numCleaned = $this->cleanFeeds($voter, $feeds);
         } else {
-            $voter = new ThresholdVoter(
-                function ($count, $total, $max, $message) use ($input, $output, $interactive) {
-                    $output->writeln($message);
-
-                    // see if we can ask the user to confirm cleanup
-                    $question = new ConfirmationQuestion('<question>> Clean these sources anyway? [y]</question> ');
-                    $helper   = new QuestionHelper();
-
-                    return $interactive && $helper->ask($input, $output, $question);
-                },
-                $dispatcher
-            );
+            $numCleaned = $this->cleanAll($voter);
         }
-
-        $numCleaned = $this->clean($voter, $origin);
 
         $output->writeln(sprintf('<info>%s</info> sources cleaned', $numCleaned));
 
@@ -118,44 +104,92 @@ class SourceCleanupCommand extends Command
 
     /**
      * @param ThresholdVoterInterface $voter
-     * @param array                   $origins
+     * @param array                   $feeds
      *
      * @throws \RuntimeException
      *
      * @return integer
      */
-    protected function clean(ThresholdVoterInterface $voter, array $origins = null)
+    protected function cleanFeeds(ThresholdVoterInterface $voter, array $feeds)
     {
-        if ($origins) {
-            $idleCleaner = null;
-            foreach ($this->sourceCleaner->getCleaners() as $cleaner) {
-                if ($cleaner instanceof IdleSourceCleaner) {
-                    $idleCleaner = $cleaner;
-                    break;
-                }
+        $idleCleaner = $this->getIdleSourceCleaner();
+
+        $repo = $this->originManager->getRepository();
+        $query = $repo
+            ->createQueryBuilder('o')
+            ->select('o', 'f')
+            ->join('o.feeds', 'f')
+            ->where('f.id IN (:ids)')
+            ->setParameter('ids', $feeds)
+            ->getQuery()
+        ;
+
+        $numCleaned = 0;
+
+        /** @var OriginInterface $origin */
+        foreach ($query->getResult() as $origin) {
+            foreach ($origin->getFeeds() as $feed) {
+                $numCleaned += $idleCleaner->cleanFeed($this->sourceCleaner, $feed, $voter);
             }
-
-            if (null === $idleCleaner) {
-                throw new \RuntimeException('No IdleSourceCleaner is configured');
-            }
-
-            $repo = $this->originManager->getRepository();
-            $query = $repo
-                ->createQueryBuilder('o')
-                ->select('o')
-                ->where('o.id IN (:ids)')
-                ->setParameter('ids', $origins)
-                ->getQuery()
-            ;
-
-            $numCleaned = 0;
-            foreach ($query->getResult() as $origin) {
-                $numCleaned += $idleCleaner->cleanOrigin($this->sourceCleaner, $origin, $voter);
-            }
-
-            return $numCleaned;
-        } else {
-            return $this->sourceCleaner->cleanAll($voter);
         }
+
+        return $numCleaned;
+    }
+
+    /**
+     * @param ThresholdVoterInterface $voter
+     *
+     * @return integer
+     */
+    protected function cleanAll(ThresholdVoterInterface $voter)
+    {
+        return $this->sourceCleaner->cleanAll($voter);
+    }
+
+    /**
+     * @param InputInterface  $input
+     * @param OutputInterface $output
+     * @param boolean         $force
+     * @param boolean         $interactive
+     *
+     * @return callable
+     */
+    protected function getThresholdVotingFunction(InputInterface $input, OutputInterface $output, $force, $interactive)
+    {
+        if ($force) {
+            return function () {
+                    return true;
+            };
+        }
+
+        return function ($count, $total, $max, $message) use ($input, $output, $interactive) {
+            $output->writeln($message);
+
+            // see if we can ask the user to confirm cleanup
+            $question = new ConfirmationQuestion('<question>> Clean these sources anyway? [y]</question> ');
+            $helper   = new QuestionHelper();
+
+            return $interactive && $helper->ask($input, $output, $question);
+        };
+    }
+
+    /**
+     * @return null|IdleSourceCleaner
+     */
+    protected function getIdleSourceCleaner()
+    {
+        $idleCleaner = null;
+        foreach ($this->sourceCleaner->getCleaners() as $cleaner) {
+            if ($cleaner instanceof IdleSourceCleaner) {
+                $idleCleaner = $cleaner;
+                break;
+            }
+        }
+
+        if (!$idleCleaner instanceof IdleSourceCleaner) {
+            throw new \RuntimeException('No IdleSourceCleaner is configured');
+        }
+
+        return $idleCleaner;
     }
 }

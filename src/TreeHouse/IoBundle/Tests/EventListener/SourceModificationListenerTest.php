@@ -6,7 +6,6 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\UnitOfWork;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use TreeHouse\IoBundle\Event\SourceEvent;
 use TreeHouse\IoBundle\EventListener\SourceModificationListener;
 use TreeHouse\IoBundle\IoEvents;
 use TreeHouse\IoBundle\Source\Processor\DelegatingSourceProcessor;

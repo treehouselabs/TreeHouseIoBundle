@@ -2,7 +2,7 @@
 
 namespace TreeHouse\IoBundle\Scrape\Handler;
 
-use Symfony\Component\Validator\ValidatorInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 use TreeHouse\IoBundle\Exception\ValidationException;
 use TreeHouse\IoBundle\Import\Exception\FailedItemException;
 use TreeHouse\IoBundle\Model\SourceInterface;
