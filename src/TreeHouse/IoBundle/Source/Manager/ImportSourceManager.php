@@ -3,6 +3,7 @@
 namespace TreeHouse\IoBundle\Source\Manager;
 
 use TreeHouse\IoBundle\Entity\Feed;
+use TreeHouse\IoBundle\Entity\Scraper;
 use TreeHouse\IoBundle\Model\SourceInterface;
 use TreeHouse\IoBundle\Source\SourceManagerInterface;
 
@@ -63,10 +64,10 @@ class ImportSourceManager implements SourceManagerInterface
     /**
      * @inheritdoc
      */
-    public function findSource(Feed $feed, $originalId)
+    public function findSourceByFeed(Feed $feed, $originalId)
     {
         if (null === $source = $this->findCachedByFeed($feed, $originalId)) {
-            $source = $this->sourceManager->findSource($feed, $originalId);
+            $source = $this->sourceManager->findSourceByFeed($feed, $originalId);
             $this->cache($source);
         }
 
@@ -76,10 +77,36 @@ class ImportSourceManager implements SourceManagerInterface
     /**
      * @inheritdoc
      */
-    public function findSourceOrCreate(Feed $feed, $originalId, $originalUrl = null)
+    public function findSourceByScraper(Scraper $scraper, $originalId)
+    {
+        if (null === $source = $this->findCachedByScraper($scraper, $originalId)) {
+            $source = $this->sourceManager->findSourceByScraper($scraper, $originalId);
+            $this->cache($source);
+        }
+
+        return $source;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function findSourceByFeedOrCreate(Feed $feed, $originalId, $originalUrl = null)
     {
         if (null === $source = $this->findCachedByFeed($feed, $originalId)) {
-            $source = $this->sourceManager->findSourceOrCreate($feed, $originalId, $originalUrl);
+            $source = $this->sourceManager->findSourceByFeedOrCreate($feed, $originalId, $originalUrl);
+            $this->cache($source);
+        }
+
+        return $source;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function findSourceByScraperOrCreate(Scraper $scraper, $originalId, $originalUrl)
+    {
+        if (null === $source = $this->findCachedByScraper($scraper, $originalId)) {
+            $source = $this->sourceManager->findSourceByScraperOrCreate($scraper, $originalId, $originalUrl);
             $this->cache($source);
         }
 
@@ -147,15 +174,19 @@ class ImportSourceManager implements SourceManagerInterface
             $this->sources[$source->getId()] = $source;
         }
 
-        // cache by origin
-        if ((null === ($feed = $source->getFeed())) || !$source->getOriginalId()) {
+        $hash = null;
+        if (null !== $feed = $source->getFeed()) {
+            $hash = $this->getFeedHash($feed);
+        } elseif (null !== $scraper = $source->getScraper()) {
+            $hash = $this->getScraperHash($scraper);
+        }
+
+        // must have hash and original id
+        if (!$hash || !$source->getOriginalId()) {
             return;
         }
 
-        $hash       = $this->getFeedHash($feed);
-        $originalId = $source->getOriginalId();
-
-        $this->originSources[$hash][$originalId] = $source;
+        $this->originSources[$hash][$source->getOriginalId()] = $source;
     }
 
     /**
@@ -166,10 +197,32 @@ class ImportSourceManager implements SourceManagerInterface
     protected function findCachedById($sourceId)
     {
         if (!array_key_exists($sourceId, $this->sources)) {
-            return;
+            return null;
         }
 
         return $this->sources[$sourceId];
+    }
+
+    /**
+     * @param string $hash
+     * @param string $originalId
+     *
+     * @return SourceInterface|null
+     */
+    protected function findCachedByOrigin($hash, $originalId)
+    {
+        // create origin cache if necessary
+        if (!isset($this->originSources[$hash])) {
+            $this->originSources[$hash] = [];
+        }
+
+        // see if we have a cached mapping, return the cached entry
+        if (!array_key_exists($originalId, $this->originSources[$hash])) {
+            return null;
+        }
+
+        return $this->originSources[$hash][$originalId];
+
     }
 
     /**
@@ -182,28 +235,43 @@ class ImportSourceManager implements SourceManagerInterface
     {
         $hash = $this->getFeedHash($feed);
 
-        // create origin cache if necessary
-        if (!isset($this->originSources[$hash])) {
-            $this->originSources[$hash] = [];
-        }
-
-        // see if we have a cached mapping
-        // return the cached entry
-        if (!array_key_exists($originalId, $this->originSources[$hash])) {
-            return;
-        }
-
-        return $this->originSources[$hash][$originalId];
+        return $this->findCachedByOrigin($hash, $originalId);
     }
 
     /**
-     * Returns a unique hash for an origin and a feed
+     * @param Scraper $scraper
+     * @param string  $originalId
      *
-     * @param  Feed   $feed
+     * @return SourceInterface|null
+     */
+    protected function findCachedByScraper(Scraper $scraper, $originalId)
+    {
+        $hash = $this->getScraperHash($scraper);
+
+        return $this->findCachedByOrigin($hash, $originalId);
+    }
+
+    /**
+     * Returns a unique hash for a feed
+     *
+     * @param Feed $feed
+     *
      * @return string
      */
     protected function getFeedHash(Feed $feed)
     {
-        return md5($feed->getId());
+        return md5('feed' . $feed->getId());
+    }
+
+    /**
+     * Returns a unique hash for a scraper
+     *
+     * @param Scraper $scraper
+     *
+     * @return string
+     */
+    protected function getScraperHash(Scraper $scraper)
+    {
+        return md5('scraper' . $scraper->getId());
     }
 }

@@ -30,7 +30,7 @@ class ImportJobTest extends WebTestCase
     {
         $import = $this->runImport();
 
-        $this->assertEquals(98, $import->getSuccess());
+        $this->assertEquals(11, $import->getSuccess());
         $this->assertEquals(1, $import->getFailed());
         $this->assertEquals(1, $import->getSkipped());
     }
@@ -39,7 +39,7 @@ class ImportJobTest extends WebTestCase
     {
         // run import
         $import1 = $this->runImport();
-        $this->assertEquals(98, $import1->getSuccess());
+        $this->assertEquals(11, $import1->getSuccess());
         $this->assertEquals(1, $import1->getFailed());
         $this->assertEquals(1, $import1->getSkipped());
 
@@ -47,11 +47,11 @@ class ImportJobTest extends WebTestCase
         $import2 = $this->runImport();
         $this->assertEquals(0, $import2->getSuccess());
         $this->assertEquals(1, $import2->getFailed());
-        $this->assertEquals(99, $import2->getSkipped());
+        $this->assertEquals(12, $import2->getSkipped());
 
         // now import with force
         $import3 = $this->runImport(true);
-        $this->assertEquals(98, $import3->getSuccess());
+        $this->assertEquals(11, $import3->getSuccess());
         $this->assertEquals(1, $import3->getFailed());
         $this->assertEquals(1, $import3->getSkipped());
     }

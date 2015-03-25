@@ -11,7 +11,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use TreeHouse\IoBundle\Entity\Feed;
-use TreeHouse\IoBundle\EventListener\ImportOutputSubscriber;
+use TreeHouse\IoBundle\Import\EventListener\ImportOutputSubscriber;
 use TreeHouse\IoBundle\Import\ImportFactory;
 use TreeHouse\IoBundle\Import\ImportScheduler;
 

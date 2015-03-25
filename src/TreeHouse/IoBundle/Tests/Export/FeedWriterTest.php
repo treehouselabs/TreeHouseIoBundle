@@ -2,6 +2,7 @@
 
 namespace TreeHouse\IoBundle\Tests\Export;
 
+use Symfony\Component\Templating\EngineInterface;
 use TreeHouse\IoBundle\Export\FeedWriter;
 
 class FeedWriterTest extends \PHPUnit_Framework_TestCase
@@ -23,21 +24,21 @@ class FeedWriterTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \RuntimeException
      */
-    public function testOpenTwiceThrowsException()
+    public function testStartTwiceThrowsException()
     {
         $writer = $this->getWriter();
 
-        $writer->open($this->tmpFile);
-        $writer->open($this->tmpFile);
+        $writer->start($this->tmpFile, 'feed', 'item');
+        $writer->start($this->tmpFile, 'feed', 'item');
     }
 
-    public function testIsOpen()
+    public function testIsStarted()
     {
         $writer = $this->getWriter();
 
         $this->assertFalse($writer->isStarted());
 
-        $writer->open($this->tmpFile);
+        $writer->start($this->tmpFile, 'feed', 'item');
 
         $this->assertTrue($writer->isStarted());
     }
@@ -46,7 +47,7 @@ class FeedWriterTest extends \PHPUnit_Framework_TestCase
      * @expectedException \RuntimeException
      * @dataProvider methodProvider
      */
-    public function testMethodThrowsExceptionWhenNotOpen($method, $args = [])
+    public function testMethodThrowsExceptionWhenNotStarted($method, $args = [])
     {
         $writer = $this->getWriter();
 
@@ -56,7 +57,7 @@ class FeedWriterTest extends \PHPUnit_Framework_TestCase
     public function methodProvider()
     {
         return [
-            ['close'],
+            ['finish'],
             ['writeStart', ['someRootNode']],
             ['writeEnd'],
             ['writeContent', ['some content']],
@@ -70,46 +71,42 @@ class FeedWriterTest extends \PHPUnit_Framework_TestCase
     public function testWriteEndThrowsExceptionWhenNotWriteStartCalled()
     {
         $writer = $this->getWriter();
-
         $writer->writeEnd();
     }
 
     public function testWriteStart()
     {
         $writer = $this->getWriter();
-
-        $writer->open($this->tmpFile);
+        $writer->start($this->tmpFile, 'feed', 'item');
 
         $this->assertEquals('', file_get_contents($this->tmpFile));
 
-        $writer->writeStart('vacancies');
+        $writer->writeStart();
 
-        $this->assertContains('<vacancies', file_get_contents($this->tmpFile), 'File contains rootNode');
+        $this->assertContains('<feed>', file_get_contents($this->tmpFile), 'File contains rootNode');
     }
 
     public function testWriteEnd()
     {
         $writer = $this->getWriter();
-
-        $writer->open($this->tmpFile);
+        $writer->start($this->tmpFile, 'feed', 'item');
 
         $this->assertEquals('', file_get_contents($this->tmpFile));
 
-        $writer->writeStart('vacancies');
+        $writer->writeStart();
         $writer->writeEnd();
 
-        $this->assertContains('</vacancies>', file_get_contents($this->tmpFile), 'File contains rootNode');
+        $this->assertContains('</feed>', file_get_contents($this->tmpFile), 'File contains rootNode');
     }
 
     public function testWriteContent()
     {
         $writer = $this->getWriter();
-
-        $writer->open($this->tmpFile);
+        $writer->start($this->tmpFile, 'feed', 'item');
 
         $this->assertEquals('', file_get_contents($this->tmpFile));
 
-        $writer->writeStart('someRootNode');
+        $writer->writeStart();
         $writer->writeContent('<someNode>some content</someNode>');
 
         $this->assertContains('<someNode>some content</someNode>', file_get_contents($this->tmpFile));
@@ -121,18 +118,13 @@ class FeedWriterTest extends \PHPUnit_Framework_TestCase
         $template = 'SomeTemplate';
         $templateOutput = '<someNode>some rendered template</someNode>';
 
-        $templating = $this->getMockBuilder(
-            'Symfony\Bundle\FrameworkBundle\Templating\EngineInterface'
-        )->getMockForAbstractClass();
-
+        $templating = $this->getMockBuilder(EngineInterface::class)->getMockForAbstractClass();
         $templating->expects($this->once())
             ->method('render')
-            ->with($template, ['item' => $someItem])
             ->willReturn($templateOutput);
 
         $writer = $this->getWriter($templating);
-
-        $writer->open($this->tmpFile);
+        $writer->start($this->tmpFile, 'feed', 'item');
 
         $writer->writeStart('someRootNode');
         $writer->writeItem($someItem, $template);
@@ -147,12 +139,8 @@ class FeedWriterTest extends \PHPUnit_Framework_TestCase
      */
     protected function getWriter($templating = null)
     {
-        $templating = $templating ?: $this->getMockBuilder(
-            'Symfony\Bundle\FrameworkBundle\Templating\EngineInterface'
-        )->getMockForAbstractClass();
+        $templating = $templating ?: $this->getMockBuilder(EngineInterface::class)->getMockForAbstractClass();
 
-        $writer = new FeedWriter($templating);
-
-        return $writer;
+        return new FeedWriter($templating);
     }
 }

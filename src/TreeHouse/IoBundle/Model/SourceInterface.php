@@ -2,6 +2,7 @@
 
 namespace TreeHouse\IoBundle\Model;
 
+use TreeHouse\IoBundle\Entity\Scraper;
 use TreeHouse\IoBundle\Entity\Feed;
 
 interface SourceInterface
@@ -18,7 +19,7 @@ interface SourceInterface
      *
      * @param string $originalId
      *
-     * @return SourceInterface
+     * @return $this
      */
     public function setOriginalId($originalId);
 
@@ -34,7 +35,7 @@ interface SourceInterface
      *
      * @param string $originalUrl
      *
-     * @return SourceInterface
+     * @return $this
      */
     public function setOriginalUrl($originalUrl);
 
@@ -50,7 +51,7 @@ interface SourceInterface
      *
      * @param boolean $blocked
      *
-     * @return SourceInterface
+     * @return $this
      */
     public function setBlocked($blocked);
 
@@ -66,7 +67,7 @@ interface SourceInterface
      *
      * @param array $data
      *
-     * @return SourceInterface
+     * @return $this
      */
     public function setData($data);
 
@@ -82,7 +83,7 @@ interface SourceInterface
      *
      * @param string $rawData
      *
-     * @return SourceInterface
+     * @return $this
      */
     public function setRawData($rawData);
 
@@ -98,7 +99,7 @@ interface SourceInterface
      *
      * @param array $messages
      *
-     * @return SourceInterface
+     * @return $this
      */
     public function setMessages($messages);
 
@@ -114,7 +115,7 @@ interface SourceInterface
      *
      * @param Feed $feed
      *
-     * @return SourceInterface
+     * @return $this
      */
     public function setFeed(Feed $feed = null);
 
@@ -124,6 +125,22 @@ interface SourceInterface
      * @return Feed
      */
     public function getFeed();
+
+    /**
+     * Set scraper
+     *
+     * @param Scraper $scraper
+     *
+     * @return $this
+     */
+    public function setScraper(Scraper $scraper = null);
+
+    /**
+     * Get scraper
+     *
+     * @return Scraper
+     */
+    public function getScraper();
 
     /**
      * Get origin
@@ -137,7 +154,7 @@ interface SourceInterface
      *
      * @param \DateTime $datetimeCreated
      *
-     * @return SourceInterface
+     * @return $this
      */
     public function setDatetimeCreated(\DateTime $datetimeCreated);
 
@@ -153,7 +170,7 @@ interface SourceInterface
      *
      * @param \DateTime $datetimeModified
      *
-     * @return SourceInterface
+     * @return $this
      */
     public function setDatetimeModified(\DateTime $datetimeModified);
 
@@ -169,7 +186,7 @@ interface SourceInterface
      *
      * @param \DateTime $datetimeLastVisited
      *
-     * @return SourceInterface
+     * @return $this
      */
     public function setDatetimeLastVisited(\DateTime $datetimeLastVisited);
 

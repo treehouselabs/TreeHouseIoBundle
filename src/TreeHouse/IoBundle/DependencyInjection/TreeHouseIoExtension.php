@@ -23,6 +23,7 @@ class TreeHouseIoExtension extends Extension
         $loader->load('source.yml');
         $loader->load('import.yml');
         $loader->load('export.yml');
+        $loader->load('scrape.yml');
         $loader->load('commands.yml');
 
         $this->setParameters($container, $config);

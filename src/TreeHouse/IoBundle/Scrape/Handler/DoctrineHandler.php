@@ -1,0 +1,91 @@
+<?php
+
+namespace TreeHouse\IoBundle\Scrape\Handler;
+
+use Symfony\Component\Validator\Validator\ValidatorInterface;
+use TreeHouse\IoBundle\Exception\ValidationException;
+use TreeHouse\IoBundle\Import\Exception\FailedItemException;
+use TreeHouse\IoBundle\Model\SourceInterface;
+use TreeHouse\IoBundle\Scrape\ScrapedItemBag;
+use TreeHouse\IoBundle\Source\Manager\ImportSourceManager;
+
+class DoctrineHandler implements HandlerInterface
+{
+    /**
+     * @var ImportSourceManager
+     */
+    protected $sourceManager;
+
+    /**
+     * @var ValidatorInterface
+     */
+    protected $validator;
+
+    /**
+     * @param ImportSourceManager $sourceManager
+     * @param ValidatorInterface  $validator
+     */
+    public function __construct(ImportSourceManager $sourceManager, ValidatorInterface $validator)
+    {
+        $this->sourceManager = $sourceManager;
+        $this->validator     = $validator;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function handle(ScrapedItemBag $item)
+    {
+        // get source and set the data to it
+        $source = $this->sourceManager->findSourceByScraperOrCreate(
+            $item->getScraper(),
+            $item->getOriginalId(),
+            $item->getOriginalUrl()
+        );
+
+        // save data
+        $source->setData($item->all());
+
+        try {
+            $this->validate($source);
+            $this->sourceManager->persist($source);
+            $this->sourceManager->flush($source);
+
+            return $source;
+        } catch (\Exception $exception) {
+            $this->sourceManager->detach($source);
+
+            throw new FailedItemException($source, $exception->getMessage(), $exception->getCode(), $exception);
+        }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function flush()
+    {
+        $this->sourceManager->flush();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function clear()
+    {
+        $this->sourceManager->clear();
+    }
+
+    /**
+     * @param SourceInterface $source
+     *
+     * @throws ValidationException
+     */
+    protected function validate(SourceInterface $source)
+    {
+        $violations = $this->validator->validate($source);
+
+        if ($violations->count()) {
+            throw ValidationException::create($violations);
+        }
+    }
+}

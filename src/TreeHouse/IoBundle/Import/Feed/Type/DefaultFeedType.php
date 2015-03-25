@@ -294,7 +294,7 @@ abstract class DefaultFeedType extends AbstractFeedType
             case 'decimal':
                 $this->addTransformerBetween(
                     $builder,
-                    new LocalizedStringToNumberTransformer(\NumberFormatter::TYPE_DOUBLE, 0, true, null, $this->options['number_locale']),
+                    new LocalizedStringToNumberTransformer(\NumberFormatter::TYPE_DOUBLE, $mapping['scale'], true, null, $this->options['number_locale']),
                     $field,
                     $startIndex,
                     $endIndex

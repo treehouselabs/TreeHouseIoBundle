@@ -87,7 +87,7 @@ class SourceRepository extends EntityRepository
     /**
      * Returns orphaned sources, meaning those without a feed or scraper.
      *
-     * @return SourceInterface[]
+     * @return QueryBuilder
      */
     public function queryOrphaned()
     {

@@ -5,6 +5,7 @@ namespace TreeHouse\IoIntegrationBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints\Url;
 use TreeHouse\IoBundle\Entity\Feed;
+use TreeHouse\IoBundle\Entity\Scraper;
 use TreeHouse\IoBundle\Model\SourceInterface;
 
 /**
@@ -72,6 +73,13 @@ class Source implements SourceInterface
      * @ORM\ManyToOne(targetEntity="TreeHouse\IoBundle\Entity\Feed", inversedBy="sources")
      */
     protected $feed;
+
+    /**
+     * @var Scraper
+     *
+     * @ORM\ManyToOne(targetEntity="TreeHouse\IoBundle\Entity\Scraper", inversedBy="sources")
+     */
+    protected $scraper;
 
     /**
      * @var Episode
@@ -249,6 +257,23 @@ class Source implements SourceInterface
         return $this->feed;
     }
 
+    /**
+     * @inheritdoc
+     */
+    public function setScraper(Scraper $scraper = null)
+    {
+        $this->scraper = $scraper;
+
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getScraper()
+    {
+        return $this->scraper;
+    }
     /**
      * @inheritdoc
      */

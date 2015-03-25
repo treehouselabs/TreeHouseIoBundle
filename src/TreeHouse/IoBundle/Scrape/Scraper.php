@@ -1,29 +1,38 @@
 <?php
 
-namespace FM\IoBundle\Scrape;
+namespace TreeHouse\IoBundle\Scrape;
 
-use FM\Feeder\Event\FailedItemModificationEvent;
-use FM\Feeder\Exception\FilterException;
-use FM\Feeder\Exception\ModificationException;
-use FM\Feeder\Exception\ValidationException;
-use FM\Feeder\Modifier\Item\Filter\FilterInterface;
-use FM\Feeder\Modifier\Item\Mapper\MapperInterface;
-use FM\Feeder\Modifier\Item\ModifierInterface;
-use FM\Feeder\Modifier\Item\Transformer\TransformerInterface;
-use FM\Feeder\Modifier\Item\Validator\ValidatorInterface;
-use FM\IoBundle\Entity\Scraper as ScraperEntity;
-use FM\IoBundle\Import\Exception\FailedItemException;
-use FM\IoBundle\Import\Handler\HandlerInterface;
-use FM\IoBundle\Scrape\Model\ScrapedItemBag;
-use FM\IoBundle\Scrape\Modifier\Item\Mapper\NodeMapperInterface;
-use Symfony\Component\DomCrawler\Crawler;
+use GuzzleHttp\Url;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use TreeHouse\Feeder\Exception\FilterException;
+use TreeHouse\Feeder\Exception\ModificationException;
+use TreeHouse\Feeder\Exception\ValidationException;
+use TreeHouse\IoBundle\Entity\Scraper as ScraperEntity;
+use TreeHouse\IoBundle\Scrape\Crawler\CrawlerInterface;
+use TreeHouse\IoBundle\Scrape\Event\FailedItemEvent;
+use TreeHouse\IoBundle\Scrape\Event\RateLimitEvent;
+use TreeHouse\IoBundle\Scrape\Event\ScrapeResponseEvent;
+use TreeHouse\IoBundle\Scrape\Event\ScrapeUrlEvent;
+use TreeHouse\IoBundle\Scrape\Event\SkippedItemEvent;
+use TreeHouse\IoBundle\Scrape\Event\SuccessItemEvent;
+use TreeHouse\IoBundle\Scrape\Exception\CrawlException;
+use TreeHouse\IoBundle\Scrape\Exception\RateLimitException;
+use TreeHouse\IoBundle\Scrape\Exception\UnexpectedResponseException;
+use TreeHouse\IoBundle\Scrape\Handler\HandlerInterface;
+use TreeHouse\IoBundle\Scrape\Parser\ParserInterface;
 
 class Scraper implements ScraperInterface
 {
     /**
-     * @var ScraperEntity
+     * @var CrawlerInterface
      */
-    protected $scraper;
+    protected $crawler;
+
+    /**
+     * @var ParserInterface
+     */
+    protected $parser;
 
     /**
      * @var HandlerInterface
@@ -31,127 +40,163 @@ class Scraper implements ScraperInterface
     protected $handler;
 
     /**
-     * @var array<ModifierInterface, bool>
+     * @var EventDispatcherInterface
      */
-    protected $modifiers = [];
+    protected $eventDispatcher;
+
+    /**
+     * @var boolean
+     */
+    protected $async = false;
+
+    /**
+     * @param CrawlerInterface         $crawler
+     * @param ParserInterface          $parser
+     * @param HandlerInterface         $handler
+     * @param EventDispatcherInterface $dispatcher
+     */
+    public function __construct(CrawlerInterface $crawler, ParserInterface $parser, HandlerInterface $handler, EventDispatcherInterface $dispatcher = null)
+    {
+        $this->crawler         = $crawler;
+        $this->parser          = $parser;
+        $this->handler         = $handler;
+        $this->eventDispatcher = $dispatcher ?: new EventDispatcher();
+    }
 
     /**
      * @inheritdoc
      */
-    public function addModifier(ModifierInterface $modifier, $continue = null)
+    public function getCrawler()
     {
-        $this->modifiers[] = [$modifier, $continue];
+        return $this->crawler;
     }
 
-    public function run($crawler)
+    /**
+     * @inheritdoc
+     */
+    public function getEventDispatcher()
     {
-        while ($item = $this->scrape($crawler)) {
-            // import the item
-            try {
-                $source = $this->handler->handle($this->scraper, $item);
-            } catch (FailedItemException $e) {
-            }
+        return $this->eventDispatcher;
+    }
 
-            // clear entitymanager after batch
-            if (($this->processed % $this->batchSize) === 0) {
-                $this->flush();
-                $this->clear();
-            }
+    /**
+     * @inheritdoc
+     */
+    public function setAsync($async)
+    {
+        $this->async = $async;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function isAsync()
+    {
+        return $this->async;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function scrape(ScraperEntity $scraper, $url)
+    {
+        $url  = $this->normalizeUrl($url);
+
+        try {
+            $html = $this->crawler->crawl($url);
+            // put it in a bag
+            $item = new ScrapedItemBag($scraper, $url, $html);
+
+            // scrape the item and the next urls
+            $this->scrapeItem($item);
+            $this->scrapeNextUrls($scraper);
+
+            return true;
+        } catch (RateLimitException $e) {
+            $this->handleRateLimitException($scraper, $url, $e);
+
+            return false;
+        } catch (UnexpectedResponseException $e) {
+            // we didn't get a 200 OK response, let the application know
+            $this->eventDispatcher->dispatch(
+                ScraperEvents::SCRAPE_URL_NOT_OK,
+                new ScrapeResponseEvent($scraper, $url, $e->getResponse())
+            );
+
+            return false;
+        } catch (CrawlException $e) {
+            // something bad happened, let the calling command handle this
+            throw $e;
         }
-
-        // flush remaining changes
-        $this->flush();
-        $this->clear();
     }
 
     /**
-     * @inheritdoc
+     * @param ScrapedItemBag $item
      */
-    public function scrape($html, $url)
-    {
-        $crawler = $this->getCrawler($html);
-
-        $item = new ScrapedItemBag($url);
-
-        foreach ($this->modifiers as list($modifier, $continue)) {
-            try {
-                if ($modifier instanceof NodeMapperInterface) {
-                    $modifier->setCrawler($crawler);
-                }
-
-                if ($modifier instanceof FilterInterface) {
-                    $modifier->filter($item);
-                }
-
-                if ($modifier instanceof MapperInterface) {
-                    $item = $modifier->map($item);
-                }
-
-                if ($modifier instanceof TransformerInterface) {
-                    $modifier->transform($item);
-                }
-
-                if ($modifier instanceof ValidatorInterface) {
-                    $modifier->validate($item);
-                }
-            } catch (FilterException $e) {
-                // filter exceptions don't get to continue
-                throw $e;
-            } catch (ValidationException $e) {
-                // validation exceptions don't get to continue
-                throw $e;
-            } catch (ModificationException $e) {
-                // notify listeners of this failure, give them the option to stop propagation
-                $event = new FailedItemModificationEvent($item, $modifier, $e);
-                $event->setContinue($continue);
-
-                $this->eventDispatcher->dispatch(FeedEvents::ITEM_MODIFICATION_FAILED, $event);
-
-                if (!$event->getContinue()) {
-                    throw $e;
-                }
-            }
-        }
-
-        return $item;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    protected function getCrawler($html)
-    {
-        return new Crawler($html);
-    }
-
-    /**
-     * Returns the next item in the feed, or null if no more items are left.
-     * Use this when iterating over the feed.
-     *
-     * @param  Feed             $feed
-     * @return FeedItemBag|null
-     */
-    protected function getNextItem(Feed $feed)
+    protected function scrapeItem(ScrapedItemBag $item)
     {
         try {
-            return $feed->getNextItem();
-        } catch (\Exception $exception) {
-            $this->handleException($exception);
-        }
+            $this->parser->parse($item);
+            $source = $this->handler->handle($item);
 
-        return;
+            $this->eventDispatcher->dispatch(ScraperEvents::ITEM_SUCCESS, new SuccessItemEvent($this, $item, $source));
+        } catch (FilterException $e) {
+            $this->eventDispatcher->dispatch(ScraperEvents::ITEM_SKIPPED, new SkippedItemEvent($this, $item, $e->getMessage()));
+        } catch (ValidationException $e) {
+            $this->eventDispatcher->dispatch(ScraperEvents::ITEM_FAILED, new FailedItemEvent($this, $item, $e->getMessage()));
+        } catch (ModificationException $e) {
+            if ($e->getPrevious()) {
+                $e = $e->getPrevious();
+            }
+
+            $this->eventDispatcher->dispatch(ScraperEvents::ITEM_FAILED, new FailedItemEvent($this, $item, $e->getMessage()));
+        }
     }
 
     /**
-     * Flushes outstanding changes
+     * @param ScraperEntity $scraper
      */
-    protected function flush()
+    protected function scrapeNextUrls(ScraperEntity $scraper)
     {
-        $this->handler->flush();
+        foreach ($this->crawler->getNextUrls() as $url) {
+            if ($this->async) {
+                $this->eventDispatcher->dispatch(ScraperEvents::SCRAPE_NEXT_URL, new ScrapeUrlEvent($scraper, $url));
+            } else {
+                $this->scrape($scraper, $url);
+            }
+        }
     }
 
-    protected function clear()
+    /**
+     * @param ScraperEntity      $scraper
+     * @param string             $url
+     * @param RateLimitException $e
+     */
+    protected function handleRateLimitException(ScraperEntity $scraper, $url, RateLimitException $e)
     {
-        $this->handler->clear();
+        $date = $e->getRetryDate();
+
+        // dispatch event about rate limit
+        if ($this->async) {
+            $this->eventDispatcher->dispatch(
+                ScraperEvents::RATE_LIMIT_REACHED,
+                new RateLimitEvent($scraper, $url, $date)
+            );
+        } else  {
+            // if no retry-date is given, sleep for a minute
+            $sleepTime = (null !== $date) ? $date->getTimestamp() - time() : 60;
+
+            sleep($sleepTime);
+        }
+    }
+
+    /**
+     * @param string $url
+     *
+     * @return string
+     */
+    protected function normalizeUrl($url)
+    {
+        return (string) Url::fromString($url);
     }
 }

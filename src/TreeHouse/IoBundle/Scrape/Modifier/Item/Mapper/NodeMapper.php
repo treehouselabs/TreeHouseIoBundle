@@ -1,11 +1,12 @@
 <?php
 
-namespace FM\IoBundle\Scrape\Modifier\Item\Mapper;
+namespace TreeHouse\IoBundle\Scrape\Modifier\Item\Mapper;
 
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpFoundation\ParameterBag;
+use TreeHouse\Feeder\Modifier\Item\Mapper\MapperInterface;
 
-class NodeMapper implements NodeMapperInterface
+class NodeMapper implements MapperInterface, CrawlerAwareInterface
 {
     /**
      * @var Crawler
@@ -15,14 +16,68 @@ class NodeMapper implements NodeMapperInterface
     /**
      * @var array
      */
-    protected $mapping;
+    protected $mapping = [];
+
+    /**
+     * @var string[]
+     */
+    protected $filters = [];
+
+    /**
+     * @var callable[]
+     */
+    protected $extractors = [];
 
     /**
      * @param array $mapping
      */
     public function __construct(array $mapping)
     {
-        $this->mapping = $mapping;
+        foreach ($mapping as $name => $selector) {
+            if (is_string($selector)) {
+                $extractor = [$this, 'extractHtml'];
+            } elseif (is_array($selector) && sizeof($selector) === 2) {
+                list($selector, $extractor) = $selector;
+            } else {
+                throw new \InvalidArgumentException('A mapping value must be either a string or array<string, callable>');
+            }
+
+            $this->addMapping($name, $selector, $extractor);
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public function getMapping()
+    {
+        return $this->mapping;
+    }
+
+    /**
+     * @param string          $name
+     * @param string          $selector
+     * @param string|callable $extractor
+     */
+    public function addMapping($name, $selector, $extractor = 'extractHtml')
+    {
+        if (is_string($extractor) && method_exists($this, $extractor)) {
+            $extractor = [$this, $extractor];
+        }
+
+        if (!is_callable($extractor)) {
+            throw new \InvalidArgumentException(
+                sprintf('The extractor of a mapping must be a callable, but got %s', json_encode($extractor))
+            );
+        }
+
+        $this->mapping[$name]    = $selector;
+        $this->extractors[$name] = $extractor;
+        $this->filters[$name]    = 'filter';
+
+        if (preg_match('~^//~', $selector) || strpos($selector, 'descendant-or-self::') === 0) {
+            $this->filters[$name] = 'filterXpath';
+        }
     }
 
     /**
@@ -46,15 +101,20 @@ class NodeMapper implements NodeMapperInterface
             throw new \LogicException('setCrawler() should be called before map()');
         }
 
-        foreach ($this->mapping as $field => $selector) {
-            if (preg_match('/^\/\//', $selector)) {
-                $node = $this->crawler->filterXPath($selector);
+        foreach ($this->mapping as $name => $selector) {
+            $filter    = $this->filters[$name];
+            $extractor = $this->extractors[$name];
+
+            /** @var Crawler $node */
+            $node = $this->crawler->$filter($selector);
+
+            if ($node->count() === 0) {
+                $value = null;
             } else {
-                $node = $this->crawler->filter($selector);
+                $value = call_user_func($extractor, $name, $node);
             }
 
-            $value = ($node->count() > 0) ? $this->getNodeHtmlValue($field, $node) : null;
-            $item->set($field, $value);
+            $item->set($name, $value);
         }
 
         return $item;
@@ -66,8 +126,19 @@ class NodeMapper implements NodeMapperInterface
      *
      * @return string
      */
-    protected function getNodeHtmlValue($field, Crawler $node)
+    protected function extractHtml($field, Crawler $node)
     {
         return $node->html();
+    }
+
+    /**
+     * @param string  $field
+     * @param Crawler $node
+     *
+     * @return string
+     */
+    protected function extractText($field, Crawler $node)
+    {
+        return $node->text();
     }
 }

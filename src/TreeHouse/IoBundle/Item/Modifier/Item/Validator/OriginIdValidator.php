@@ -5,7 +5,7 @@ namespace TreeHouse\IoBundle\Item\Modifier\Item\Validator;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use TreeHouse\Feeder\Exception\ValidationException;
 use TreeHouse\Feeder\Modifier\Item\Validator\ValidatorInterface;
-use TreeHouse\IoBundle\Import\Model\FeedItemBag;
+use TreeHouse\IoBundle\Import\Feed\FeedItemBag;
 
 /**
  * Validates an origin for a valid external id.

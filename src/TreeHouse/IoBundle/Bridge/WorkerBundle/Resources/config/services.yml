@@ -1,9 +1,12 @@
 parameters:
   tree_house.io.worker.listener.source_modification.class: TreeHouse\IoBundle\Bridge\WorkerBundle\EventListener\SourceModificationListener
   tree_house.io.worker.listener.import_schedule.class: TreeHouse\IoBundle\Bridge\WorkerBundle\EventListener\ImportScheduleListener
+  tree_house.io.worker.listener.scrape_url.class: TreeHouse\IoBundle\Bridge\WorkerBundle\EventListener\ScrapeUrlListener
+  tree_house.io.worker.listener.rate_limit.class: TreeHouse\IoBundle\Bridge\WorkerBundle\EventListener\ScrapeRateLimitListener
   tree_house.io.queue.executor.import_schedule.class: TreeHouse\IoBundle\Bridge\WorkerBundle\Executor\ImportScheduleExecutor
   tree_house.io.queue.executor.export_item.class: TreeHouse\IoBundle\Bridge\WorkerBundle\Executor\ExportItemExecutor
   tree_house.io.queue.executor.import_part.class: TreeHouse\IoBundle\Bridge\WorkerBundle\Executor\ImportPartExecutor
+  tree_house.io.queue.executor.scrape_url.class: TreeHouse\IoBundle\Bridge\WorkerBundle\Executor\ScrapeUrlExecutor
   tree_house.io.queue.executor.source_process.class: TreeHouse\IoBundle\Bridge\WorkerBundle\Executor\SourceProcessExecutor
 
 services:
@@ -20,6 +23,20 @@ services:
       - @fm_worker.queue_manager
     tags:
       - { name: tree_house.io.event_listener, event: io.import.part.scheduled, method: onPartScheduled }
+
+  tree_house.io.worker.listener.scrape_url:
+    class: %tree_house.io.worker.listener.scrape_url.class%
+    arguments:
+      - @fm_worker.queue_manager
+    tags:
+      - { name: tree_house.io.event_listener, event: io.scrape.url.next, method: onScrapeNextUrl }
+
+  tree_house.io.worker.listener.rate_limit:
+    class: %tree_house.io.worker.listener.rate_limit.class%
+    arguments:
+      - @fm_worker.queue_manager
+    tags:
+      - { name: tree_house.io.event_listener, event: io.scrape.rate_limit.reached, method: onRateLimit }
 
   tree_house.io.worker.executor.export_item:
     class: %tree_house.io.queue.executor.export_item.class%
@@ -43,6 +60,15 @@ services:
     arguments:
       - @tree_house.io.import.import_scheduler
       - @tree_house.io.import.import_factory
+      - @logger
+    tags:
+      - { name: fm_worker.queue.job_executor }
+
+  tree_house.io.worker.executor.scrape_url:
+    class: %tree_house.io.queue.executor.scrape_url.class%
+    arguments:
+      - @doctrine
+      - @tree_house.io.scrape.scraper_factory
       - @logger
     tags:
       - { name: fm_worker.queue.job_executor }

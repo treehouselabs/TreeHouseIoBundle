@@ -60,10 +60,17 @@ class ForeignMappingTransformer implements TransformerInterface
         );
     }
 
+    /**
+     * @param string $value
+     *
+     * @throws TransformationFailedException
+     *
+     * @return string
+     */
     protected function getMappedValue($value)
     {
         if (empty($value)) {
-            return;
+            return $value;
         }
 
         if (!array_key_exists($value, $this->mapping)) {

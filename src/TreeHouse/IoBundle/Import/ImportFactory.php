@@ -456,7 +456,6 @@ class ImportFactory implements EventSubscriberInterface
     {
         return [
             'forced'         => $import->isForced(),
-            'origin'         => $import->getFeed()->getOrigin(),
             'feed'           => $import->getFeed(),
             'default_values' => $import->getFeed()->getDefaultValues(),
         ];

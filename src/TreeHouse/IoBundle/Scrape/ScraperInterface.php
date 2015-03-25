@@ -1,30 +1,38 @@
 <?php
 
-namespace FM\IoBundle\Scrape;
+namespace TreeHouse\IoBundle\Scrape;
 
-use FM\Feeder\Exception\FilterException;
-use FM\Feeder\Exception\ValidationException;
-use FM\Feeder\Modifier\Item\ModifierInterface;
-use FM\IoBundle\Scrape\Model\ScrapedItemBag;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use TreeHouse\IoBundle\Entity\Scraper as ScraperEntity;
+use TreeHouse\IoBundle\Scrape\Crawler\CrawlerInterface;
 
 interface ScraperInterface
 {
     /**
-     * @param ModifierInterface $modifier
-     * @param boolean           $continue Will be determined based on modifier type
+     * @return CrawlerInterface
      */
-    public function addModifier(ModifierInterface $modifier, $continue = null);
-
-    public function run(Scraper $scraper);
+    public function getCrawler();
 
     /**
-     * @param string $html
-     * @param string $url
-     *
-     * @throws FilterException
-     * @throws ValidationException
-     *
-     * @return ScrapedItemBag
+     * @return EventDispatcherInterface
      */
-    public function scrape($html, $url);
+    public function getEventDispatcher();
+
+    /**
+     * @param boolean $async
+     */
+    public function setAsync($async);
+
+    /**
+     * @return boolean
+     */
+    public function isAsync();
+
+    /**
+     * @param ScraperEntity $scraper
+     * @param string        $url
+     *
+     * @return boolean True when the scrape succeeded, regardless of the outcome, false otherwise.
+     */
+    public function scrape(ScraperEntity $scraper, $url);
 }

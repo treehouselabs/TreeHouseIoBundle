@@ -2,7 +2,7 @@
 
 namespace TreeHouse\IoBundle\Import\Handler;
 
-use Symfony\Component\Validator\ValidatorInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 use TreeHouse\IoBundle\Exception\ValidationException;
 use TreeHouse\IoBundle\Import\Exception\FailedItemException;
 use TreeHouse\IoBundle\Import\Feed\FeedItemBag;
@@ -37,7 +37,7 @@ class DoctrineHandler implements HandlerInterface
     public function handle(FeedItemBag $item)
     {
         // get source and set the data to it
-        $source = $this->sourceManager->findSourceOrCreate(
+        $source = $this->sourceManager->findSourceByFeedOrCreate(
             $item->getFeed(),
             $item->getOriginalId(),
             $item->getOriginalUrl()

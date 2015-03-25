@@ -3,6 +3,7 @@
 namespace TreeHouse\IoBundle\Tests\Mock;
 
 use TreeHouse\IoBundle\Entity\Feed;
+use TreeHouse\IoBundle\Entity\Scraper;
 use TreeHouse\IoBundle\Model\OriginInterface;
 use TreeHouse\IoBundle\Model\SourceInterface;
 
@@ -67,6 +68,11 @@ class SourceMock implements SourceInterface
      * @var Feed
      */
     protected $feed;
+
+    /**
+     * @var Scraper
+     */
+    protected $scraper;
 
     /**
      * @param integer $id
@@ -264,6 +270,24 @@ class SourceMock implements SourceInterface
     public function getFeed()
     {
         return $this->feed;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setScraper(Scraper $scraper = null)
+    {
+        $this->scraper = $scraper;
+
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getScraper()
+    {
+        return $this->scraper;
     }
 
     /**
