@@ -28,8 +28,8 @@ use TreeHouse\IoBundle\Item\Modifier\Item\Filter\BlockedSourceFilter;
 use TreeHouse\IoBundle\Item\Modifier\Item\Filter\ModifiedItemFilter;
 use TreeHouse\IoBundle\Item\Modifier\Item\Transformer\DefaultValuesTransformer;
 use TreeHouse\IoBundle\Item\Modifier\Item\Validator\OriginIdValidator;
-use TreeHouse\IoBundle\Scrape\Modifier\Item\Mapper\ScrapedItemBagMapper;
 use TreeHouse\IoBundle\Scrape\Modifier\Item\Mapper\NodeMapper;
+use TreeHouse\IoBundle\Scrape\Modifier\Item\Mapper\ScrapedItemBagMapper;
 use TreeHouse\IoBundle\Scrape\Parser\ParserBuilderInterface;
 use TreeHouse\IoBundle\Source\Manager\ImportSourceManager;
 
@@ -166,7 +166,7 @@ abstract class AbstractParserType implements ParserTypeInterface
     abstract protected function getForeignMapping();
 
     /**
-     * @return callable
+     * @return \Closure
      */
     protected function getOriginalIdCallback()
     {
@@ -186,7 +186,7 @@ abstract class AbstractParserType implements ParserTypeInterface
     }
 
     /**
-     * @return callable
+     * @return \Closure
      */
     protected function getOriginalUrlCallback()
     {
@@ -206,7 +206,7 @@ abstract class AbstractParserType implements ParserTypeInterface
     }
 
     /**
-     * @return callable
+     * @return \Closure
      */
     protected function getModificationDateCallback()
     {

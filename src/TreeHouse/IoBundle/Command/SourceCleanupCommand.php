@@ -152,7 +152,7 @@ class SourceCleanupCommand extends Command
      * @param boolean         $force
      * @param boolean         $interactive
      *
-     * @return callable
+     * @return \Closure
      */
     protected function getThresholdVotingFunction(InputInterface $input, OutputInterface $output, $force, $interactive)
     {
@@ -174,7 +174,7 @@ class SourceCleanupCommand extends Command
     }
 
     /**
-     * @return null|IdleSourceCleaner
+     * @return IdleSourceCleaner
      */
     protected function getIdleSourceCleaner()
     {
