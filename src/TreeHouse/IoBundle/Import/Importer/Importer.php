@@ -208,7 +208,7 @@ class Importer implements EventSubscriberInterface
             $this->handleException($exception);
         }
 
-        return;
+        return null;
     }
 
     /**

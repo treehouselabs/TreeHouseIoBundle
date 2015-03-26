@@ -2,12 +2,12 @@
 
 namespace TreeHouse\IoBundle\Item\Modifier\Data\Transformer;
 
-use TreeHouse\Feeder\Modifier\Data\Transformer\LocalizedStringToDateTimeTransformer;
+use TreeHouse\Feeder\Modifier\Data\Transformer\StringToDateTimeTransformer as FallbackTransformer;
 use TreeHouse\Feeder\Modifier\Data\Transformer\TransformerInterface;
 
 class DutchStringToDateTimeTransformer implements TransformerInterface
 {
-    protected $monthNames = array(
+    protected $monthNames = [
         1 =>  'januari',
         2 =>  'februari',
         3 =>  'maart',
@@ -20,7 +20,7 @@ class DutchStringToDateTimeTransformer implements TransformerInterface
         10 => 'oktober',
         11 => 'november',
         12 => 'december',
-    );
+    ];
 
     /**
      * @var \DateTimeZone
@@ -52,7 +52,7 @@ class DutchStringToDateTimeTransformer implements TransformerInterface
     public function transform($value)
     {
         if (is_null($value) || empty($value)) {
-            return;
+            return null;
         }
 
         if ($value instanceof \DateTime) {
@@ -152,12 +152,20 @@ class DutchStringToDateTimeTransformer implements TransformerInterface
         if (preg_match('/^(?P<day>\d{1,2})\/(?P<month>\d{1,2})\/(?<year>\d{4})/i', $value, $matches)) {
             return $this->createDate($matches['year'], $matches['month'], $matches['day']);
         }
+
         // last resort
-        $transformer = new LocalizedStringToDateTimeTransformer();
+        $transformer = new FallbackTransformer(null, $this->timezone->getName(), 'd-m-Y H:i:s');
 
         return $transformer->transform($value);
     }
 
+    /**
+     * @param string $year
+     * @param string $month
+     * @param string $day
+     *
+     * @return \DateTime
+     */
     protected function createDate($year, $month, $day)
     {
         // year can have a quote prefix ('12)
@@ -167,7 +175,7 @@ class DutchStringToDateTimeTransformer implements TransformerInterface
         foreach (['year', 'month', 'day'] as $test) {
             $$test = intval($$test);
             if ($$test < 1) {
-                return;
+                return null;
             }
         }
 
@@ -180,12 +188,12 @@ class DutchStringToDateTimeTransformer implements TransformerInterface
 
         // test if year seems valid
         if ((strlen($year) !== 4) || ($year > 2100)) {
-            return;
+            return null;
         }
 
         // check whether this is a valid date
         if (false === checkdate($month, $day, $year)) {
-            return;
+            return null;
         }
 
         return \DateTime::createFromFormat(
