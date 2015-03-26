@@ -2,7 +2,7 @@
 
 namespace TreeHouse\IoBundle\Item\Modifier\Data\Transformer;
 
-use TreeHouse\Feeder\Modifier\Data\Transformer\LocalizedStringToDateTimeTransformer;
+use TreeHouse\Feeder\Modifier\Data\Transformer\StringToDateTimeTransformer as FallbackTransformer;
 use TreeHouse\Feeder\Modifier\Data\Transformer\TransformerInterface;
 
 class StringToDateTimeTransformer implements TransformerInterface
@@ -26,7 +26,7 @@ class StringToDateTimeTransformer implements TransformerInterface
     public function transform($value)
     {
         if (is_null($value) || empty($value)) {
-            return;
+            return null;
         }
 
         if ($value instanceof \DateTime) {
@@ -39,7 +39,7 @@ class StringToDateTimeTransformer implements TransformerInterface
         }
 
         // last resort
-        $transformer = new LocalizedStringToDateTimeTransformer();
+        $transformer = new FallbackTransformer();
 
         return $transformer->transform($value);
     }

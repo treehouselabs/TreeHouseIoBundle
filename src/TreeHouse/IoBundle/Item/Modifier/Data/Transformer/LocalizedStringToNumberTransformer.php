@@ -42,7 +42,7 @@ class LocalizedStringToNumberTransformer extends BaseTransformer
         // discard alphanumeric characters altogether
         if (!preg_match('/(\-?\d+('.preg_quote($decSep).'\d+)?)/', $value, $matches)) {
             // could not find any digit
-            return;
+            return null;
         }
 
         // use the matched numbers as value
