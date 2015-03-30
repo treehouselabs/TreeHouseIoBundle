@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 use TreeHouse\IoBundle\Scrape\Crawler\Client\ClientInterface;
 use TreeHouse\IoBundle\Scrape\Crawler\Log\RequestLoggerInterface;
 use TreeHouse\IoBundle\Scrape\Crawler\RateLimit\RateLimitInterface;
+use TreeHouse\IoBundle\Scrape\Exception\NotFoundException;
 use TreeHouse\IoBundle\Scrape\Exception\RateLimitException;
 use TreeHouse\IoBundle\Scrape\Exception\UnexpectedResponseException;
 
@@ -97,6 +98,10 @@ abstract class AbstractCrawler implements CrawlerInterface
      */
     public function getLastResponse()
     {
+        if (!$this->response) {
+            throw new \RuntimeException('Crawler has yet to make a request');
+        }
+
         return $this->response;
     }
 
@@ -105,6 +110,10 @@ abstract class AbstractCrawler implements CrawlerInterface
      */
     public function getLastUrl()
     {
+        if (!$this->url) {
+            throw new \RuntimeException('Crawler has yet to make a request');
+        }
+
         return $this->url;
     }
 
@@ -135,7 +144,11 @@ abstract class AbstractCrawler implements CrawlerInterface
             );
         }
 
-        if ($this->response->getStatusCode() !== Response::HTTP_OK) {
+        if ($this->islastResponseNotFound()) {
+            throw new NotFoundException($url, $this->response);
+        }
+
+        if (!$this->islastResponseOk()) {
             throw new UnexpectedResponseException($url, $this->response);
         }
 
@@ -179,5 +192,30 @@ abstract class AbstractCrawler implements CrawlerInterface
         }
 
         return null;
+    }
+
+    /**
+     * Returns whether the last response is a 200 OK.
+     *
+     * @return boolean
+     */
+    protected function islastResponseOk()
+    {
+        return $this->getLastResponse()->getStatusCode() === Response::HTTP_OK;
+    }
+
+    /**
+     * Returns whether the last response is not found. This includes checks for
+     * soft 404's, redirects from what should be 404/410 responses to 200 OK
+     * pages, and other tricks like that.
+     *
+     * In other words: returns true if the last response is not the actual page
+     * that was requested.
+     *
+     * @return boolean
+     */
+    protected function islastResponseNotFound()
+    {
+        return in_array($this->getLastResponse()->getStatusCode(), [Response::HTTP_NOT_FOUND, Response::HTTP_GONE]);
     }
 }

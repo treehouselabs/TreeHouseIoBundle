@@ -12,8 +12,10 @@ use TreeHouse\IoBundle\Scrape\Crawler\CrawlerInterface;
 use TreeHouse\IoBundle\Scrape\Event\FailedItemEvent;
 use TreeHouse\IoBundle\Scrape\Event\RateLimitEvent;
 use TreeHouse\IoBundle\Scrape\Event\ScrapeResponseEvent;
+use TreeHouse\IoBundle\Scrape\Event\ScrapeUrlEvent;
 use TreeHouse\IoBundle\Scrape\Event\SkippedItemEvent;
 use TreeHouse\IoBundle\Scrape\Event\SuccessItemEvent;
+use TreeHouse\IoBundle\Scrape\Exception\NotFoundException;
 use TreeHouse\IoBundle\Scrape\Exception\RateLimitException;
 use TreeHouse\IoBundle\Scrape\Exception\UnexpectedResponseException;
 use TreeHouse\IoBundle\Scrape\Handler\HandlerInterface;
@@ -108,7 +110,7 @@ class ScraperTest extends \PHPUnit_Framework_TestCase
             }))
         ;
 
-        $this->assertTrue($this->scraper->scrape(new ScraperEntity(), 'http://example.org'));
+        $this->scraper->scrape(new ScraperEntity(), 'http://example.org');
     }
 
     public function testScrapeItemFiltered()
@@ -131,7 +133,7 @@ class ScraperTest extends \PHPUnit_Framework_TestCase
             ->with(ScraperEvents::ITEM_SKIPPED, $this->isInstanceOf(SkippedItemEvent::class));
         ;
 
-        $this->assertTrue($this->scraper->scrape(new ScraperEntity(), 'http://example.org'));
+        $this->scraper->scrape(new ScraperEntity(), 'http://example.org');
     }
 
     public function testScrapeItemInvalid()
@@ -154,7 +156,7 @@ class ScraperTest extends \PHPUnit_Framework_TestCase
             ->with(ScraperEvents::ITEM_FAILED, $this->isInstanceOf(FailedItemEvent::class));
         ;
 
-        $this->assertTrue($this->scraper->scrape(new ScraperEntity(), 'http://example.org'));
+        $this->scraper->scrape(new ScraperEntity(), 'http://example.org');
     }
 
     public function testScrapeItemModificationFailure()
@@ -177,9 +179,12 @@ class ScraperTest extends \PHPUnit_Framework_TestCase
             ->with(ScraperEvents::ITEM_FAILED, $this->isInstanceOf(FailedItemEvent::class));
         ;
 
-        $this->assertTrue($this->scraper->scrape(new ScraperEntity(), 'http://example.org'));
+        $this->scraper->scrape(new ScraperEntity(), 'http://example.org');
     }
 
+    /**
+     * @expectedException \TreeHouse\IoBundle\Scrape\Exception\RateLimitException
+     */
     public function testScrapeRateLimit()
     {
         $this->crawler
@@ -188,9 +193,12 @@ class ScraperTest extends \PHPUnit_Framework_TestCase
             ->will($this->throwException(new RateLimitException('http://example.org', '', new \DateTime())))
         ;
 
-        $this->assertFalse($this->scraper->scrape(new ScraperEntity(), 'http://example.org'));
+        $this->scraper->scrape(new ScraperEntity(), 'http://example.org');
     }
 
+    /**
+     * @expectedException \TreeHouse\IoBundle\Scrape\Exception\RateLimitException
+     */
     public function testScrapeRateLimitAsync()
     {
         $this->scraper->setAsync(true);
@@ -207,9 +215,32 @@ class ScraperTest extends \PHPUnit_Framework_TestCase
             ->with(ScraperEvents::RATE_LIMIT_REACHED, $this->isInstanceOf(RateLimitEvent::class));
         ;
 
-        $this->assertFalse($this->scraper->scrape(new ScraperEntity(), 'http://example.org'));
+        $this->scraper->scrape(new ScraperEntity(), 'http://example.org');
     }
 
+    /**
+     * @expectedException \TreeHouse\IoBundle\Scrape\Exception\NotFoundException
+     */
+    public function testScrapeNotFoundResponse()
+    {
+        $this->crawler
+            ->expects($this->once())
+            ->method('crawl')
+            ->will($this->throwException(new NotFoundException('http://example.org', new Response(410))))
+        ;
+
+        $this->dispatcher
+            ->expects($this->once())
+            ->method('dispatch')
+            ->with(ScraperEvents::SCRAPE_URL_NOT_OK, $this->isInstanceOf(ScrapeResponseEvent::class));
+        ;
+
+        $this->scraper->scrape(new ScraperEntity(), 'http://example.org');
+    }
+
+    /**
+     * @expectedException \TreeHouse\IoBundle\Scrape\Exception\UnexpectedResponseException
+     */
     public function testScrapeUnexpectedResponse()
     {
         $this->crawler
@@ -224,6 +255,74 @@ class ScraperTest extends \PHPUnit_Framework_TestCase
             ->with(ScraperEvents::SCRAPE_URL_NOT_OK, $this->isInstanceOf(ScrapeResponseEvent::class));
         ;
 
-        $this->assertFalse($this->scraper->scrape(new ScraperEntity(), 'http://example.org'));
+        $this->scraper->scrape(new ScraperEntity(), 'http://example.org');
+    }
+
+    public function testScrapeAfter()
+    {
+        $this->dispatcher
+            ->expects($this->once())
+            ->method('dispatch')
+            ->with(ScraperEvents::SCRAPE_NEXT_URL, $this->isInstanceOf(ScrapeUrlEvent::class));
+        ;
+
+        $this->scraper->scrapeAfter(new ScraperEntity(), 'http://example.org', new \DateTime());
+    }
+
+    public function testScrapeNext()
+    {
+        $entity = new ScraperEntity();
+        $url    = 'http://www.treehouse.nl';
+
+        $this->crawler
+            ->expects($this->once())
+            ->method('getNextUrls')
+            ->will($this->returnValue([$url]))
+        ;
+
+        /** @var \PHPUnit_Framework_MockObject_MockObject|Scraper $scraper */
+        $scraper = $this
+            ->getMockBuilder(Scraper::class)
+            ->setConstructorArgs([$this->crawler, $this->parser, $this->handler])
+            ->setMethods(['scrape'])
+            ->getMock()
+        ;
+
+        $scraper
+            ->expects($this->once())
+            ->method('scrape')
+            ->with($entity, $url)
+        ;
+
+        $scraper->scrapeNext($entity);
+    }
+
+    public function testScrapeNextAsync()
+    {
+        $entity = new ScraperEntity();
+        $url    = 'http://www.treehouse.nl';
+
+        $this->crawler
+            ->expects($this->once())
+            ->method('getNextUrls')
+            ->will($this->returnValue([$url]))
+        ;
+
+        /** @var \PHPUnit_Framework_MockObject_MockObject|Scraper $scraper */
+        $scraper = $this
+            ->getMockBuilder(Scraper::class)
+            ->setConstructorArgs([$this->crawler, $this->parser, $this->handler])
+            ->setMethods(['scrapeAfter'])
+            ->getMock()
+        ;
+
+        $scraper
+            ->expects($this->once())
+            ->method('scrapeAfter')
+            ->with($entity, $url, $this->greaterThanOrEqual(new \DateTime()))
+        ;
+
+        $scraper->setAsync(true);
+        $scraper->scrapeNext($entity);
     }
 }

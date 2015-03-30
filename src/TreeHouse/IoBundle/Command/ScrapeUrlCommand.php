@@ -12,6 +12,7 @@ use TreeHouse\IoBundle\Entity\Scraper;
 use TreeHouse\IoBundle\Entity\Scraper as ScraperEntity;
 use TreeHouse\IoBundle\Scrape\Crawler\RateLimit\EnablingRateLimitInterface;
 use TreeHouse\IoBundle\Scrape\EventListener\ScrapeOutputSubscriber;
+use TreeHouse\IoBundle\Scrape\Exception\CrawlException;
 use TreeHouse\IoBundle\Scrape\ScraperFactory;
 
 class ScrapeUrlCommand extends Command
@@ -61,7 +62,10 @@ class ScrapeUrlCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $entity  = $this->findScraper($input->getArgument('scraper'));
+        if (null === $entity  = $this->findScraper($input->getArgument('scraper'))) {
+            throw new \RuntimeException(sprintf('Scraper %d not found', $input->getArgument('scraper')));
+        }
+
         $scraper = $this->factory->createScraper($entity);
 
         if ($input->getOption('async')) {
@@ -80,9 +84,15 @@ class ScrapeUrlCommand extends Command
             $dispatcher->addSubscriber(new ScrapeOutputSubscriber($output));
         }
 
-        $scraper->scrape($entity, $input->getArgument('url'));
+        try {
+            $scraper->scrape($entity, $input->getArgument('url'));
 
-        $output->writeln(sprintf('Scraped <info>%s</info>', $input->getArgument('url')));
+            return 0;
+        } catch (CrawlException $e) {
+            $output->writeln("<error>Error scraping url: %s\n\n%s</error>", $e->getUrl(), $e->getMessage());
+
+            return 1;
+        }
     }
 
     /**

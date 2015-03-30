@@ -13,6 +13,7 @@ parameters:
   tree_house.io.command.export.inspect.class: TreeHouse\IoBundle\Command\ExportInspectCommand
   tree_house.io.command.export.validate.class: TreeHouse\IoBundle\Command\ExportValidateCommand
   tree_house.io.command.scrape.url.class: TreeHouse\IoBundle\Command\ScrapeUrlCommand
+  tree_house.io.command.scrape.start.class: TreeHouse\IoBundle\Command\ScrapeStartCommand
   tree_house.io.command.source.process.class: TreeHouse\IoBundle\Command\SourceProcessCommand
   tree_house.io.command.source.cleanup.class: TreeHouse\IoBundle\Command\SourceCleanupCommand
 
@@ -114,6 +115,14 @@ services:
 
   tree_house.io.command.scrape.url:
     class: %tree_house.io.command.scrape.url.class%
+    arguments:
+      - @doctrine
+      - @tree_house.io.scrape.scraper_factory
+    tags:
+      - { name: console.command }
+
+  tree_house.io.command.scrape.start:
+    class: %tree_house.io.command.scrape.start.class%
     arguments:
       - @doctrine
       - @tree_house.io.scrape.scraper_factory

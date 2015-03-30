@@ -1,22 +1,39 @@
 parameters:
   tree_house.io.import.dir: %tree_house.io.data_dir%/import
   tree_house.io.import.reader.multipart.default_part_size: 1000
-  tree_house.io.import.importer_builder.class: TreeHouse\IoBundle\Import\Importer\ImporterBuilder
-  tree_house.io.import.importer_builder_factory.class: TreeHouse\IoBundle\Import\Importer\ImporterBuilderFactory
   tree_house.io.import.factory.class: TreeHouse\IoBundle\Import\ImportFactory
   tree_house.io.import.storage.class: TreeHouse\IoBundle\Import\ImportStorage
-  tree_house.io.import.reader_builder_factory.class: TreeHouse\IoBundle\Import\Reader\ReaderBuilderFactory
-  tree_house.io.import.feed_type.class: TreeHouse\IoBundle\Import\Feed\Type\AbstractFeedType
-  tree_house.io.import.handler.doctrine.class: TreeHouse\IoBundle\Import\Handler\DoctrineHandler
+  tree_house.io.import.listener.source_raw_data.class: TreeHouse\IoBundle\Import\EventListener\SourceRawDataListener
+  tree_house.io.import.listener.import_removal.class: TreeHouse\IoBundle\Import\EventListener\ImportRemovalListener
+  tree_house.io.import.importer_builder.class: TreeHouse\IoBundle\Import\Importer\ImporterBuilder
+  tree_house.io.import.importer_builder_factory.class: TreeHouse\IoBundle\Import\Importer\ImporterBuilderFactory
   tree_house.io.import.importer_type.default.class: TreeHouse\IoBundle\Import\Importer\Type\DefaultImporterType
+  tree_house.io.import.reader_builder_factory.class: TreeHouse\IoBundle\Import\Reader\ReaderBuilderFactory
   tree_house.io.import.reader_type.xml.class: TreeHouse\IoBundle\Import\Reader\Type\XmlReaderType
   tree_house.io.import.reader_type.xml_multi_part.class: TreeHouse\IoBundle\Import\Reader\Type\XmlMultiPartReaderType
+  tree_house.io.import.handler.doctrine.class: TreeHouse\IoBundle\Import\Handler\DoctrineHandler
+  tree_house.io.import.feed_type.class: TreeHouse\IoBundle\Import\Feed\Type\AbstractFeedType
   tree_house.io.import.processor.posix.class: TreeHouse\IoBundle\Import\Processor\PosixProcessor
   tree_house.io.import.import_scheduler.class: TreeHouse\IoBundle\Import\ImportScheduler
   tree_house.io.import.import_rotator.class: TreeHouse\IoBundle\Import\ImportRotator
   tree_house.io.import.item_logger.redis.class: TreeHouse\IoBundle\Import\Log\RedisItemLogger
 
 services:
+  tree_house.io.import.listener.source_raw_data:
+    class: %tree_house.io.import.listener.source_raw_data.class%
+    tags:
+      - { name: tree_house.io.event_listener, event: feeder.feed.resource_pre_serialize, method: onResourcePreSerialize }
+      - { name: tree_house.io.event_listener, event: io.import.item.success, method: onItemSuccess }
+      - { name: tree_house.io.event_listener, event: io.import.item.finish, method: onItemFinish }
+
+  tree_house.io.import.listener.import_removal:
+    class: %tree_house.io.import.listener.import_removal.class%
+    arguments:
+      - @tree_house.io.import.import_storage
+      - @?tree_house.io.import.item_logger
+    tags:
+      - { name: doctrine.event_listener, event: preRemove, lazy: true }
+
   tree_house.io.import.importer_builder:
     class: %tree_house.io.import.importer_builder.class%
     tags:

@@ -71,13 +71,19 @@ class ScrapeUrlExecutor extends JobExecutor implements LoggerAggregate
 
         list($scraperId, $url) = $payload;
 
-        $entity  = $this->findScraper($scraperId);
+        if (null === $entity = $this->findScraper($scraperId)) {
+            $this->logger->error(sprintf('Scraper %d not found', $scraperId));
+
+            return false;
+        }
 
         $scraper = $this->factory->createScraper($entity);
         $scraper->setAsync(true);
 
         try {
-            return $scraper->scrape($entity, $url);
+            $scraper->scrape($entity, $url);
+
+            return true;
         } catch (CrawlException $e) {
             $this->logger->error($e->getMessage(), ['url' => $e->getUrl()]);
 

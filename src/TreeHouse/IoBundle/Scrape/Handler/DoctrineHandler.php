@@ -37,13 +37,7 @@ class DoctrineHandler implements HandlerInterface
     public function handle(ScrapedItemBag $item)
     {
         // get source and set the data to it
-        $source = $this->sourceManager->findSourceByScraperOrCreate(
-            $item->getScraper(),
-            $item->getOriginalId(),
-            $item->getOriginalUrl()
-        );
-
-        // save data
+        $source = $this->findSourceOrCreate($item);
         $source->setData($item->all());
 
         try {
@@ -87,5 +81,19 @@ class DoctrineHandler implements HandlerInterface
         if ($violations->count()) {
             throw ValidationException::create($violations);
         }
+    }
+
+    /**
+     * @param ScrapedItemBag $item
+     *
+     * @return SourceInterface
+     */
+    protected function findSourceOrCreate(ScrapedItemBag $item)
+    {
+        return $this->sourceManager->findSourceByScraperOrCreate(
+            $item->getScraper(),
+            $item->getOriginalId(),
+            $item->getOriginalUrl()
+        );
     }
 }
