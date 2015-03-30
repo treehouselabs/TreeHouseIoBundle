@@ -23,7 +23,7 @@ class Feed
     protected $id;
 
     /**
-     * The frequency to import the feed with
+     * The frequency to import the feed with, in hours
      *
      * @var integer $frequency
      *

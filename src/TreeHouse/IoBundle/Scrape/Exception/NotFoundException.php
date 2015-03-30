@@ -4,13 +4,8 @@ namespace TreeHouse\IoBundle\Scrape\Exception;
 
 use Symfony\Component\HttpFoundation\Response;
 
-class UnexpectedResponseException extends CrawlException
+class NotFoundException extends UnexpectedResponseException
 {
-    /**
-     * @var Response
-     */
-    protected $response;
-
     /**
      * @param string     $url
      * @param Response   $response
@@ -21,19 +16,9 @@ class UnexpectedResponseException extends CrawlException
     public function __construct($url, Response $response, $message = '', $code = 0, \Exception $previous = null)
     {
         if (empty($message)) {
-            $message = sprintf('Got a %d response instead of a 200 OK response', $response->getStatusCode());
+            $message = 'Got a "not found" response for url';
         }
 
-        parent::__construct($url, $message, $code, $previous);
-
-        $this->response = $response;
-    }
-
-    /**
-     * @return Response
-     */
-    public function getResponse()
-    {
-        return $this->response;
+        parent::__construct($url, $response, $message, $code, $previous);
     }
 }

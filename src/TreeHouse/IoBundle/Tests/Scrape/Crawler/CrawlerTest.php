@@ -9,11 +9,26 @@ use GuzzleHttp\Message\ResponseInterface;
 use GuzzleHttp\Stream\Stream;
 use TreeHouse\IoBundle\Scrape\Crawler\AbstractCrawler;
 use TreeHouse\IoBundle\Scrape\Crawler\Client\GuzzleClient;
+use TreeHouse\IoBundle\Scrape\Crawler\CrawlerInterface;
 use TreeHouse\IoBundle\Scrape\Crawler\Log\RequestLoggerInterface;
 use TreeHouse\IoBundle\Scrape\Crawler\RateLimit\RateLimitInterface;
 
 class CrawlerTest extends \PHPUnit_Framework_TestCase
 {
+    public function testClass()
+    {
+        $client    = new GuzzleClient($this->getMockForAbstractClass(ClientInterface::class));
+        $logger    = $this->getMockForAbstractClass(RequestLoggerInterface::class);
+        $rateLimit = $this->getMockForAbstractClass(RateLimitInterface::class);
+
+        $crawler = new Crawler($client, $logger, $rateLimit);
+
+        $this->assertInstanceOf(CrawlerInterface::class, $crawler);
+        $this->assertSame($client, $crawler->getClient());
+        $this->assertSame($logger, $crawler->getLogger());
+        $this->assertSame($rateLimit, $crawler->getRateLimit());
+    }
+
     public function testCrawl()
     {
         $content = 'Hello, World!';
@@ -29,6 +44,10 @@ class CrawlerTest extends \PHPUnit_Framework_TestCase
         $crawler = $this->createCrawler($guzzle, $logger, $rateLimit);
 
         $this->assertEquals($content, $crawler->crawl('http://example.org'));
+
+        $response = $crawler->getLastResponse();
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertSame($content, $response->getContent());
     }
 
     public function testCrawlWithRedirect()
@@ -44,6 +63,32 @@ class CrawlerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($content, $crawler->crawl($url));
         $this->assertEquals($redirectUrl, $crawler->getLastUrl());
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     */
+    public function testLastResponseWithoutCrawl()
+    {
+        $client    = new GuzzleClient($this->getMockForAbstractClass(ClientInterface::class));
+        $logger    = $this->getMockForAbstractClass(RequestLoggerInterface::class);
+        $rateLimit = $this->getMockForAbstractClass(RateLimitInterface::class);
+
+        $crawler = new Crawler($client, $logger, $rateLimit);
+        $crawler->getLastResponse();
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     */
+    public function testLastUrlWithoutCrawl()
+    {
+        $client    = new GuzzleClient($this->getMockForAbstractClass(ClientInterface::class));
+        $logger    = $this->getMockForAbstractClass(RequestLoggerInterface::class);
+        $rateLimit = $this->getMockForAbstractClass(RateLimitInterface::class);
+
+        $crawler = new Crawler($client, $logger, $rateLimit);
+        $crawler->getLastUrl();
     }
 
     /**

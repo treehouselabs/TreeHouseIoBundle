@@ -23,6 +23,24 @@ class Scraper
     protected $id;
 
     /**
+     * The frequency to start the scraper, in hours
+     *
+     * @var integer $startFrequency
+     *
+     * @ORM\Column(type="integer")
+     */
+    protected $startFrequency;
+
+    /**
+     * The frequency to revisit sources, in hours
+     *
+     * @var integer $revisitFrequency
+     *
+     * @ORM\Column(type="integer")
+     */
+    protected $revisitFrequency;
+
+    /**
      * One of the configured crawler types
      *
      * @var string $type
@@ -86,6 +104,13 @@ class Scraper
     protected $defaultValues;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    protected $datetimeLastStarted;
+
+    /**
      * @var OriginInterface
      *
      * @ORM\ManyToOne(targetEntity="TreeHouse\IoBundle\Model\OriginInterface", inversedBy="scrapers", cascade={"persist"})
@@ -121,6 +146,46 @@ class Scraper
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @param integer $startFrequency
+     *
+     * @return $this
+     */
+    public function setStartFrequency($startFrequency)
+    {
+        $this->startFrequency = $startFrequency;
+
+        return $this;
+    }
+
+    /**
+     * @return integer
+     */
+    public function getStartFrequency()
+    {
+        return $this->startFrequency;
+    }
+
+    /**
+     * @param integer $revisitFrequency
+     *
+     * @return $this
+     */
+    public function setRevisitFrequency($revisitFrequency)
+    {
+        $this->revisitFrequency = $revisitFrequency;
+
+        return $this;
+    }
+
+    /**
+     * @return integer
+     */
+    public function getRevisitFrequency()
+    {
+        return $this->revisitFrequency;
     }
 
     /**
@@ -261,6 +326,26 @@ class Scraper
     public function getDefaultValues()
     {
         return $this->defaultValues;
+    }
+
+    /**
+     * @param \DateTime $datetimeLastStarted
+     *
+     * @return $this
+     */
+    public function setDatetimeLastStarted(\DateTime $datetimeLastStarted = null)
+    {
+        $this->datetimeLastStarted = $datetimeLastStarted;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getDatetimeLastStarted()
+    {
+        return $this->datetimeLastStarted;
     }
 
     /**

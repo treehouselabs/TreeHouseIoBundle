@@ -98,24 +98,26 @@ class Scraper implements ScraperInterface
     /**
      * @inheritdoc
      */
-    public function scrape(ScraperEntity $scraper, $url)
+    public function scrape(ScraperEntity $scraper, $url, $continue = true)
     {
-        $url  = $this->normalizeUrl($url);
+        $url = $this->normalizeUrl($url);
 
         try {
             $html = $this->crawler->crawl($url);
+
             // put it in a bag
             $item = new ScrapedItemBag($scraper, $url, $html);
 
             // scrape the item and the next urls
             $this->scrapeItem($item);
-            $this->scrapeNextUrls($scraper);
 
-            return true;
+            if ($continue) {
+                $this->scrapeNext($scraper);
+            }
         } catch (RateLimitException $e) {
             $this->handleRateLimitException($scraper, $url, $e);
 
-            return false;
+            throw $e;
         } catch (UnexpectedResponseException $e) {
             // we didn't get a 200 OK response, let the application know
             $this->eventDispatcher->dispatch(
@@ -123,11 +125,37 @@ class Scraper implements ScraperInterface
                 new ScrapeResponseEvent($scraper, $url, $e->getResponse())
             );
 
-            return false;
+            throw $e;
         } catch (CrawlException $e) {
             // something bad happened, let the calling command handle this
             throw $e;
         }
+    }
+
+    /**
+     * @param ScraperEntity $scraper
+     */
+    public function scrapeNext(ScraperEntity $scraper)
+    {
+        foreach ($this->crawler->getNextUrls() as $url) {
+            if ($this->async) {
+                $this->scrapeAfter($scraper, $url, new \DateTime());
+            } else {
+                $this->scrape($scraper, $url);
+            }
+        }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function scrapeAfter(ScraperEntity $scraper, $url, \DateTime $date)
+    {
+        $this->eventDispatcher->dispatch(
+            ScraperEvents::SCRAPE_NEXT_URL,
+            new ScrapeUrlEvent($scraper, $url),
+            $date
+        );
     }
 
     /**
@@ -154,20 +182,6 @@ class Scraper implements ScraperInterface
     }
 
     /**
-     * @param ScraperEntity $scraper
-     */
-    protected function scrapeNextUrls(ScraperEntity $scraper)
-    {
-        foreach ($this->crawler->getNextUrls() as $url) {
-            if ($this->async) {
-                $this->eventDispatcher->dispatch(ScraperEvents::SCRAPE_NEXT_URL, new ScrapeUrlEvent($scraper, $url));
-            } else {
-                $this->scrape($scraper, $url);
-            }
-        }
-    }
-
-    /**
      * @param ScraperEntity      $scraper
      * @param string             $url
      * @param RateLimitException $e
@@ -182,7 +196,7 @@ class Scraper implements ScraperInterface
                 ScraperEvents::RATE_LIMIT_REACHED,
                 new RateLimitEvent($scraper, $url, $date)
             );
-        } else  {
+        } else {
             // if no retry-date is given, sleep for a minute
             $sleepTime = (null !== $date) ? $date->getTimestamp() - time() : 60;
 

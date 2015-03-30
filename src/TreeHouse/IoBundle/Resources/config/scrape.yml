@@ -5,6 +5,7 @@ parameters:
   tree_house.io.scrape.scraper_factory.class: TreeHouse\IoBundle\Scrape\ScraperFactory
   tree_house.io.scrape.handler.doctrine.class: TreeHouse\IoBundle\Scrape\Handler\DoctrineHandler
   tree_house.io.scrape.parser_type.abstract.class: TreeHouse\IoBundle\Scrape\Parser\Type\AbstractParserType
+  tree_house.io.scrape.source.revisitor.class: TreeHouse\IoBundle\Scrape\SourceRevisitor
 
 services:
   tree_house.io.scrape.scraper_factory:
@@ -27,6 +28,8 @@ services:
       - @tree_house.io.scrape.crawler.client.guzzle_client
     calls:
       - ['setLogger', [@logger]]
+    tags:
+      - { name: monolog.logger, channel: io }
 
   tree_house.io.scrape.crawler.abstract:
     abstract: true
@@ -49,3 +52,9 @@ services:
     arguments:
       - @doctrine
       - @tree_house.io.source.manager.import
+
+  tree_house.io.scrape.source.revisitor:
+    class: %tree_house.io.scrape.source.revisitor.class%
+    arguments:
+      - @tree_house.io.source_manager
+      - @tree_house.io.scrape.scraper_factory
