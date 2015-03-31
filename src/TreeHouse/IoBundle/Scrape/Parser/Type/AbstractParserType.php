@@ -339,7 +339,7 @@ abstract class AbstractParserType implements ParserTypeInterface
             case 'integer':
             case 'smallint':
                 $parser->addTransformerBetween(
-                    new LocalizedStringToNumberTransformer(\NumberFormatter::TYPE_INT32, 0, true, null, $this->options['number_locale']),
+                    new LocalizedStringToNumberTransformer($this->options['number_locale'], 0, true, null),
                     $field,
                     $startIndex,
                     $endIndex
@@ -348,7 +348,7 @@ abstract class AbstractParserType implements ParserTypeInterface
 
             case 'decimal':
                 $parser->addTransformerBetween(
-                    new LocalizedStringToNumberTransformer(\NumberFormatter::TYPE_DOUBLE, $mapping['scale'], true, null, $this->options['number_locale']),
+                    new LocalizedStringToNumberTransformer($this->options['number_locale'], $mapping['scale'], true, null),
                     $field,
                     $startIndex,
                     $endIndex
