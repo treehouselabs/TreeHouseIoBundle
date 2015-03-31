@@ -154,7 +154,7 @@ class DutchStringToDateTimeTransformer implements TransformerInterface
         }
 
         // last resort
-        $transformer = new FallbackTransformer(null, $this->timezone->getName(), 'd-m-Y H:i:s');
+        $transformer = new FallbackTransformer('d-m-Y H:i:s', null, $this->timezone->getName());
 
         return $transformer->transform($value);
     }
