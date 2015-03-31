@@ -337,7 +337,6 @@ abstract class AbstractFeedTypeTest extends TestCase
             [
                 'forced'         => true,
                 'feed'           => $feed,
-                'origin'         => $feed->getOrigin(),
                 'default_values' => $feed->getDefaultValues(),
             ],
             $feed->getOptions()
