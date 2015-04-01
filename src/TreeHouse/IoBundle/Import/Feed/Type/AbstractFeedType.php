@@ -68,12 +68,11 @@ abstract class AbstractFeedType implements FeedTypeInterface
 
         // range 100-200: first make sure we have consistent keys and a valid origin
         $this->addModifierBetween($builder, new FeederTransformer\LowercaseKeysTransformer(), 100, 200);
-        $this->addModifierBetween($builder, new FeederTransformer\UnderscoreKeysTransformer(), 110, 200);
-        $this->addModifierBetween($builder, new FeederTransformer\StripKeysPunctuationTransformer(), 120, 200);
-        $this->addModifierBetween($builder, new FeederTransformer\ExpandAttributesTransformer(), 130, 200);
-        $this->addModifierBetween($builder, new IoTransformer\NodeTextTransformer(), 140, 200);
-        $this->addModifierBetween($builder, new FeederTransformer\TrimTransformer(), 150, 200);
-        $this->addModifierBetween($builder, new FeederTransformer\StripCommentsTransformer(), 160, 200);
+        $this->addModifierBetween($builder, new FeederTransformer\UnderscoreKeysTransformer(), 100, 200);
+        $this->addModifierBetween($builder, new FeederTransformer\StripKeysPunctuationTransformer(), 100, 200);
+        $this->addModifierBetween($builder, new FeederTransformer\ExpandAttributesTransformer(), 100, 200);
+        $this->addModifierBetween($builder, new FeederTransformer\TrimTransformer(), 100, 200);
+        $this->addModifierBetween($builder, new FeederTransformer\StripCommentsTransformer(), 100, 200);
 
         // This transforms the regular ItemBag into our own FeedItemBag,
         // which adds logic for the original id/url and modification date.
