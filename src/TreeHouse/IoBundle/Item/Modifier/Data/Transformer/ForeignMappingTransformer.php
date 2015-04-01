@@ -69,7 +69,7 @@ class ForeignMappingTransformer implements TransformerInterface
      */
     protected function getMappedValue($value)
     {
-        if (empty($value)) {
+        if (null === $value) {
             return $value;
         }
 

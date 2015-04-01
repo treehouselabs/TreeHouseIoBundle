@@ -5,7 +5,7 @@ namespace TreeHouse\IoBundle\Tests\Item\Modifier\Item\Transformer;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use TreeHouse\IoBundle\Item\Modifier\Item\Transformer\NodeToTextTransformer;
 
-class NodeTextTransformerTest extends \PHPUnit_Framework_TestCase
+class NodeToTextTransformerTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var ParameterBag
