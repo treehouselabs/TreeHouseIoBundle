@@ -1,6 +1,6 @@
 <?php
 
-namespace TreeHouse\IoBundle\Tests\Import\Modifier\Data\Transformer;
+namespace TreeHouse\IoBundle\Tests\Item\Modifier\Data\Transformer;
 
 use TreeHouse\Feeder\Modifier\Data\Transformer\TransformerInterface;
 use TreeHouse\IoBundle\Item\Modifier\Data\Transformer\LocalizedStringToNumberTransformer;

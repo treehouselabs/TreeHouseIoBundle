@@ -6,7 +6,6 @@ use Doctrine\Common\Inflector\Inflector;
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Markdownify\ConverterExtra;
 use TreeHouse\Feeder\Exception\FilterException;
-use TreeHouse\Feeder\Exception\ModificationException;
 use TreeHouse\Feeder\Exception\TransformationFailedException;
 use TreeHouse\Feeder\Modifier\Data\Transformer\CallbackTransformer;
 use TreeHouse\Feeder\Modifier\Item\Filter\CallbackFilter;
@@ -15,7 +14,6 @@ use TreeHouse\IoBundle\Import\Feed\FeedBuilderInterface;
 use TreeHouse\IoBundle\Import\Feed\FeedItemBag;
 use TreeHouse\IoBundle\Import\Feed\Type\DefaultFeedType;
 use TreeHouse\IoBundle\Item\Modifier\Data\Transformer\HtmlToMarkdownTransformer;
-use TreeHouse\IoBundle\Item\Modifier\Data\Transformer\PurifiedHtmlTransformer;
 use TreeHouse\IoIntegrationBundle\Entity\Author;
 
 class ItunesPodcastFeedType extends DefaultFeedType
@@ -33,7 +31,7 @@ class ItunesPodcastFeedType extends DefaultFeedType
      */
     protected function getOriginalIdField()
     {
-        return 'guid';
+        return 'guid[#]';
     }
 
     /**
@@ -117,7 +115,7 @@ class ItunesPodcastFeedType extends DefaultFeedType
                     throw new TransformationFailedException('Invalid duration');
                 }
 
-                list ($hours, $minutes, $seconds) = explode(':', $value);
+                list($hours, $minutes, $seconds) = explode(':', $value);
 
                 return (3600 * $hours) + (60 * $minutes) + $seconds;
             }),
@@ -153,7 +151,6 @@ class ItunesPodcastFeedType extends DefaultFeedType
             3000,
             3500
         );
-
     }
 
     /**

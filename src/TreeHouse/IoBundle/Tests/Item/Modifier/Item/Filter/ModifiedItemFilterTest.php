@@ -1,6 +1,6 @@
 <?php
 
-namespace TreeHouse\IoBundle\Tests\Import\Modifier\Item\Filter;
+namespace TreeHouse\IoBundle\Tests\Item\Modifier\Item\Filter;
 
 use TreeHouse\IoBundle\Import\Feed\FeedItemBag;
 use TreeHouse\IoBundle\Item\Modifier\Item\Filter\ModifiedItemFilter;

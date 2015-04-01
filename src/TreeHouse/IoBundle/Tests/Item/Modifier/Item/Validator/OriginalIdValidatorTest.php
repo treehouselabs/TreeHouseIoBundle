@@ -1,6 +1,6 @@
 <?php
 
-namespace TreeHouse\IoBundle\Tests\Import\Modifier\Item\Validator;
+namespace TreeHouse\IoBundle\Tests\Item\Modifier\Item\Validator;
 
 use TreeHouse\IoBundle\Import\Feed\FeedItemBag;
 use TreeHouse\IoBundle\Item\Modifier\Item\Validator\OriginIdValidator;
