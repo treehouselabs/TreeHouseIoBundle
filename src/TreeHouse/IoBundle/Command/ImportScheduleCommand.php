@@ -45,7 +45,8 @@ class ImportScheduleCommand extends Command
     protected function configure()
     {
         $this->setName('io:import:schedule');
-        $this->addArgument('feed', InputArgument::IS_ARRAY, 'The feed id(s), defaults to all');
+        $this->addArgument('feed', InputArgument::IS_ARRAY, 'The feed id(s), defaults to all eligible feeds (depending on <comment>--minutes</comment>');
+        $this->addOption('all', 'a', InputOption::VALUE_NONE, 'Schedule import for all feeds, negates the <comment>--minutes</comment> option');
         $this->addOption('minutes', 'm', InputOption::VALUE_OPTIONAL, 'The number of minutes to schedule imports for.', 5);
         $this->addOption('force', 'f', InputOption::VALUE_NONE, 'Make the import forced, meaning no items are skipped');
         $this->setDescription('Schedules imports for one or more feeds');
@@ -63,8 +64,10 @@ class ImportScheduleCommand extends Command
 
         if ($ids = $input->getArgument('feed')) {
             $feeds = $this->importScheduler->findByIds($ids);
-        } else {
+        } elseif ($input->getOption('all')) {
             $feeds = $this->importScheduler->findAll();
+        } else {
+            $feeds = $this->importScheduler->findByTime($minutes);
         }
 
         if ($output->getVerbosity() >= OutputInterface::VERBOSITY_NORMAL) {
