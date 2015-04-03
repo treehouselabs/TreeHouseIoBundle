@@ -1,6 +1,6 @@
 parameters:
   tree_house.io.export.feed_exporter.class: TreeHouse\IoBundle\Export\FeedExporter
-  tree_house.io.export.feed_writer.class: TreeHouse\IoBundle\Export\FeedWriter
+  tree_house.io.export.feed_writer_factory.class: TreeHouse\IoBundle\Export\FeedWriterFactory
 
 services:
   tree_house.io.export.feed_exporter:
@@ -8,11 +8,11 @@ services:
     arguments:
       - %tree_house.io.export.cache_dir%
       - %tree_house.io.export.output_dir%
-      - @tree_house.io.export.feed_writer
+      - @tree_house.io.export.feed_writer_factory
       - @filesystem
       - @event_dispatcher
 
-  tree_house.io.export.feed_writer:
-    class: %tree_house.io.export.feed_writer.class%
+  tree_house.io.export.feed_writer_factory:
+    class: %tree_house.io.export.feed_writer_factory.class%
     arguments:
       - @templating

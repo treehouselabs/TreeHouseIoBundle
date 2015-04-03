@@ -7,14 +7,17 @@ use TreeHouse\IoBundle\Export\FeedWriter;
 
 class FeedWriterTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var string
+     */
     protected $tmpFile;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->tmpFile = tempnam(sys_get_temp_dir(), 'writer');
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         if (is_file($this->tmpFile)) {
             unlink($this->tmpFile);
@@ -28,8 +31,8 @@ class FeedWriterTest extends \PHPUnit_Framework_TestCase
     {
         $writer = $this->getWriter();
 
-        $writer->start($this->tmpFile, 'feed', 'item');
-        $writer->start($this->tmpFile, 'feed', 'item');
+        $writer->start($this->tmpFile);
+        $writer->start($this->tmpFile);
     }
 
     public function testIsStarted()
@@ -38,7 +41,7 @@ class FeedWriterTest extends \PHPUnit_Framework_TestCase
 
         $this->assertFalse($writer->isStarted());
 
-        $writer->start($this->tmpFile, 'feed', 'item');
+        $writer->start($this->tmpFile);
 
         $this->assertTrue($writer->isStarted());
     }
@@ -58,8 +61,6 @@ class FeedWriterTest extends \PHPUnit_Framework_TestCase
     {
         return [
             ['finish'],
-            ['writeStart', ['someRootNode']],
-            ['writeEnd'],
             ['writeContent', ['some content']],
             ['writeItem', [$someItem = new \stdClass(), 'SomeTemplate']],
         ];
@@ -68,20 +69,16 @@ class FeedWriterTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \RuntimeException
      */
-    public function testWriteEndThrowsExceptionWhenNotWriteStartCalled()
+    public function testFinishThrowsExceptionWhenNotWriteStartCalled()
     {
         $writer = $this->getWriter();
-        $writer->writeEnd();
+        $writer->finish();
     }
 
     public function testWriteStart()
     {
         $writer = $this->getWriter();
-        $writer->start($this->tmpFile, 'feed', 'item');
-
-        $this->assertEquals('', file_get_contents($this->tmpFile));
-
-        $writer->writeStart();
+        $writer->start($this->tmpFile);
 
         $this->assertContains('<feed>', file_get_contents($this->tmpFile), 'File contains rootNode');
     }
@@ -89,12 +86,8 @@ class FeedWriterTest extends \PHPUnit_Framework_TestCase
     public function testWriteEnd()
     {
         $writer = $this->getWriter();
-        $writer->start($this->tmpFile, 'feed', 'item');
-
-        $this->assertEquals('', file_get_contents($this->tmpFile));
-
-        $writer->writeStart();
-        $writer->writeEnd();
+        $writer->start($this->tmpFile);
+        $writer->finish();
 
         $this->assertContains('</feed>', file_get_contents($this->tmpFile), 'File contains rootNode');
     }
@@ -102,11 +95,7 @@ class FeedWriterTest extends \PHPUnit_Framework_TestCase
     public function testWriteContent()
     {
         $writer = $this->getWriter();
-        $writer->start($this->tmpFile, 'feed', 'item');
-
-        $this->assertEquals('', file_get_contents($this->tmpFile));
-
-        $writer->writeStart();
+        $writer->start($this->tmpFile);
         $writer->writeContent('<someNode>some content</someNode>');
 
         $this->assertContains('<someNode>some content</someNode>', file_get_contents($this->tmpFile));
@@ -124,9 +113,7 @@ class FeedWriterTest extends \PHPUnit_Framework_TestCase
             ->willReturn($templateOutput);
 
         $writer = $this->getWriter($templating);
-        $writer->start($this->tmpFile, 'feed', 'item');
-
-        $writer->writeStart('someRootNode');
+        $writer->start($this->tmpFile);
         $writer->writeItem($someItem, $template);
 
         $this->assertContains($templateOutput, file_get_contents($this->tmpFile));
@@ -141,6 +128,6 @@ class FeedWriterTest extends \PHPUnit_Framework_TestCase
     {
         $templating = $templating ?: $this->getMockBuilder(EngineInterface::class)->getMockForAbstractClass();
 
-        return new FeedWriter($templating);
+        return new FeedWriter($templating, 'feed', 'item');
     }
 }
