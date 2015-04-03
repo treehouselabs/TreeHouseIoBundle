@@ -3,6 +3,7 @@
 namespace TreeHouse\IoBundle\EventListener;
 
 use Doctrine\ORM\Event\OnFlushEventArgs;
+use Doctrine\ORM\Event\PostFlushEventArgs;
 use Doctrine\ORM\UnitOfWork;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use TreeHouse\IoBundle\Event\SourceEvent;
@@ -31,6 +32,11 @@ class SourceModificationListener
      * @var EventDispatcherInterface
      */
     protected $dispatcher;
+
+    /**
+     * @var SourceInterface[]
+     */
+    protected $sources = [];
 
     /**
      * @param SourceProcessorInterface $sourceProcessor
@@ -67,9 +73,21 @@ class SourceModificationListener
             }
 
             if ($modified || !$this->sourceProcessor->isLinked($entity)) {
-                $this->dispatcher->dispatch(IoEvents::SOURCE_PROCESS, new SourceEvent($entity));
+                $this->sources[] = $entity;
             }
         }
+    }
+
+    /**
+     * @param PostFlushEventArgs $args
+     */
+    public function postFlush(PostFlushEventArgs $args)
+    {
+        foreach ($this->sources as $source) {
+            $this->dispatcher->dispatch(IoEvents::SOURCE_PROCESS, new SourceEvent($source));
+        }
+
+        $this->sources = [];
     }
 
     /**

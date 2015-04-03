@@ -4,6 +4,7 @@ namespace TreeHouse\IoBundle\Tests\EventListener;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\OnFlushEventArgs;
+use Doctrine\ORM\Event\PostFlushEventArgs;
 use Doctrine\ORM\UnitOfWork;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use TreeHouse\IoBundle\EventListener\SourceModificationListener;
@@ -192,6 +193,7 @@ class SourceModificationListenerTest extends \PHPUnit_Framework_TestCase
         ;
 
         $this->listener->onFlush($this->getOnFlushEventArgs(new SourceMock(12345)));
+        $this->listener->postFlush(new PostFlushEventArgs($this->entityManager));
     }
 
     /**
@@ -208,6 +210,7 @@ class SourceModificationListenerTest extends \PHPUnit_Framework_TestCase
         ;
 
         $this->listener->onFlush($this->getOnFlushEventArgs(new SourceMock(12345)));
+        $this->listener->postFlush(new PostFlushEventArgs($this->entityManager));
     }
 
     /**
