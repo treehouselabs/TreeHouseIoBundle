@@ -28,29 +28,14 @@ class FeedWriter
 
     /**
      * @param EngineInterface $templating
-     */
-    public function __construct(EngineInterface $templating)
-    {
-        $this->templating = $templating;
-    }
-
-    /**
-     * @param string $filename
      * @param string $rootNode
      * @param string $itemNode
-     *
-     * @throws \RuntimeException
      */
-    public function start($filename, $rootNode, $itemNode)
+    public function __construct(EngineInterface $templating, $rootNode, $itemNode)
     {
-        if ($this->isStarted()) {
-            throw new \RuntimeException('Writer has already started');
-        }
-
-        $this->rootNode = $rootNode;
-        $this->itemNode = $itemNode;
-
-        $this->pointer = fopen($filename, 'w');
+        $this->templating = $templating;
+        $this->rootNode   = $rootNode;
+        $this->itemNode   = $itemNode;
     }
 
     /**
@@ -62,6 +47,23 @@ class FeedWriter
     }
 
     /**
+     * @param string $filename
+     * @param string $namespaces
+     *
+     * @throws \RuntimeException
+     */
+    public function start($filename, $namespaces = '')
+    {
+        if ($this->isStarted()) {
+            throw new \RuntimeException('Writer has already started');
+        }
+
+        $this->pointer = fopen($filename, 'w');
+
+        $this->writeStart($namespaces);
+    }
+
+    /**
      * @throws \RuntimeException
      */
     public function finish()
@@ -70,36 +72,11 @@ class FeedWriter
             throw new \RuntimeException('Writer has not yet started');
         }
 
+        $this->writeEnd();
+
         fclose($this->pointer);
 
         $this->pointer = null;
-    }
-
-    /**
-     * Writes the XML prolog
-     *
-     * @param string $namespaces
-     */
-    public function writeStart($namespaces = '')
-    {
-        $this->writeContent('<?xml version="1.0" encoding="UTF-8"?>');
-        $this->writeContent(sprintf('<%s%s>', $this->rootNode, rtrim(' ' . $namespaces)));
-    }
-
-    /**
-     * Writes the end part of the XML, closing the rootnode.
-     *
-     * @throws \RuntimeException If open() is not called yet
-     */
-    public function writeEnd()
-    {
-        if (!$this->isStarted()) {
-            throw new \RuntimeException('Writer has not yet started');
-        }
-
-        $this->writeContent(sprintf('</%s>', $this->rootNode));
-
-        $this->rootNode = null;
     }
 
     /**
@@ -136,5 +113,32 @@ class FeedWriter
     public function renderItem($item, $template)
     {
         return $this->templating->render($template, ['item' => $item, 'itemNode' => $this->itemNode]);
+    }
+
+    /**
+     * Writes the XML prolog
+     *
+     * @param string $namespaces
+     */
+    protected function writeStart($namespaces = '')
+    {
+        $this->writeContent('<?xml version="1.0" encoding="UTF-8"?>');
+        $this->writeContent(sprintf('<%s%s>', $this->rootNode, rtrim(' ' . $namespaces)));
+    }
+
+    /**
+     * Writes the end part of the XML, closing the rootnode.
+     *
+     * @throws \RuntimeException If open() is not called yet
+     */
+    protected function writeEnd()
+    {
+        if (!$this->isStarted()) {
+            throw new \RuntimeException('Writer has not yet started');
+        }
+
+        $this->writeContent(sprintf('</%s>', $this->rootNode));
+
+        $this->rootNode = null;
     }
 }

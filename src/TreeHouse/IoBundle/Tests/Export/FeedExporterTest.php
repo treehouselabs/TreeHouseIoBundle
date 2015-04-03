@@ -7,6 +7,7 @@ use Symfony\Component\Finder\Finder;
 use TreeHouse\IoBundle\Export\FeedExporter;
 use TreeHouse\IoBundle\Export\FeedType\FeedTypeInterface;
 use TreeHouse\IoBundle\Export\FeedWriter;
+use TreeHouse\IoBundle\Export\FeedWriterFactory;
 
 class FeedExporterTest extends \PHPUnit_Framework_TestCase
 {
@@ -33,12 +34,16 @@ class FeedExporterTest extends \PHPUnit_Framework_TestCase
         $exporter = $this->getExporter();
 
         $type = $this->getMockBuilder(FeedTypeInterface::class)->getMockForAbstractClass();
-        $type->expects($this->any())
+        $type
+            ->expects($this->any())
             ->method('getName')
-            ->willReturn('some_type');
-        $type->expects($this->any())
+            ->willReturn('some_type')
+        ;
+        $type
+            ->expects($this->any())
             ->method('supports')
-            ->willReturn(true);
+            ->willReturn(true)
+        ;
 
         $exporter->registerType($type, 'some_type');
 
@@ -49,26 +54,36 @@ class FeedExporterTest extends \PHPUnit_Framework_TestCase
 
     public function testCacheItemWritesAFileToDisk()
     {
-        $writer = $this->getMockBuilder(FeedWriter::class)
-            ->disableOriginalConstructor()->getMock();
-        $writer->expects($this->any())
+        $writer = $this
+            ->getMockBuilder(FeedWriter::class)
+            ->disableOriginalConstructor()->getMock()
+        ;
+
+        $writer
+            ->expects($this->any())
             ->method('renderEntity')
-            ->willReturn('<someNode>some entity data</someNode>');
+            ->willReturn('<someNode>some entity data</someNode>')
+        ;
 
         $entity = $this->getMockBuilder('stdClass')->setMethods(['getId'])->getMock();
         $entity->expects($this->any())
             ->method('getId')
-            ->willReturn(234);
+            ->willReturn(234)
+        ;
 
         $exporter = $this->getExporter(null, null, $writer);
 
         $type = $this->getMockBuilder(FeedTypeInterface::class)->getMockForAbstractClass();
-        $type->expects($this->any())
+        $type
+            ->expects($this->any())
             ->method('getName')
-            ->willReturn('some_type');
-        $type->expects($this->any())
+            ->willReturn('some_type')
+        ;
+        $type
+            ->expects($this->any())
             ->method('supports')
-            ->willReturn(true);
+            ->willReturn(true)
+        ;
 
         $exporter->registerType($type, 'some_type');
 
@@ -82,20 +97,35 @@ class FeedExporterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param null|string     $cacheDir
-     * @param null            $exportDir
+     * @param null|string            $cacheDir
+     * @param null                   $exportDir
      * @param null|FeedWriter $writer
      *
      * @return FeedExporter
      */
     protected function getExporter($cacheDir = null, $exportDir = null, $writer = null)
     {
-        $writer = $writer ?:
-            $this->getMockBuilder(FeedWriter::class)
-                ->disableOriginalConstructor()->getMock();
+        if (!$writer) {
+            $writer = $this->getMockBuilder(FeedWriter::class)->disableOriginalConstructor()->getMock();
+        }
 
-        $exporter = new FeedExporter($cacheDir ?: $this->tmpDir, $exportDir ?: $this->tmpDir, $writer, new Filesystem());
+        $writerFactory = $this
+            ->getMockBuilder(FeedWriterFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock()
+        ;
 
-        return $exporter;
+        $writerFactory
+            ->expects($this->any())
+            ->method('createWriter')
+            ->willReturn($writer)
+        ;
+
+        return new FeedExporter(
+            $cacheDir ?: $this->tmpDir,
+            $exportDir ?: $this->tmpDir,
+            $writerFactory,
+            new Filesystem()
+        );
     }
 }

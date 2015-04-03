@@ -36,9 +36,9 @@ class FeedExporter
     protected $exportDir;
 
     /**
-     * @var FeedWriter
+     * @var FeedWriterFactory
      */
-    protected $writer;
+    protected $writerFactory;
 
     /**
      * @var FeedTypeInterface[]
@@ -53,15 +53,15 @@ class FeedExporter
     /**
      * @param string                   $cacheDir
      * @param string                   $exportDir
-     * @param FeedWriter               $writer
+     * @param FeedWriterFactory               $writerFactory
      * @param Filesystem               $filesystem
      * @param EventDispatcherInterface $dispatcher
      */
-    public function __construct($cacheDir, $exportDir, FeedWriter $writer, Filesystem $filesystem, EventDispatcherInterface $dispatcher = null)
+    public function __construct($cacheDir, $exportDir, FeedWriterFactory $writerFactory, Filesystem $filesystem, EventDispatcherInterface $dispatcher = null)
     {
         $this->cacheDir   = $cacheDir;
         $this->exportDir  = $exportDir;
-        $this->writer     = $writer;
+        $this->writerFactory     = $writerFactory;
         $this->filesystem = $filesystem;
         $this->dispatcher = $dispatcher;
     }
@@ -90,7 +90,8 @@ class FeedExporter
             if (!file_exists($cacheFile) || !$this->isFresh($cacheFile, $ttl)) {
                 $this->filesystem->mkdir(dirname($cacheFile));
 
-                $xml = $this->writer->renderItem($item, $template);
+                $writer = $this->writerFactory->createWriter($type);
+                $xml = $writer->renderItem($item, $template);
 
                 $this->filesystem->dumpFile($cacheFile, $xml, null);
             }
@@ -146,8 +147,8 @@ class FeedExporter
 
         $this->filesystem->mkdir(dirname($file));
 
-        $this->writer->start($tmpFile, $type->getRootNode(), $type->getItemNode());
-        $this->writer->writeStart($this->getNamespaceAttributes($type));
+        $writer = $this->writerFactory->createWriter($type);
+        $writer->start($tmpFile, $this->getNamespaceAttributes($type));
 
         $num = 0;
         foreach ($qb->getQuery()->iterate() as list($item)) {
@@ -159,7 +160,7 @@ class FeedExporter
             $this->cacheItem($item, [$type]);
 
             $cacheFile = $this->getItemCacheFilename($item, $type);
-            $this->writer->writeContent(file_get_contents($cacheFile));
+            $writer->writeContent(file_get_contents($cacheFile));
 
             $this->dispatch(ExportEvents::POST_EXPORT_ITEM, new ExportProgressEvent($num, $count));
 
@@ -168,8 +169,7 @@ class FeedExporter
             }
         }
 
-        $this->writer->writeEnd();
-        $this->writer->finish();
+        $writer->finish();
 
         $this->gzip($tmpFile, $gzTmpFile);
         rename($tmpFile, $file);
