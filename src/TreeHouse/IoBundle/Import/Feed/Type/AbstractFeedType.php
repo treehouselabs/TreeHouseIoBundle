@@ -14,19 +14,19 @@ use TreeHouse\IoBundle\Item\Modifier\Item\Filter\ModifiedItemFilter;
 use TreeHouse\IoBundle\Item\Modifier\Item\Mapper\FeedItemBagMapper;
 use TreeHouse\IoBundle\Item\Modifier\Item\Transformer as IoTransformer;
 use TreeHouse\IoBundle\Item\Modifier\Item\Validator\OriginIdValidator;
-use TreeHouse\IoBundle\Source\Manager\ImportSourceManager;
+use TreeHouse\IoBundle\Source\Manager\CachedSourceManager;
 
 abstract class AbstractFeedType implements FeedTypeInterface
 {
     /**
-     * @var ImportSourceManager
+     * @var CachedSourceManager
      */
     protected $sourceManager;
 
     /**
-     * @param ImportSourceManager $sourceManager
+     * @param CachedSourceManager $sourceManager
      */
-    public function __construct(ImportSourceManager $sourceManager)
+    public function __construct(CachedSourceManager $sourceManager)
     {
         $this->sourceManager = $sourceManager;
     }
@@ -193,7 +193,7 @@ abstract class AbstractFeedType implements FeedTypeInterface
     }
 
     /**
-     * @return ImportSourceManager
+     * @return CachedSourceManager
      */
     protected function getSourceManager()
     {

@@ -20,7 +20,7 @@ services:
     class: TreeHouse\IoIntegrationBundle\Import\Feed\Type\ItunesPodcastFeedType
     arguments:
       - @doctrine
-      - @tree_house.io.source.manager.import
+      - @tree_house.io.source.manager.cached
     tags:
       - { name: tree_house.io.feed_type, alias: itunes_podcast }
 

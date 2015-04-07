@@ -24,7 +24,7 @@ use TreeHouse\IoBundle\Item\Modifier\Data\Transformer\MultiSpaceToSingleSpaceTra
 use TreeHouse\IoBundle\Item\Modifier\Data\Transformer\NormalizedStringTransformer;
 use TreeHouse\IoBundle\Item\Modifier\Data\Transformer\StringToDateTimeTransformer;
 use TreeHouse\IoBundle\Item\Modifier\Item\Transformer\DefaultValuesTransformer;
-use TreeHouse\IoBundle\Source\Manager\ImportSourceManager;
+use TreeHouse\IoBundle\Source\Manager\CachedSourceManager;
 
 abstract class DefaultFeedType extends AbstractFeedType
 {
@@ -40,9 +40,9 @@ abstract class DefaultFeedType extends AbstractFeedType
 
     /**
      * @param ManagerRegistry     $doctrine
-     * @param ImportSourceManager $sourceManager
+     * @param CachedSourceManager $sourceManager
      */
-    public function __construct(ManagerRegistry $doctrine, ImportSourceManager $sourceManager)
+    public function __construct(ManagerRegistry $doctrine, CachedSourceManager $sourceManager)
     {
         $this->doctrine = $doctrine;
 

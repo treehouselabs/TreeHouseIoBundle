@@ -31,7 +31,7 @@ use TreeHouse\IoBundle\Item\Modifier\Item\Validator\OriginIdValidator;
 use TreeHouse\IoBundle\Scrape\Modifier\Item\Mapper\NodeMapper;
 use TreeHouse\IoBundle\Scrape\Modifier\Item\Mapper\ScrapedItemBagMapper;
 use TreeHouse\IoBundle\Scrape\Parser\ParserBuilderInterface;
-use TreeHouse\IoBundle\Source\Manager\ImportSourceManager;
+use TreeHouse\IoBundle\Source\Manager\CachedSourceManager;
 
 abstract class AbstractParserType implements ParserTypeInterface
 {
@@ -41,7 +41,7 @@ abstract class AbstractParserType implements ParserTypeInterface
     protected $doctrine;
 
     /**
-     * @var ImportSourceManager
+     * @var CachedSourceManager
      */
     protected $sourceManager;
 
@@ -52,9 +52,9 @@ abstract class AbstractParserType implements ParserTypeInterface
 
     /**
      * @param ManagerRegistry     $doctrine
-     * @param ImportSourceManager $sourceManager
+     * @param CachedSourceManager $sourceManager
      */
-    public function __construct(ManagerRegistry $doctrine, ImportSourceManager $sourceManager)
+    public function __construct(ManagerRegistry $doctrine, CachedSourceManager $sourceManager)
     {
         $this->doctrine      = $doctrine;
         $this->sourceManager = $sourceManager;

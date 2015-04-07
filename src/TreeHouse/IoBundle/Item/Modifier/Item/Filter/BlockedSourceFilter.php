@@ -9,7 +9,7 @@ use TreeHouse\IoBundle\Import\Feed\FeedItemBag;
 use TreeHouse\IoBundle\Item\ItemBag;
 use TreeHouse\IoBundle\Model\SourceInterface;
 use TreeHouse\IoBundle\Scrape\ScrapedItemBag;
-use TreeHouse\IoBundle\Source\Manager\ImportSourceManager;
+use TreeHouse\IoBundle\Source\Manager\CachedSourceManager;
 
 /**
  * Filters out items in the feed that correspond to blocked sources.
@@ -17,14 +17,14 @@ use TreeHouse\IoBundle\Source\Manager\ImportSourceManager;
 class BlockedSourceFilter implements FilterInterface
 {
     /**
-     * @var ImportSourceManager
+     * @var CachedSourceManager
      */
     protected $sourceManager;
 
     /**
-     * @param ImportSourceManager $sourceManager
+     * @param CachedSourceManager $sourceManager
      */
-    public function __construct(ImportSourceManager $sourceManager)
+    public function __construct(CachedSourceManager $sourceManager)
     {
         $this->sourceManager = $sourceManager;
     }

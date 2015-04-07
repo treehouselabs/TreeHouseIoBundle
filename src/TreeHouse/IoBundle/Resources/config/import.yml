@@ -67,12 +67,12 @@ services:
     abstract: true
     arguments:
       - @doctrine
-      - @tree_house.io.source.manager.import
+      - @tree_house.io.source.manager.cached
 
   tree_house.io.import.handler.doctrine:
     class: %tree_house.io.import.handler.doctrine.class%
     arguments:
-      - @tree_house.io.source.manager.import
+      - @tree_house.io.source.manager.cached
       - @validator
     tags:
       - { name: tree_house.io.import_handler, alias: doctrine }
