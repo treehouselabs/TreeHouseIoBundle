@@ -94,6 +94,7 @@ class FeedExporter
                 $xml = $writer->renderItem($item, $template);
 
                 $this->filesystem->dumpFile($cacheFile, $xml, null);
+                $this->filesystem->chmod($cacheFile, 0666, umask());
             }
         }
 
