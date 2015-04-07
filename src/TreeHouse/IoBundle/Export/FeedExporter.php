@@ -9,6 +9,7 @@ use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Templating\TemplateReferenceInterface;
 use TreeHouse\IoBundle\Event\ExportFeedEvent;
 use TreeHouse\IoBundle\Event\ExportProgressEvent;
 use TreeHouse\IoBundle\Export\FeedType\FeedTypeInterface;
@@ -51,24 +52,29 @@ class FeedExporter
     protected $templateHashes = [];
 
     /**
+     * @var FeedWriter[]
+     */
+    protected $writers = [];
+
+    /**
      * @param string                   $cacheDir
      * @param string                   $exportDir
-     * @param FeedWriterFactory               $writerFactory
+     * @param FeedWriterFactory        $writerFactory
      * @param Filesystem               $filesystem
      * @param EventDispatcherInterface $dispatcher
      */
     public function __construct($cacheDir, $exportDir, FeedWriterFactory $writerFactory, Filesystem $filesystem, EventDispatcherInterface $dispatcher = null)
     {
-        $this->cacheDir   = $cacheDir;
-        $this->exportDir  = $exportDir;
-        $this->writerFactory     = $writerFactory;
-        $this->filesystem = $filesystem;
-        $this->dispatcher = $dispatcher;
+        $this->cacheDir      = $cacheDir;
+        $this->exportDir     = $exportDir;
+        $this->writerFactory = $writerFactory;
+        $this->filesystem    = $filesystem;
+        $this->dispatcher    = $dispatcher;
     }
 
     /**
-     * @param object $item
-     * @param FeedTypeInterface[]  $types
+     * @param object              $item
+     * @param FeedTypeInterface[] $types
      *
      * @return bool
      */
@@ -84,14 +90,10 @@ class FeedExporter
 
         foreach ($types as $type) {
             $template  = $type->getTemplate();
-            $ttl       = $type->getTtl();
             $cacheFile = $this->getItemCacheFilename($item, $type);
 
-            if (!file_exists($cacheFile) || !$this->isFresh($cacheFile, $ttl)) {
-                $this->filesystem->mkdir(dirname($cacheFile));
-
-                $writer = $this->writerFactory->createWriter($type);
-                $xml = $writer->renderItem($item, $template);
+            if (!file_exists($cacheFile)) {
+                $xml = $this->getWriter($type)->renderItem($item, $template);
 
                 $this->filesystem->dumpFile($cacheFile, $xml, null);
                 $this->filesystem->chmod($cacheFile, 0666, umask());
@@ -104,8 +106,8 @@ class FeedExporter
     /**
      * Clears cached exports for an item
      *
-     * @param object $item
-     * @param FeedTypeInterface[]  $types
+     * @param object              $item
+     * @param FeedTypeInterface[] $types
      */
     public function clearCache($item, array $types = [])
     {
@@ -148,7 +150,7 @@ class FeedExporter
 
         $this->filesystem->mkdir(dirname($file));
 
-        $writer = $this->writerFactory->createWriter($type);
+        $writer = $this->getWriter($type);
         $writer->start($tmpFile, $this->getNamespaceAttributes($type));
 
         $num = 0;
@@ -168,6 +170,8 @@ class FeedExporter
             if ($num++ % 2000 === 0) {
                 $this->pingDatabase($qb->getEntityManager());
             }
+
+            $qb->getEntityManager()->detach($item);
         }
 
         $writer->finish();
@@ -221,7 +225,7 @@ class FeedExporter
 
         throw new \OutOfBoundsException(
             sprintf(
-                'Export type "%s" is not supported. You can add it by creating a service which implements %s, '.
+                'Export type "%s" is not supported. You can add it by creating a service which implements %s, ' .
                 'and tag it with tree_house.io.export.feed_type',
                 $name,
                 FeedTypeInterface::class
@@ -336,7 +340,7 @@ class FeedExporter
 
     /**
      * @param string $file
-     * @param int    $ttl  time to life in minutes
+     * @param int    $ttl time to life in minutes
      *
      * @return boolean
      */
@@ -371,12 +375,12 @@ class FeedExporter
             return $countQb->getMaxResults();
         }
 
-        $aliases = $countQb->getRootAliases();
+        $aliases   = $countQb->getRootAliases();
         $rootAlias = reset($aliases);
 
-        $query = $countQb->select('COUNT('.$rootAlias.')')->getQuery();
+        $query = $countQb->select('COUNT(' . $rootAlias . ')')->getQuery();
 
-        return (int) $query->getSingleScalarResult();
+        return (int)$query->getSingleScalarResult();
     }
 
     /**
@@ -414,12 +418,37 @@ class FeedExporter
     protected function getTemplateHash(FeedTypeInterface $type)
     {
         if (!array_key_exists($type->getName(), $this->templateHashes)) {
-            // TODO find a way to get the template contents, so the hash changes when the template does
-            $hash = md5($type->getItemNode() . $type->getTemplate());
-            $this->templateHashes[$type->getName()] = $hash;
+            // concatenate all variables that can change the template in the hash
+            $hash = $type->getRootNode() . $type->getItemNode();
+
+            // use the canonical path if we're using a template reference, otherwise just use the template name
+            $template = $type->getTemplate();
+            if ($template instanceof TemplateReferenceInterface && file_exists($template->getPath())) {
+                $hash .= md5_file($template->getPath());
+            } else {
+                $hash .= $template;
+            }
+
+            $this->templateHashes[$type->getName()] = md5($hash);
         }
 
         return $this->templateHashes[$type->getName()];
+    }
+
+    /**
+     * Returns cached instance of a FeedWriter for a specific type
+     *
+     * @param FeedTypeInterface $type
+     *
+     * @return FeedWriter
+     */
+    protected function getWriter(FeedTypeInterface $type)
+    {
+        if (!array_key_exists($type->getName(), $this->writers)) {
+            $this->writers[$type->getName()] = $this->writerFactory->createWriter($type);
+        }
+
+        return $this->writers[$type->getName()];
     }
 
     /**
@@ -457,7 +486,6 @@ class FeedExporter
         fclose($fp);
         gzclose($zp);
     }
-
     /**
      * @param string $eventName
      * @param Event  $event
