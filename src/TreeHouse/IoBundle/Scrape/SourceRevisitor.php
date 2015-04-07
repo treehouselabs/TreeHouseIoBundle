@@ -43,9 +43,13 @@ class SourceRevisitor
      * source origin, only this time the source will be removed if the original
      * url was not found.
      *
-     * @param SourceInterface $source
-     * @param boolean         $async
-     * @param boolean         $disableLimit
+     * @param SourceInterface $source       The source to revisit.
+     * @param boolean         $async        If true, makes the scrape action asynchronous.
+     *                                      The revisit action will happen right away, but any
+     *                                      consecutive scrape actions will be queued. Use this
+     *                                      when calling the revisit action from an asynchronous
+     *                                      context.
+     * @param boolean         $disableLimit Whether to disable the rate limit when revisiting.
      */
     public function revisit(SourceInterface $source, $async = false, $disableLimit = false)
     {
@@ -53,9 +57,8 @@ class SourceRevisitor
             throw new \InvalidArgumentException('Source does not contain an original url');
         }
 
-        if ($async) {
-            $this->revisitAfter($source, new \DateTime());
-
+        // check if source is still fresh
+        if ($this->isFresh($source)) {
             return;
         }
 
@@ -79,7 +82,6 @@ class SourceRevisitor
     public function revisitAfter(SourceInterface $source, \DateTime $date)
     {
         $scraper = $this->createScraper($source->getScraper());
-        $scraper->setAsync(true);
         $scraper->getEventDispatcher()->dispatch(
             ScraperEvents::SCRAPE_REVISIT_SOURCE,
             new SourceEvent($source),
@@ -118,5 +120,27 @@ class SourceRevisitor
         }
 
         return $this->scrapers[$scraperEntity->getId()];
+    }
+
+    /**
+     * Checks whether the given source is fresh, meaning it doesn't need revisiting right now.
+     *
+     * @param SourceInterface $source
+     *
+     * @return boolean
+     */
+    protected function isFresh(SourceInterface $source)
+    {
+        $lastVisitDate = $source->getDatetimeLastVisited();
+
+        // no previous visit date, consider it stale
+        if (null === $lastVisitDate) {
+            return false;
+        }
+
+        $revisitDate = clone $lastVisitDate;
+        $revisitDate->modify(sprintf('+%d hours', $source->getScraper()->getRevisitFrequency()));
+
+        return $revisitDate > new \DateTime();
     }
 }
