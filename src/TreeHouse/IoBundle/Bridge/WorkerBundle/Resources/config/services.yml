@@ -40,13 +40,6 @@ services:
     tags:
       - { name: tree_house.io.event_listener, event: io.scrape.source.revisit, method: onScrapeRevisitSource }
 
-  tree_house.io.worker.listener.rate_limit:
-    class: %tree_house.io.worker.listener.rate_limit.class%
-    arguments:
-      - @fm_worker.queue_manager
-    tags:
-      - { name: tree_house.io.event_listener, event: io.scrape.rate_limit.reached, method: onRateLimit }
-
   tree_house.io.worker.executor.export_item:
     class: %tree_house.io.queue.executor.export_item.class%
     arguments:

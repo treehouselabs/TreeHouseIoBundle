@@ -12,6 +12,7 @@ use TreeHouse\IoBundle\Entity\Scraper;
 use TreeHouse\IoBundle\Entity\Scraper as ScraperEntity;
 use TreeHouse\IoBundle\Scrape\Crawler\RateLimit\EnablingRateLimitInterface;
 use TreeHouse\IoBundle\Scrape\EventListener\ScrapeOutputSubscriber;
+use TreeHouse\IoBundle\Scrape\Exception\CrawlException;
 use TreeHouse\IoBundle\Scrape\ScraperFactory;
 
 class ScrapeStartCommand extends Command
@@ -88,7 +89,11 @@ class ScrapeStartCommand extends Command
             $output->writeln('Starting scraper...');
             $output->writeln('-------------------');
 
-            $this->scrape($input, $scraperEntity);
+            try {
+                $this->scrape($input, $scraperEntity);
+            } catch (CrawlException $e) {
+                $output->writeln(sprintf('<error>%s</error>', $e->getMessage()));
+            }
 
             $output->writeln('-------------------');
             $output->writeln('');
