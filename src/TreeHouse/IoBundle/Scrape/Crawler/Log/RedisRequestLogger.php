@@ -33,36 +33,38 @@ class RedisRequestLogger implements RequestLoggerInterface
             $date = new \DateTime();
         }
 
-        $hashKey = $this->getHashKey($url);
+        $timestamp = $date->getTimestamp();
+        $hashKey   = $this->getHashKey($timestamp, $url);
 
-        $this->redis->zAdd($this->key, $date->getTimestamp(), $hashKey);
+        $this->redis->zAdd($this->key, $timestamp, $hashKey);
     }
 
     /**
      * @inheritdoc
      */
-    public function getRequestsSince(\DateTime $date)
+    public function getRequestsSince(\DateTime $date = null)
     {
-        $start = $date->getTimestamp();
+        $start = $date ? $date->getTimestamp() : '-inf';
         $end   = time();
 
         return array_map(
             function ($hash) {
-                list (, $url) = explode('#', $hash, 2);
+                list ($timestamp, $url) = explode('#', $hash, 2);
 
-                return $url;
+                return [intval($timestamp), $url];
             },
             $this->redis->zRangeByScore($this->key, $start, $end)
         );
     }
 
     /**
-     * @param string $url
+     * @param integer $timestamp
+     * @param string  $url
      *
      * @return string
      */
-    protected function getHashKey($url)
+    protected function getHashKey($timestamp, $url)
     {
-        return sprintf('%d#%s', time(), $url);
+        return sprintf('%d#%s', $timestamp, $url);
     }
 }

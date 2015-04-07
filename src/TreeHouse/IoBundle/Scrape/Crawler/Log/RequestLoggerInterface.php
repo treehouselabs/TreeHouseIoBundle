@@ -11,9 +11,12 @@ interface RequestLoggerInterface
     public function logRequest($url, \DateTime $date = null);
 
     /**
-     * @param \DateTime $date
+     * Returns an array of requests since a specific date.
      *
-     * @return \string[]
+     * @param \DateTime $date The interval to get the logged requests for.
+     *                        When `null` is given, all logged requests are returned.
+     *
+     * @return array<integer, string> The requests as an array of [timestamp, url] tuples
      */
-    public function getRequestsSince(\DateTime $date);
+    public function getRequestsSince(\DateTime $date = null);
 }
