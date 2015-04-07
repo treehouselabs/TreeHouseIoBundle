@@ -15,6 +15,7 @@ parameters:
   tree_house.io.command.scrape.url.class: TreeHouse\IoBundle\Command\ScrapeUrlCommand
   tree_house.io.command.scrape.start.class: TreeHouse\IoBundle\Command\ScrapeStartCommand
   tree_house.io.command.scrape.revisit.class: TreeHouse\IoBundle\Command\ScrapeRevisitCommand
+  tree_house.io.command.crawler.log.class: TreeHouse\IoBundle\Command\CrawlerLogCommand
   tree_house.io.command.source.process.class: TreeHouse\IoBundle\Command\SourceProcessCommand
   tree_house.io.command.source.cleanup.class: TreeHouse\IoBundle\Command\SourceCleanupCommand
 
@@ -136,6 +137,13 @@ services:
       - @doctrine
       - @tree_house.io.source_manager
       - @tree_house.io.scrape.source.revisitor
+    tags:
+      - { name: console.command }
+
+  tree_house.io.command.crawler.log:
+    class: %tree_house.io.command.crawler.log.class%
+    arguments:
+      - @tree_house.io.scrape.scraper_factory
     tags:
       - { name: console.command }
 

@@ -81,7 +81,11 @@ class ScrapeRevisitCommand extends Command
                 try {
                     $output->writeln(sprintf('Revisiting <info>%s</info>', $source->getOriginalUrl()));
 
-                    $this->revisitor->revisit($source, $async, $noLimit);
+                    if ($async) {
+                        $this->revisitor->revisitAfter($source, new \DateTime());
+                    } else {
+                        $this->revisitor->revisit($source, $async, $noLimit);
+                    }
                 } catch (CrawlException $e) {
                     $output->writeln(sprintf('<error>%s</error>', $e->getMessage()));
                 }

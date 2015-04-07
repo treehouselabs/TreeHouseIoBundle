@@ -68,7 +68,7 @@ class RpmRateLimit implements RateLimitInterface, EnablingRateLimitInterface
             $this->timeUnit = 1 / ($this->rpm / 60);
             $this->maxAmount *= $this->timeUnit;
         } else {
-            $this->maxAmount = floor($this->maxAmount);
+            $this->maxAmount = ceil($this->maxAmount);
         }
     }
 

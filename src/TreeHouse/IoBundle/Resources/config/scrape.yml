@@ -41,7 +41,7 @@ services:
     public: false
     class: %tree_house.io.scrape.handler.doctrine.class%
     arguments:
-      - @tree_house.io.source.manager.import
+      - @tree_house.io.source.manager.cached
       - @validator
     tags:
       - { name: tree_house.io.scrape.handler, alias: doctrine }
@@ -51,7 +51,7 @@ services:
     class: %tree_house.io.scrape.parser_type.abstract.class%
     arguments:
       - @doctrine
-      - @tree_house.io.source.manager.import
+      - @tree_house.io.source.manager.cached
 
   tree_house.io.scrape.source.revisitor:
     class: %tree_house.io.scrape.source.revisitor.class%

@@ -5,14 +5,14 @@ namespace TreeHouse\IoBundle\Tests\Item\Modifier\Item\Filter;
 use TreeHouse\IoBundle\Import\Feed\FeedItemBag;
 use TreeHouse\IoBundle\Item\Modifier\Item\Filter\ModifiedItemFilter;
 use TreeHouse\IoBundle\Model\SourceInterface;
-use TreeHouse\IoBundle\Source\Manager\ImportSourceManager;
+use TreeHouse\IoBundle\Source\Manager\CachedSourceManager;
 use TreeHouse\IoBundle\Tests\Mock\FeedMock;
 use TreeHouse\IoBundle\Tests\Mock\SourceMock;
 
 class ModifiedItemFilterTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ImportSourceManager
+     * @var \PHPUnit_Framework_MockObject_MockObject|CachedSourceManager
      */
     protected $sourceManager;
 
@@ -26,7 +26,7 @@ class ModifiedItemFilterTest extends \PHPUnit_Framework_TestCase
         $this->source = new SourceMock(123);
 
         $this->sourceManager = $this
-            ->getMockBuilder(ImportSourceManager::class)
+            ->getMockBuilder(CachedSourceManager::class)
             ->disableOriginalConstructor()
             ->setMethods(['findSourceByFeed'])
             ->getMock()

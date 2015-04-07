@@ -102,11 +102,11 @@ class ImportFactory implements EventSubscriberInterface
         foreach ([FeedEvents::class, ImportEvents::class] as $class) {
             $refl = new \ReflectionClass($class);
             foreach ($refl->getConstants() as $constant) {
-                $events[$constant] = 'relayEvent';
+                $events[$constant][] = 'relayEvent';
             }
         }
 
-        $events[ImportEvents::EXCEPTION] = 'onException';
+        $events[ImportEvents::EXCEPTION][] = 'onException';
 
         return $events;
     }

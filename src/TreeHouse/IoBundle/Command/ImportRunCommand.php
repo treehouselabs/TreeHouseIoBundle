@@ -74,10 +74,8 @@ class ImportRunCommand extends Command
             $feeds = $this->getFeedRepository()->findBy(['id' => $ids]);
         }
 
-        if ($output->getVerbosity() >= OutputInterface::VERBOSITY_NORMAL) {
-            $dispatcher = $this->importFactory->getEventDispatcher();
-            $dispatcher->addSubscriber(new ImportOutputSubscriber($output));
-        }
+        $dispatcher = $this->importFactory->getEventDispatcher();
+        $dispatcher->addSubscriber(new ImportOutputSubscriber($output));
 
         $force = $input->getOption('force');
 

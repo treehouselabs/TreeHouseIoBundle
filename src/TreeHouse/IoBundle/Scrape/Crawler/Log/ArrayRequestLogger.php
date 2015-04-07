@@ -34,15 +34,16 @@ class ArrayRequestLogger implements RequestLoggerInterface
     /**
      * @inheritdoc
      */
-    public function getRequestsSince(\DateTime $date)
+    public function getRequestsSince(\DateTime $date = null)
     {
-        $start = $date->getTimestamp();
-        $end   = time();
+        $start = $date ? $date->getTimestamp() : 0;
 
         $requests = [];
         foreach ($this->requests as $time => $reqs) {
-            if ($time >= $start && $time <= $end) {
-                $requests += $reqs;
+            if ($time >= $start) {
+                foreach ($reqs as $req) {
+                    array_unshift($requests, [$time, $req]);
+                }
             }
         }
 

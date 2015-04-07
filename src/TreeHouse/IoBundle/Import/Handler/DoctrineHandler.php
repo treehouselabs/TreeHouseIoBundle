@@ -7,12 +7,12 @@ use TreeHouse\IoBundle\Exception\ValidationException;
 use TreeHouse\IoBundle\Import\Exception\FailedItemException;
 use TreeHouse\IoBundle\Import\Feed\FeedItemBag;
 use TreeHouse\IoBundle\Model\SourceInterface;
-use TreeHouse\IoBundle\Source\Manager\ImportSourceManager;
+use TreeHouse\IoBundle\Source\Manager\CachedSourceManager;
 
 class DoctrineHandler implements HandlerInterface
 {
     /**
-     * @var ImportSourceManager
+     * @var CachedSourceManager
      */
     protected $sourceManager;
 
@@ -22,10 +22,10 @@ class DoctrineHandler implements HandlerInterface
     protected $validator;
 
     /**
-     * @param ImportSourceManager $sourceManager
+     * @param CachedSourceManager $sourceManager
      * @param ValidatorInterface  $validator
      */
-    public function __construct(ImportSourceManager $sourceManager, ValidatorInterface $validator)
+    public function __construct(CachedSourceManager $sourceManager, ValidatorInterface $validator)
     {
         $this->sourceManager = $sourceManager;
         $this->validator     = $validator;

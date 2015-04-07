@@ -101,7 +101,7 @@ class ScrapeOutputSubscriber implements EventSubscriberInterface
     public function onRateLimitReached(RateLimitEvent $event)
     {
         $seconds = $event->getRetryDate()->getTimestamp() - time();
-        $this->output->writeln(sprintf('Rate limit reached, trying again after <info>%d</info> seconds', $seconds));
+        $this->output->writeln(sprintf('Rate limit reached, try again after <info>%d</info> seconds', $seconds));
     }
 
     /**

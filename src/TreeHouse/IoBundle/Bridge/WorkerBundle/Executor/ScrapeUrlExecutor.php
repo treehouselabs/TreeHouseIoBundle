@@ -3,12 +3,14 @@
 namespace TreeHouse\IoBundle\Bridge\WorkerBundle\Executor;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
+use FM\WorkerBundle\Exception\RescheduleException;
 use FM\WorkerBundle\Monolog\LoggerAggregate;
 use FM\WorkerBundle\Queue\JobExecutor;
 use Psr\Log\LoggerInterface;
 use TreeHouse\IoBundle\Entity\Scraper as ScraperEntity;
 use TreeHouse\IoBundle\Scrape\EventListener\ScrapeLoggingSubscriber;
 use TreeHouse\IoBundle\Scrape\Exception\CrawlException;
+use TreeHouse\IoBundle\Scrape\Exception\RateLimitException;
 use TreeHouse\IoBundle\Scrape\ScraperFactory;
 
 class ScrapeUrlExecutor extends JobExecutor implements LoggerAggregate
@@ -84,6 +86,14 @@ class ScrapeUrlExecutor extends JobExecutor implements LoggerAggregate
             $scraper->scrape($entity, $url);
 
             return true;
+        } catch (RateLimitException $e) {
+            $re = new RescheduleException();
+
+            if ($date = $e->getRetryDate()) {
+                $re->setRescheduleDate($date);
+            }
+
+            throw $re;
         } catch (CrawlException $e) {
             $this->logger->error($e->getMessage(), ['url' => $e->getUrl()]);
 

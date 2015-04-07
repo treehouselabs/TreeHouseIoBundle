@@ -1,13 +1,13 @@
 parameters:
-  tree_house.io.source.manager.import.class: TreeHouse\IoBundle\Source\Manager\ImportSourceManager
+  tree_house.io.source.manager.cached.class: TreeHouse\IoBundle\Source\Manager\CachedSourceManager
   tree_house.io.source.cleaner.delegating.class: TreeHouse\IoBundle\Source\Cleaner\DelegatingSourceCleaner
   tree_house.io.source.cleaner.orphaned.class: TreeHouse\IoBundle\Source\Cleaner\OrphanedSourceCleaner
   tree_house.io.source.cleaner.idle.class: TreeHouse\IoBundle\Source\Cleaner\IdleSourceCleaner
   tree_house.io.source.processor.delegating.class: TreeHouse\IoBundle\Source\Processor\DelegatingSourceProcessor
 
 services:
-  tree_house.io.source.manager.import:
-    class: %tree_house.io.source.manager.import.class%
+  tree_house.io.source.manager.cached:
+    class: %tree_house.io.source.manager.cached.class%
     arguments:
       - @tree_house.io.source_manager
 

@@ -11,6 +11,7 @@ use TreeHouse\Feeder\Event\ResourceEvent;
 use TreeHouse\Feeder\Event\TransportEvent;
 use TreeHouse\Feeder\FeedEvents;
 use TreeHouse\Feeder\Transport\ProgressAwareInterface;
+use TreeHouse\IoBundle\Import\Event\ExceptionEvent;
 use TreeHouse\IoBundle\Import\Event\FailedItemEvent;
 use TreeHouse\IoBundle\Import\Event\ImporterEvent;
 use TreeHouse\IoBundle\Import\Event\PartEvent;
@@ -62,6 +63,7 @@ class ImportOutputSubscriber implements EventSubscriberInterface
             ImportEvents::ITEM_SKIPPED           => 'onItemSkipped',
             ImportEvents::PART_CREATED           => 'onPartCreated',
             ImportEvents::PART_FINISH            => 'onPartFinished',
+            ImportEvents::EXCEPTION              => 'onException',
         ];
     }
 
@@ -194,17 +196,30 @@ class ImportOutputSubscriber implements EventSubscriberInterface
         $importer = $event->getImporter();
         $result = $importer->getResult();
 
+        $total      = $result->getTotal();
+        $processed  = $result->getProcessed();
+        $percentage = $total > 0 ? ($processed / $total * 100) : 0;
+
         $this->output->writeln(sprintf('Import ended in %s seconds', round($result->getElapsedTime())));
         $this->output->writeln(
             sprintf(
                 'Processed <info>%s</info> of <info>%s</info> items (<info>%d%%</info>):',
-                $result->getProcessed(),
-                $result->getTotal(),
-                $result->getProcessed() / $result->getTotal() * 100
+                $processed,
+                $total,
+                $percentage
             )
         );
+
         $this->output->writeln(sprintf('- succes:  <info>%s</info>', $result->getSuccess()));
         $this->output->writeln(sprintf('- failed:  <info>%s</info>', $result->getFailed()));
         $this->output->writeln(sprintf('- skipped: <info>%s</info>', $result->getSkipped()));
+    }
+
+    /**
+     * @param ExceptionEvent $event
+     */
+    public function onException(ExceptionEvent $event)
+    {
+        $this->output->writeln(sprintf('<error>%s</error>', $event->getException()->getMessage()));
     }
 }

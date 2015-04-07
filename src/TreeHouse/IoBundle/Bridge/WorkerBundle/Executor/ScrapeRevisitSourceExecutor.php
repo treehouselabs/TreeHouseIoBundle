@@ -2,6 +2,7 @@
 
 namespace TreeHouse\IoBundle\Bridge\WorkerBundle\Executor;
 
+use FM\WorkerBundle\Exception\RescheduleException;
 use FM\WorkerBundle\Monolog\LoggerAggregate;
 use FM\WorkerBundle\Queue\JobExecutor;
 use FM\WorkerBundle\Queue\ObjectPayloadInterface;
@@ -9,6 +10,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use TreeHouse\IoBundle\Model\SourceInterface;
 use TreeHouse\IoBundle\Scrape\Exception\CrawlException;
+use TreeHouse\IoBundle\Scrape\Exception\RateLimitException;
 use TreeHouse\IoBundle\Scrape\SourceRevisitor;
 use TreeHouse\IoBundle\Source\SourceManagerInterface;
 
@@ -95,6 +97,14 @@ class ScrapeRevisitSourceExecutor extends JobExecutor implements ObjectPayloadIn
             $this->revisitor->revisit($source, true);
 
             return true;
+        } catch (RateLimitException $e) {
+            $re = new RescheduleException();
+
+            if ($date = $e->getRetryDate()) {
+                $re->setRescheduleDate($date);
+            }
+
+            throw $re;
         } catch (CrawlException $e) {
             $this->logger->error($e->getMessage(), ['url' => $e->getUrl()]);
 
