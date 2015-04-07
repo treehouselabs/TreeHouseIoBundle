@@ -2,8 +2,8 @@
 
 namespace TreeHouse\IoBundle\Tests\Export;
 
+use Symfony\Component\Templating\TemplateReference;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Finder\Finder;
 use TreeHouse\IoBundle\Export\FeedExporter;
 use TreeHouse\IoBundle\Export\FeedType\FeedTypeInterface;
 use TreeHouse\IoBundle\Export\FeedWriter;
@@ -56,24 +56,25 @@ class FeedExporterTest extends \PHPUnit_Framework_TestCase
     {
         $writer = $this
             ->getMockBuilder(FeedWriter::class)
-            ->disableOriginalConstructor()->getMock()
+            ->disableOriginalConstructor()
+            ->getMock()
         ;
 
         $writer
             ->expects($this->any())
-            ->method('renderEntity')
-            ->willReturn('<someNode>some entity data</someNode>')
+            ->method('renderItem')
+            ->willReturn('<someNode>some item data</someNode>')
         ;
 
-        $entity = $this->getMockBuilder('stdClass')->setMethods(['getId'])->getMock();
-        $entity->expects($this->any())
+        $item = $this->getMockBuilder('stdClass')->setMethods(['getId'])->getMock();
+        $item->expects($this->any())
             ->method('getId')
             ->willReturn(234)
         ;
 
         $exporter = $this->getExporter(null, null, $writer);
 
-        $type = $this->getMockBuilder(FeedTypeInterface::class)->getMockForAbstractClass();
+        $type = $this->getMockForAbstractClass(FeedTypeInterface::class);
         $type
             ->expects($this->any())
             ->method('getName')
@@ -87,18 +88,88 @@ class FeedExporterTest extends \PHPUnit_Framework_TestCase
 
         $exporter->registerType($type, 'some_type');
 
-        $finder = new Finder();
-        $this->assertEquals(0, $finder->files()->in($this->tmpDir)->count());
+        $cachedFile = $exporter->getItemCacheFilename($item, $type);
 
-        $exporter->cacheItem($entity);
+        if (file_exists($cachedFile)) {
+            unlink($cachedFile);
+        }
 
-        $finder = new Finder();
-        $this->assertEquals(1, $finder->files()->in($this->tmpDir)->count());
+        $exporter->cacheItem($item);
+        $this->assertTrue(file_exists($cachedFile));
     }
 
     /**
-     * @param null|string            $cacheDir
-     * @param null                   $exportDir
+     * Tests that the item cache filename reflects different aspects of the used template and type
+     */
+    public function testCacheItemFilenameReflectsTemplate()
+    {
+        /** @var FeedExporter $exporter */
+        $exporter = $this
+            ->getMockBuilder(FeedExporter::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['cacheItem'])
+            ->getMock()
+        ;
+
+        $item = $this->getMockBuilder('stdClass')->setMethods(['getId'])->getMock();
+        $item->expects($this->any())
+            ->method('getId')
+            ->willReturn(234)
+        ;
+
+        $templateFile = tempnam(sys_get_temp_dir(), 'template');
+
+        /** @var FeedTypeInterface[] $types */
+        $types = [];
+
+        // load a basic type
+        $types[] = $this->createFeedType('type1');
+        $types[] = $this->createFeedType('type2', 'root2');
+        $types[] = $this->createFeedType('type3', null, 'item2');
+        $types[] = $this->createFeedType('type4', null, null, 'template2');
+        $types[] = $this->createFeedType('type5', null, null, new TemplateReference($templateFile));
+
+        $files = [];
+        foreach ($types as $type) {
+            $exporter->registerType($type, $type->getName());
+            $files[] = $file = $exporter->getItemCacheFilename($item, $type);
+
+            // assert that the item cache filename is a string
+            $this->assertInternalType('string', $file);
+        }
+
+        // now change the template data and the cached file should be different
+        file_put_contents($templateFile, 'template_data_changed');
+        $types[] = $type = $this->createFeedType('type6', null, null, new TemplateReference($templateFile));
+        $exporter->registerType($type, $type->getName());
+        $files[] = $exporter->getItemCacheFilename($item, $type);
+
+        // assert that the files are all unique
+        $this->assertSame(sizeof($files), sizeof(array_unique($files)));
+    }
+
+    /**
+     * @param string $name
+     * @param string $rootNode
+     * @param string $itemNode
+     * @param string $template
+     *
+     * @return \PHPUnit_Framework_MockObject_MockObject|FeedTypeInterface
+     */
+    protected function createFeedType($name, $rootNode = null, $itemNode = null, $template = null)
+    {
+        $type = $this->getMockForAbstractClass(FeedTypeInterface::class);
+        $type->expects($this->any())->method('getName')->willReturn($name);
+        $type->expects($this->any())->method('getRootNode')->willReturn($rootNode ?: 'feed');
+        $type->expects($this->any())->method('getItemNode')->willReturn($itemNode ?: 'item');
+        $type->expects($this->any())->method('getTemplate')->willReturn($template ?: 'AppBundle:Feed:export.xml.twig');
+
+        return $type;
+    }
+
+    /**
+     * @param null|string     $cacheDir
+     * @param null            $exportDir
      * @param null|FeedWriter $writer
      *
      * @return FeedExporter

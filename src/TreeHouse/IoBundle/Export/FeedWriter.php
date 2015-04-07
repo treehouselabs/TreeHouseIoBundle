@@ -3,6 +3,7 @@
 namespace TreeHouse\IoBundle\Export;
 
 use Symfony\Component\Templating\EngineInterface;
+use Symfony\Component\Templating\TemplateReferenceInterface;
 
 class FeedWriter
 {
@@ -28,8 +29,8 @@ class FeedWriter
 
     /**
      * @param EngineInterface $templating
-     * @param string $rootNode
-     * @param string $itemNode
+     * @param string          $rootNode
+     * @param string          $itemNode
      */
     public function __construct(EngineInterface $templating, $rootNode, $itemNode)
     {
@@ -95,7 +96,7 @@ class FeedWriter
 
     /**
      * @param object $item
-     * @param string $template
+     * @param string|TemplateReferenceInterface $template
      *
      * @throws \RuntimeException
      */
@@ -105,8 +106,8 @@ class FeedWriter
     }
 
     /**
-     * @param object $item
-     * @param string $template
+     * @param object                            $item
+     * @param string|TemplateReferenceInterface $template
      *
      * @return string
      */
