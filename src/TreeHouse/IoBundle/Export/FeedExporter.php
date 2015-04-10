@@ -75,10 +75,11 @@ class FeedExporter
     /**
      * @param object              $item
      * @param FeedTypeInterface[] $types
+     * @param boolean             $force
      *
-     * @return bool
+     * @return boolean
      */
-    public function cacheItem($item, array $types = [])
+    public function cacheItem($item, array $types = [], $force = false)
     {
         if (false === $this->supports($item)) {
             return false;
@@ -92,7 +93,7 @@ class FeedExporter
             $template  = $type->getTemplate();
             $cacheFile = $this->getItemCacheFilename($item, $type);
 
-            if (!file_exists($cacheFile)) {
+            if (!file_exists($cacheFile) || $force) {
                 $xml = $this->getWriter($type)->renderItem($item, $template);
 
                 $this->filesystem->dumpFile($cacheFile, $xml, null);
@@ -127,9 +128,9 @@ class FeedExporter
 
     /**
      * @param FeedTypeInterface $type
-     * @param bool              $force
+     * @param boolean           $force
      *
-     * @return bool
+     * @return boolean
      */
     public function exportFeed(FeedTypeInterface $type, $force = false)
     {
@@ -197,7 +198,7 @@ class FeedExporter
     /**
      * @param object $item
      *
-     * @return bool
+     * @return boolean
      */
     public function supports($item)
     {
@@ -264,7 +265,7 @@ class FeedExporter
      * exported feed will be cached and served from.
      *
      * @param FeedTypeInterface $type
-     * @param bool              $gzip
+     * @param boolean           $gzip
      *
      * @return string
      */
@@ -339,8 +340,8 @@ class FeedExporter
     }
 
     /**
-     * @param string $file
-     * @param int    $ttl time to life in minutes
+     * @param string  $file
+     * @param integer $ttl  time to life in minutes
      *
      * @return boolean
      */
@@ -486,6 +487,7 @@ class FeedExporter
         fclose($fp);
         gzclose($zp);
     }
+
     /**
      * @param string $eventName
      * @param Event  $event

@@ -21,8 +21,6 @@ class ExportItemExecutor extends JobExecutor
     protected $doctrine;
 
     /**
-     * Constructor.
-     *
      * @param FeedExporter    $exporter
      * @param ManagerRegistry $doctrine
      */
@@ -36,7 +34,8 @@ class ExportItemExecutor extends JobExecutor
      * Executes a job with given payload
      *
      * @param  array $payload
-     * @return mixed
+     *
+     * @return boolean
      */
     public function execute(array $payload)
     {
@@ -48,7 +47,7 @@ class ExportItemExecutor extends JobExecutor
             return false;
         }
 
-        return $this->exporter->cacheItem($entity);
+        return $this->exporter->cacheItem($entity, [], true);
     }
 
     /**
