@@ -83,6 +83,14 @@ class ScraperFactory
     }
 
     /**
+     * @return CrawlerInterface[]
+     */
+    public function getCrawlers()
+    {
+        return $this->crawlers;
+    }
+
+    /**
      * @inheritdoc
      */
     public function registerParserType(ParserTypeInterface $parser, $alias)
@@ -112,6 +120,14 @@ class ScraperFactory
     }
 
     /**
+     * @return ParserTypeInterface[]
+     */
+    public function getParserTypes()
+    {
+        return $this->parserTypes;
+    }
+
+    /**
      * @inheritdoc
      */
     public function registerHandler(HandlerInterface $handler, $alias)
@@ -138,6 +154,14 @@ class ScraperFactory
         }
 
         return $this->handlers[$alias];
+    }
+
+    /**
+     * @return HandlerInterface[]
+     */
+    public function getHandlers()
+    {
+        return $this->handlers;
     }
 
     /**
