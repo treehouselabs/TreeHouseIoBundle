@@ -96,6 +96,17 @@ class FeedExporterTest extends \PHPUnit_Framework_TestCase
 
         $exporter->cacheItem($item);
         $this->assertTrue(file_exists($cachedFile));
+
+        // overwrite cache file with new data
+        file_put_contents($cachedFile, 'test');
+
+        // caching now will leave the file alone
+        $exporter->cacheItem($item);
+        $this->assertEquals('test', file_get_contents($cachedFile));
+
+        // caching with force will overwrite the file
+        $exporter->cacheItem($item, [], true);
+        $this->assertEquals('<someNode>some item data</someNode>', file_get_contents($cachedFile));
     }
 
     /**
