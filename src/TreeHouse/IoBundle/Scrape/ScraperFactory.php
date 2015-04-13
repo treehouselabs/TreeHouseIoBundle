@@ -209,7 +209,7 @@ class ScraperFactory
         );
 
         $parserType = $this->getParserType($scraper->getParser());
-        $builder    = new ParserBuilder();
+        $builder    = new ParserBuilder($this->eventDispatcher);
 
         return $builder->build($parserType, $options);
     }

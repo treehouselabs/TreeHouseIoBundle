@@ -3,6 +3,7 @@
 namespace TreeHouse\IoBundle\Scrape\Parser;
 
 use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use TreeHouse\Feeder\Modifier\Data\Transformer\TransformerInterface;
 use TreeHouse\Feeder\Modifier\Item\Filter\FilterInterface;
@@ -14,9 +15,30 @@ use TreeHouse\IoBundle\Scrape\Parser\Type\ParserTypeInterface;
 class ParserBuilder implements ParserBuilderInterface
 {
     /**
+     * @var EventDispatcherInterface
+     */
+    protected $eventDispatcher;
+
+    /**
      * @var ModifierInterface[]
      */
     protected $modifiers = [];
+
+    /**
+     * @param EventDispatcherInterface $eventDispatcher
+     */
+    public function __construct(EventDispatcherInterface $eventDispatcher = null)
+    {
+        $this->eventDispatcher = $eventDispatcher ?: new EventDispatcher();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getEventDispatcher()
+    {
+        return $this->eventDispatcher;
+    }
 
     /**
      * @return ModifierInterface[]
@@ -151,7 +173,7 @@ class ParserBuilder implements ParserBuilderInterface
 
         $type->build($this, $resolver->resolve($options));
 
-        $parser = new DefaultParser(new EventDispatcher());
+        $parser = new DefaultParser($this->eventDispatcher);
         foreach ($this->modifiers as $position => list($modifier, $continue)) {
             $parser->addModifier($modifier, $position, $continue);
         }

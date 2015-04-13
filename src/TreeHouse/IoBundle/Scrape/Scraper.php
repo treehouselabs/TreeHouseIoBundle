@@ -9,6 +9,7 @@ use TreeHouse\Feeder\Exception\FilterException;
 use TreeHouse\Feeder\Exception\ModificationException;
 use TreeHouse\Feeder\Exception\ValidationException;
 use TreeHouse\IoBundle\Entity\Scraper as ScraperEntity;
+use TreeHouse\IoBundle\Import\Exception\FailedItemException;
 use TreeHouse\IoBundle\Scrape\Crawler\CrawlerInterface;
 use TreeHouse\IoBundle\Scrape\Event\FailedItemEvent;
 use TreeHouse\IoBundle\Scrape\Event\RateLimitEvent;
@@ -171,6 +172,8 @@ class Scraper implements ScraperInterface
         } catch (FilterException $e) {
             $this->eventDispatcher->dispatch(ScraperEvents::ITEM_SKIPPED, new SkippedItemEvent($this, $item, $e->getMessage()));
         } catch (ValidationException $e) {
+            $this->eventDispatcher->dispatch(ScraperEvents::ITEM_FAILED, new FailedItemEvent($this, $item, $e->getMessage()));
+        } catch (FailedItemException $e) {
             $this->eventDispatcher->dispatch(ScraperEvents::ITEM_FAILED, new FailedItemEvent($this, $item, $e->getMessage()));
         } catch (ModificationException $e) {
             if ($e->getPrevious()) {
