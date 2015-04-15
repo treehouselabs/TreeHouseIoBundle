@@ -72,7 +72,7 @@ class SourceCleanupCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $feeds       = $input->getOption('feeds');
+        $feeds       = $input->getOption('feed');
         $force       = $input->getOption('force');
         $interactive = $input->isInteractive();
         $dispatcher  = $this->sourceCleaner->getEventDispatcher();

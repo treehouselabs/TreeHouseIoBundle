@@ -170,7 +170,7 @@ class SourceRepository extends EntityRepository
         return $this
             ->createQueryBuilder('s')
             ->where('s.feed IS NULL')
-            // TODO add scraper clause when it's implemented
+            ->andWhere('s.scraper IS NULL')
         ;
     }
 }
