@@ -5,7 +5,8 @@ parameters:
   tree_house.io.worker.listener.scrape_source.class: TreeHouse\IoBundle\Bridge\WorkerBundle\EventListener\ScrapeSourceListener
   tree_house.io.worker.listener.rate_limit.class: TreeHouse\IoBundle\Bridge\WorkerBundle\EventListener\ScrapeRateLimitListener
   tree_house.io.queue.executor.import_schedule.class: TreeHouse\IoBundle\Bridge\WorkerBundle\Executor\ImportScheduleExecutor
-  tree_house.io.queue.executor.export_item.class: TreeHouse\IoBundle\Bridge\WorkerBundle\Executor\ExportItemExecutor
+  tree_house.io.queue.executor.export_item.class: TreeHouse\IoBundle\Bridge\WorkerBundle\Executor\ItemExportExecutor
+  tree_house.io.queue.executor.export_item_remove.class: TreeHouse\IoBundle\Bridge\WorkerBundle\Executor\ItemExportRemoveExecutor
   tree_house.io.queue.executor.import_part.class: TreeHouse\IoBundle\Bridge\WorkerBundle\Executor\ImportPartExecutor
   tree_house.io.queue.executor.scrape_url.class: TreeHouse\IoBundle\Bridge\WorkerBundle\Executor\ScrapeUrlExecutor
   tree_house.io.queue.executor.scrape_source_revisit.class: TreeHouse\IoBundle\Bridge\WorkerBundle\Executor\ScrapeRevisitSourceExecutor
@@ -42,6 +43,14 @@ services:
 
   tree_house.io.worker.executor.export_item:
     class: %tree_house.io.queue.executor.export_item.class%
+    arguments:
+      - @tree_house.io.export.feed_exporter
+      - @doctrine
+    tags:
+      - { name: tree_house.worker.executor }
+
+  tree_house.io.worker.executor.export_item_remove:
+    class: %tree_house.io.queue.executor.export_item_remove.class%
     arguments:
       - @tree_house.io.export.feed_exporter
       - @doctrine
