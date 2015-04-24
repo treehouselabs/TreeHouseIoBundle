@@ -3,8 +3,10 @@
 namespace TreeHouse\IoBundle\EventListener;
 
 use TreeHouse\Feeder\Event\ResourceSerializeEvent;
-use TreeHouse\IoBundle\Import\Event\ItemEvent;
-use TreeHouse\IoBundle\Import\Event\SuccessItemEvent;
+use TreeHouse\IoBundle\Import\Event\SuccessItemEvent as SuccessImportItemEvent;
+use TreeHouse\IoBundle\Model\SourceInterface;
+use TreeHouse\IoBundle\Scrape\Event\SuccessItemEvent as SuccessScrapeItemEvent;
+use TreeHouse\IoBundle\Scrape\ScrapedItemBag;
 
 /**
  * Listener that sets the raw (unprocessed) data on a source. Useful for debugging purposes.
@@ -12,14 +14,14 @@ use TreeHouse\IoBundle\Import\Event\SuccessItemEvent;
 class SourceRawDataListener
 {
     /**
-     * Raw source string
+     * Raw source string.
      *
      * @var string
      */
     protected $rawData;
 
     /**
-     * Catches the raw xml for an item
+     * Catches the raw xml for an item.
      *
      * @param ResourceSerializeEvent $e
      */
@@ -36,26 +38,33 @@ class SourceRawDataListener
     }
 
     /**
-     * Sets the raw data on the resulting Source
-     *
-     * @param SuccessItemEvent $e
+     * @param SuccessImportItemEvent $e
      */
-    public function onItemSuccess(SuccessItemEvent $e)
+    public function onImportItemSuccess(SuccessImportItemEvent $e)
     {
-        $source = $e->getResult();
-
-        $source->setRawData($this->rawData);
-
-        $this->rawData = null;
+        $this->setRawData($e->getResult());
     }
 
     /**
-     * Cleanup previous raw data
-     *
-     * @param ItemEvent $e
+     * @param SuccessScrapeItemEvent $e
      */
-    public function onItemFinish(ItemEvent $e)
+    public function onScrapeItemSuccess(SuccessScrapeItemEvent $e)
     {
+        /** @var ScrapedItemBag $item */
+        $item = $e->getItem();
+        $this->rawData = $item->getOriginalData();
+
+        $this->setRawData($e->getResult());
+    }
+
+    /**
+     * Sets the raw data on the resulting Source.
+     *
+     * @param SourceInterface $source
+     */
+    protected function setRawData(SourceInterface $source)
+    {
+        $source->setRawData(trim($this->rawData));
         $this->rawData = null;
     }
 }

@@ -3,7 +3,6 @@ parameters:
   tree_house.io.import.reader.multipart.default_part_size: 1000
   tree_house.io.import.factory.class: TreeHouse\IoBundle\Import\ImportFactory
   tree_house.io.import.storage.class: TreeHouse\IoBundle\Import\ImportStorage
-  tree_house.io.import.listener.source_raw_data.class: TreeHouse\IoBundle\Import\EventListener\SourceRawDataListener
   tree_house.io.import.listener.import_removal.class: TreeHouse\IoBundle\Import\EventListener\ImportRemovalListener
   tree_house.io.import.importer_builder.class: TreeHouse\IoBundle\Import\Importer\ImporterBuilder
   tree_house.io.import.importer_builder_factory.class: TreeHouse\IoBundle\Import\Importer\ImporterBuilderFactory
@@ -19,13 +18,6 @@ parameters:
   tree_house.io.import.item_logger.redis.class: TreeHouse\IoBundle\Import\Log\RedisItemLogger
 
 services:
-  tree_house.io.import.listener.source_raw_data:
-    class: %tree_house.io.import.listener.source_raw_data.class%
-    tags:
-      - { name: tree_house.io.event_listener, event: feeder.feed.resource_pre_serialize, method: onResourcePreSerialize }
-      - { name: tree_house.io.event_listener, event: io.import.item.success, method: onItemSuccess }
-      - { name: tree_house.io.event_listener, event: io.import.item.finish, method: onItemFinish }
-
   tree_house.io.import.listener.import_removal:
     class: %tree_house.io.import.listener.import_removal.class%
     arguments:
