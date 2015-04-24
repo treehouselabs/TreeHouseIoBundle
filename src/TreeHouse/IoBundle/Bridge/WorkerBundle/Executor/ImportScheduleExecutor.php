@@ -2,18 +2,20 @@
 
 namespace TreeHouse\IoBundle\Bridge\WorkerBundle\Executor;
 
-use FM\WorkerBundle\Monolog\LoggerAggregate;
-use FM\WorkerBundle\Queue\JobExecutor;
-use FM\WorkerBundle\Queue\ObjectPayloadInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\OptionsResolver\Exception\InvalidArgumentException;
+use Symfony\Component\OptionsResolver\Options;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use TreeHouse\IoBundle\Entity\Feed;
 use TreeHouse\IoBundle\Import\ImportFactory;
 use TreeHouse\IoBundle\Import\ImportScheduler;
+use TreeHouse\WorkerBundle\Executor\AbstractExecutor;
+use TreeHouse\WorkerBundle\Executor\ObjectPayloadInterface;
 
 /**
- * Schedules an import
+ * Schedules an import.
  */
-class ImportScheduleExecutor extends JobExecutor implements LoggerAggregate, ObjectPayloadInterface
+class ImportScheduleExecutor extends AbstractExecutor implements ObjectPayloadInterface
 {
     const NAME = 'import.schedule';
 
@@ -55,14 +57,6 @@ class ImportScheduleExecutor extends JobExecutor implements LoggerAggregate, Obj
     /**
      * @inheritdoc
      */
-    public function getLogger()
-    {
-        return $this->logger;
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function getObjectPayload($object)
     {
         return [$object->getId()];
@@ -79,16 +73,32 @@ class ImportScheduleExecutor extends JobExecutor implements LoggerAggregate, Obj
     /**
      * @inheritdoc
      */
+    public function configurePayload(OptionsResolver $resolver)
+    {
+        $resolver->setRequired(0);
+        $resolver->setAllowedTypes(0, 'numeric');
+        $resolver->setNormalizer(0, function (Options $options, $value) {
+            if (null === $listing = $this->scheduler->findFeed($value)) {
+                throw new InvalidArgumentException(sprintf('Feed with id "%d" does not exist', $value));
+            }
+
+            return $listing;
+        });
+
+        $resolver->setDefaults([1 => false]);
+        $resolver->setNormalizer(1, function (Options $options, $value) {
+            return (boolean) $value;
+        });
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function execute(array $payload)
     {
-        $feedId = array_shift($payload);
-        $force  = !empty($payload) ? (boolean) array_shift($payload) : false;
-
-        if (null === $feed = $this->scheduler->findFeed($feedId)) {
-            $this->getLogger()->warning(sprintf('Feed with id "%d" does not exist', $feedId));
-
-            return false;
-        }
+        /** @var Feed $feed */
+        /** @var bool $force */
+        list ($feed, $force) = $payload;
 
         try {
             $import = $this->importFactory->createImport($feed, new \DateTime(), $force);

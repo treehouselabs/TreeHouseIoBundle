@@ -3,10 +3,13 @@
 namespace TreeHouse\IoBundle\Bridge\WorkerBundle\Executor;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
-use FM\WorkerBundle\Queue\JobExecutor;
+use Symfony\Component\OptionsResolver\Exception\InvalidArgumentException;
+use Symfony\Component\OptionsResolver\Options;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use TreeHouse\WorkerBundle\Executor\AbstractExecutor;
 use TreeHouse\IoBundle\Export\FeedExporter;
 
-class ExportItemExecutor extends JobExecutor
+class ExportItemExecutor extends AbstractExecutor
 {
     const NAME = "export.item";
 
@@ -31,23 +34,32 @@ class ExportItemExecutor extends JobExecutor
     }
 
     /**
-     * Executes a job with given payload
-     *
-     * @param  array $payload
-     *
-     * @return boolean
+     * @inheritdoc
+     */
+    public function configurePayload(OptionsResolver $resolver)
+    {
+        $resolver->setRequired(0);
+        $resolver->setRequired(1);
+        $resolver->setAllowedTypes(0, 'string');
+        $resolver->setAllowedTypes(1, 'numeric');
+        $resolver->setNormalizer(1, function (Options $options, $value) {
+            $class = $options[0];
+            if (null === $item = $this->doctrine->getRepository($class)->find($value)) {
+                throw new InvalidArgumentException(sprintf('Could not find %s with id %d', $class, $value));
+            }
+
+            return $item;
+        });
+    }
+
+    /**
+     * @inheritdoc
      */
     public function execute(array $payload)
     {
-        list($entityClass, $entityId) = $payload;
+        $item = $payload[1];
 
-        $entity = $this->doctrine->getRepository($entityClass)->find($entityId);
-
-        if (null === $entity) {
-            return false;
-        }
-
-        return $this->exporter->cacheItem($entity, [], true);
+        return $this->exporter->cacheItem($item, [], true);
     }
 
     /**

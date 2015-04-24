@@ -3,17 +3,19 @@
 namespace TreeHouse\IoBundle\Bridge\WorkerBundle\Executor;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
-use FM\WorkerBundle\Exception\RescheduleException;
-use FM\WorkerBundle\Monolog\LoggerAggregate;
-use FM\WorkerBundle\Queue\JobExecutor;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\OptionsResolver\Exception\InvalidArgumentException;
+use Symfony\Component\OptionsResolver\Options;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use TreeHouse\IoBundle\Entity\Scraper as ScraperEntity;
 use TreeHouse\IoBundle\Scrape\EventListener\ScrapeLoggingSubscriber;
 use TreeHouse\IoBundle\Scrape\Exception\CrawlException;
 use TreeHouse\IoBundle\Scrape\Exception\RateLimitException;
 use TreeHouse\IoBundle\Scrape\ScraperFactory;
+use TreeHouse\WorkerBundle\Exception\RescheduleException;
+use TreeHouse\WorkerBundle\Executor\AbstractExecutor;
 
-class ScrapeUrlExecutor extends JobExecutor implements LoggerAggregate
+class ScrapeUrlExecutor extends AbstractExecutor
 {
     const NAME = 'scrape.url';
 
@@ -57,9 +59,20 @@ class ScrapeUrlExecutor extends JobExecutor implements LoggerAggregate
     /**
      * @inheritdoc
      */
-    public function getLogger()
+    public function configurePayload(OptionsResolver $resolver)
     {
-        return $this->logger;
+        $resolver->setRequired(0);
+        $resolver->setAllowedTypes(0, 'numeric');
+        $resolver->setNormalizer(0, function (Options $options, $value) {
+            if (null === $scraper = $this->findScraper($value)) {
+                throw new InvalidArgumentException(sprintf('Could not find scraper with id %d', $value));
+            }
+
+            return $scraper;
+        });
+
+        $resolver->setRequired(1);
+        $resolver->setAllowedTypes(1, 'string');
     }
 
     /**
@@ -67,17 +80,9 @@ class ScrapeUrlExecutor extends JobExecutor implements LoggerAggregate
      */
     public function execute(array $payload)
     {
-        if (sizeof($payload) !== 2) {
-            throw new \InvalidArgumentException('Payload must contain a scraper id and a url');
-        }
-
-        list($scraperId, $url) = $payload;
-
-        if (null === $entity = $this->findScraper($scraperId)) {
-            $this->logger->error(sprintf('Scraper %d not found', $scraperId));
-
-            return false;
-        }
+        /** @var ScraperEntity $entity */
+        /** @var string $url */
+        list($entity, $url) = $payload;
 
         $scraper = $this->factory->createScraper($entity);
         $scraper->setAsync(true);
@@ -102,7 +107,7 @@ class ScrapeUrlExecutor extends JobExecutor implements LoggerAggregate
     }
 
     /**
-     * @param integer $scraperId
+     * @param int $scraperId
      *
      * @return ScraperEntity
      */

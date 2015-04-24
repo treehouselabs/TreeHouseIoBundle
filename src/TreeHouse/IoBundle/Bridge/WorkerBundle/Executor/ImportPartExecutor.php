@@ -3,18 +3,20 @@
 namespace TreeHouse\IoBundle\Bridge\WorkerBundle\Executor;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
-use FM\WorkerBundle\Monolog\LoggerAggregate;
-use FM\WorkerBundle\Queue\JobExecutor;
-use FM\WorkerBundle\Queue\ObjectPayloadInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\OptionsResolver\Exception\InvalidArgumentException;
+use Symfony\Component\OptionsResolver\Options;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use TreeHouse\IoBundle\Entity\ImportPart;
 use TreeHouse\IoBundle\Import\EventListener\ImportLoggingSubscriber;
 use TreeHouse\IoBundle\Import\ImportFactory;
+use TreeHouse\WorkerBundle\Executor\AbstractExecutor;
+use TreeHouse\WorkerBundle\Executor\ObjectPayloadInterface;
 
 /**
- * Performs import of a single ImportPart
+ * Performs import of a single ImportPart.
  */
-class ImportPartExecutor extends JobExecutor implements LoggerAggregate, ObjectPayloadInterface
+class ImportPartExecutor extends AbstractExecutor implements ObjectPayloadInterface
 {
     const NAME = 'import.part';
 
@@ -58,14 +60,6 @@ class ImportPartExecutor extends JobExecutor implements LoggerAggregate, ObjectP
     /**
      * @inheritdoc
      */
-    public function getLogger()
-    {
-        return $this->logger;
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function getObjectPayload($object)
     {
         return [$object->getId()];
@@ -82,20 +76,31 @@ class ImportPartExecutor extends JobExecutor implements LoggerAggregate, ObjectP
     /**
      * @inheritdoc
      */
+    public function configurePayload(OptionsResolver $resolver)
+    {
+        $resolver->setRequired(0);
+        $resolver->setAllowedTypes(0, 'numeric');
+        $resolver->setNormalizer(0, function (Options $options, $value) {
+            if (null === $part = $this->findImportPart($value)) {
+                throw new InvalidArgumentException(sprintf('Import part with id "%d" does not exist', $value));
+            }
+
+            return $part;
+        });
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function execute(array $payload)
     {
-        list($partId) = $payload;
-
-        if (null === $part = $this->findImportPart($partId)) {
-            $this->getLogger()->warning(sprintf('Import part with id "%d" does not exist', $partId));
-
-            return false;
-        }
+        /** @var ImportPart $part */
+        list($part) = $payload;
 
         $import = $part->getImport();
         $feed = $import->getFeed();
 
-        $this->getLogger()->info(
+        $this->logger->info(
             sprintf(
                 'Importing part <comment>%d</comment> of %s-feed for import "%d" for origin "%s"',
                 $part->getPosition(),
@@ -119,7 +124,7 @@ class ImportPartExecutor extends JobExecutor implements LoggerAggregate, ObjectP
     }
 
     /**
-     * @param  integer    $partId
+     * @param int $partId
      *
      * @return ImportPart
      */

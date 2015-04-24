@@ -33,7 +33,7 @@
     "predis/predis":                      "~1.0",
     "pixel418/markdownify":               "~2.1",
     "ezyang/htmlpurifier":                "~4.5",
-    "fm/worker-bundle":                   "~0.3"
+    "treehouselabs/worker-bundle":        "dev-master as 1.0"
   },
   "suggest": {
     "pk/markdownify-bundle":        "To integrate Markdownify in your Symfony application",

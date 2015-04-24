@@ -2,25 +2,27 @@
 
 namespace TreeHouse\IoBundle\Bridge\WorkerBundle\Executor;
 
-use FM\WorkerBundle\Monolog\LoggerAggregate;
-use FM\WorkerBundle\Queue\JobExecutor;
-use FM\WorkerBundle\Queue\ObjectPayloadInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
+use Symfony\Component\OptionsResolver\Exception\InvalidArgumentException;
+use Symfony\Component\OptionsResolver\Options;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use TreeHouse\IoBundle\Exception\SourceLinkException;
 use TreeHouse\IoBundle\Exception\SourceProcessException;
 use TreeHouse\IoBundle\Model\SourceInterface;
 use TreeHouse\IoBundle\Source\SourceManagerInterface;
 use TreeHouse\IoBundle\Source\SourceProcessorInterface;
+use TreeHouse\WorkerBundle\Executor\AbstractExecutor;
+use TreeHouse\WorkerBundle\Executor\ObjectPayloadInterface;
 
 /**
  * Worker job to link this source to existing entities, or create a
  * new entity when an entity with the same features doesn't already
- * exist
+ * exist.
  *
  * Source process jobs are added to the queue by the SourceModificationListener
  */
-class SourceProcessExecutor extends JobExecutor implements LoggerAggregate, ObjectPayloadInterface
+class SourceProcessExecutor extends AbstractExecutor implements ObjectPayloadInterface
 {
     const NAME = 'source.process';
 
@@ -60,14 +62,6 @@ class SourceProcessExecutor extends JobExecutor implements LoggerAggregate, Obje
     }
 
     /**
-     * @return LoggerInterface
-     */
-    public function getLogger()
-    {
-        return $this->logger;
-    }
-
-    /**
      * @param SourceInterface $object
      *
      * @return integer[]
@@ -88,22 +82,33 @@ class SourceProcessExecutor extends JobExecutor implements LoggerAggregate, Obje
     }
 
     /**
+     * @inheritdoc
+     */
+    public function configurePayload(OptionsResolver $resolver)
+    {
+        $resolver->setRequired(0);
+        $resolver->setAllowedTypes(0, 'numeric');
+        $resolver->setNormalizer(0, function (Options $options, $value) {
+            if (null === $source = $this->findSource($value)) {
+                throw new InvalidArgumentException(sprintf('Could not find source with id %d', $value));
+            }
+
+            return $source;
+        });
+    }
+
+    /**
      * @param array $payload Payload containing the source id
      *
-     * @return boolean
+     * @return bool
      */
     public function execute(array $payload)
     {
-        list($sourceId) = $payload;
-
-        if (null === $source = $this->findSource($sourceId)) {
-            $this->getLogger()->info(sprintf('Could not find source with id %d', $sourceId));
-
-            return false;
-        }
+        /** @var SourceInterface $source */
+        list($source) = $payload;
 
         if ($source->isBlocked()) {
-            $this->getLogger()->debug('Source is blocked');
+            $this->logger->debug('Source is blocked');
 
             $this->processor->unlink($source);
 
@@ -133,13 +138,13 @@ class SourceProcessExecutor extends JobExecutor implements LoggerAggregate, Obje
             $this->setMessage(
                 $source,
                 'link',
-                sprintf('Could not link source (%d): %s', $sourceId, $e->getMessage())
+                sprintf('Could not link source (%d): %s', $source->getId(), $e->getMessage())
             );
         } catch (SourceProcessException $e) {
             $this->setMessage(
                 $source,
                 'process',
-                sprintf('Error while processing source (%d): %s', $sourceId, $e->getMessage())
+                sprintf('Error while processing source (%d): %s', $source->getId(), $e->getMessage())
             );
         }
 
@@ -153,7 +158,7 @@ class SourceProcessExecutor extends JobExecutor implements LoggerAggregate, Obje
     }
 
     /**
-     * @param integer $sourceId
+     * @param int $sourceId
      *
      * @return SourceInterface
      */
@@ -163,7 +168,7 @@ class SourceProcessExecutor extends JobExecutor implements LoggerAggregate, Obje
     }
 
     /**
-     * Sets message for a specific key, while preserving other keys
+     * Sets message for a specific key, while preserving other keys.
      *
      * @param SourceInterface $source
      * @param string          $key

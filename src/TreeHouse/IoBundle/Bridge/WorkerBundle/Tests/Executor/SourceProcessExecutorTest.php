@@ -4,12 +4,15 @@ namespace TreeHouse\IoBundle\Bridge\WorkerBundle\Tests\Executor;
 
 use Psr\Log\LogLevel;
 use Psr\Log\NullLogger;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use TreeHouse\IoBundle\Exception\SourceLinkException;
 use TreeHouse\IoBundle\Exception\SourceProcessException;
 use TreeHouse\IoBundle\Bridge\WorkerBundle\Executor\SourceProcessExecutor;
+use TreeHouse\IoBundle\Model\SourceInterface;
 use TreeHouse\IoBundle\Source\Processor\DelegatingSourceProcessor;
 use TreeHouse\IoBundle\Source\SourceManagerInterface;
 use TreeHouse\IoBundle\Tests\Mock\SourceMock;
+use TreeHouse\WorkerBundle\Executor\ExecutorInterface;
 
 class SourceProcessExecutorTest extends \PHPUnit_Framework_TestCase
 {
@@ -54,7 +57,7 @@ class SourceProcessExecutorTest extends \PHPUnit_Framework_TestCase
         $this->processor->expects($this->once())->method('link')->will($this->returnValue(true));
         $this->manager->expects($this->once())->method('flush')->with($source);
 
-        $executor->execute($executor->getObjectPayload($source));
+        $executor->execute($this->getPayload($executor, $source));
     }
 
     public function testLinkException()
@@ -72,7 +75,7 @@ class SourceProcessExecutorTest extends \PHPUnit_Framework_TestCase
             ->will($this->throwException(new SourceLinkException('Foobar')))
         ;
 
-        $this->assertFalse($executor->execute($executor->getObjectPayload($source)));
+        $this->assertFalse($executor->execute($this->getPayload($executor, $source)));
 
         $messages = $source->getMessages();
         $this->assertInternalType('array', $messages);
@@ -91,9 +94,12 @@ class SourceProcessExecutorTest extends \PHPUnit_Framework_TestCase
         $this->processor->expects($this->once())->method('isLinked')->will($this->returnValue(true));
         $this->processor->expects($this->once())->method('process')->will($this->returnValue(true));
 
-        $this->assertTrue($executor->execute($executor->getObjectPayload($source)));
+        $this->assertTrue($executor->execute($this->getPayload($executor, $source)));
     }
 
+    /**
+     * @expectedException \Symfony\Component\OptionsResolver\Exception\InvalidArgumentException
+     */
     public function testCannotFindSource()
     {
         $executor = new SourceProcessExecutor($this->manager, $this->processor, new NullLogger());
@@ -103,7 +109,7 @@ class SourceProcessExecutorTest extends \PHPUnit_Framework_TestCase
         $this->manager->expects($this->once())->method('findById')->will($this->returnValue(null));
         $this->processor->expects($this->never())->method('link')->will($this->returnValue(true));
 
-        $this->assertFalse($executor->execute([$executor->getObjectPayload($source)]));
+        $this->assertFalse($executor->execute($this->getPayload($executor, $source)));
     }
 
     public function testBlockedSource()
@@ -117,7 +123,7 @@ class SourceProcessExecutorTest extends \PHPUnit_Framework_TestCase
         $this->processor->expects($this->never())->method('link')->will($this->returnValue(true));
         $this->processor->expects($this->once())->method('unlink')->will($this->returnValue(true));
 
-        $this->assertFalse($executor->execute([$executor->getObjectPayload($source)]));
+        $this->assertFalse($executor->execute($this->getPayload($executor, $source)));
     }
 
     public function testProcessException()
@@ -135,12 +141,28 @@ class SourceProcessExecutorTest extends \PHPUnit_Framework_TestCase
             ->will($this->throwException(new SourceProcessException('Foobar')))
         ;
 
-        $this->assertFalse($executor->execute($executor->getObjectPayload($source)));
+        $this->assertFalse($executor->execute($this->getPayload($executor, $source)));
 
         $messages = $source->getMessages();
         $this->assertInternalType('array', $messages);
         $this->assertArrayHasKey('process', $messages);
         $this->assertArrayHasKey(LogLevel::ERROR, $messages['process']);
         $this->assertContains('Foobar', $messages['process'][LogLevel::ERROR]);
+    }
+
+    /**
+     * @param SourceProcessExecutor $executor
+     * @param SourceInterface       $source
+     *
+     * @return array
+     */
+    private function getPayload(SourceProcessExecutor $executor, SourceInterface $source)
+    {
+        $payload = $executor->getObjectPayload($source);
+
+        $resolver = new OptionsResolver();
+        $executor->configurePayload($resolver);
+
+        return $resolver->resolve($payload);
     }
 }

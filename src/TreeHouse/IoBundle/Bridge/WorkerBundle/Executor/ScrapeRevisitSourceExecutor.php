@@ -2,19 +2,20 @@
 
 namespace TreeHouse\IoBundle\Bridge\WorkerBundle\Executor;
 
-use FM\WorkerBundle\Exception\RescheduleException;
-use FM\WorkerBundle\Monolog\LoggerAggregate;
-use FM\WorkerBundle\Queue\JobExecutor;
-use FM\WorkerBundle\Queue\ObjectPayloadInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\OptionsResolver\Exception\InvalidArgumentException;
+use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use TreeHouse\IoBundle\Model\SourceInterface;
 use TreeHouse\IoBundle\Scrape\Exception\CrawlException;
 use TreeHouse\IoBundle\Scrape\Exception\RateLimitException;
 use TreeHouse\IoBundle\Scrape\SourceRevisitor;
 use TreeHouse\IoBundle\Source\SourceManagerInterface;
+use TreeHouse\WorkerBundle\Exception\RescheduleException;
+use TreeHouse\WorkerBundle\Executor\AbstractExecutor;
+use TreeHouse\WorkerBundle\Executor\ObjectPayloadInterface;
 
-class ScrapeRevisitSourceExecutor extends JobExecutor implements ObjectPayloadInterface, LoggerAggregate
+class ScrapeRevisitSourceExecutor extends AbstractExecutor implements ObjectPayloadInterface
 {
     const NAME = 'scrape.source.revisit';
 
@@ -56,14 +57,6 @@ class ScrapeRevisitSourceExecutor extends JobExecutor implements ObjectPayloadIn
     /**
      * @inheritdoc
      */
-    public function getLogger()
-    {
-        return $this->logger;
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function supportsObject($object)
     {
         return $object instanceof SourceInterface;
@@ -82,16 +75,26 @@ class ScrapeRevisitSourceExecutor extends JobExecutor implements ObjectPayloadIn
     /**
      * @inheritdoc
      */
+    public function configurePayload(OptionsResolver $resolver)
+    {
+        $resolver->setRequired(0);
+        $resolver->setAllowedTypes(0, 'numeric');
+        $resolver->setNormalizer(0, function (Options $options, $value) {
+            if (null === $source = $this->findSource($value)) {
+                throw new InvalidArgumentException(sprintf('Could not find source with id %d', $value));
+            }
+
+            return $source;
+        });
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function execute(array $payload)
     {
-        $resolver = $this->getOptionsResolver();
-        $options  = $resolver->resolve($payload);
-
-        if (null === $source = $this->findSource($options[0])) {
-            $this->logger->error(sprintf('Source %d not found', $options[0]));
-
-            return false;
-        }
+        /** @var SourceInterface $source */
+        list($source) = $payload;
 
         try {
             $this->revisitor->revisit($source, true);
@@ -113,24 +116,12 @@ class ScrapeRevisitSourceExecutor extends JobExecutor implements ObjectPayloadIn
     }
 
     /**
-     * @param integer $sourceId
+     * @param int $sourceId
      *
      * @return SourceInterface
      */
     protected function findSource($sourceId)
     {
         return $this->sourceManager->findById($sourceId);
-    }
-
-    /**
-     * @return OptionsResolver
-     */
-    protected function getOptionsResolver()
-    {
-        $resolver = new OptionsResolver();
-        $resolver->setRequired([0]);
-        $resolver->setAllowedTypes(0, ['numeric']);
-
-        return $resolver;
     }
 }

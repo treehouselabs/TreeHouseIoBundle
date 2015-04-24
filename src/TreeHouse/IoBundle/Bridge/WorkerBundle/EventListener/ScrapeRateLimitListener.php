@@ -2,7 +2,7 @@
 
 namespace TreeHouse\IoBundle\Bridge\WorkerBundle\EventListener;
 
-use FM\WorkerBundle\QueueManager;
+use TreeHouse\WorkerBundle\QueueManager;
 use TreeHouse\IoBundle\Bridge\WorkerBundle\Executor\ScrapeUrlExecutor;
 use TreeHouse\IoBundle\Scrape\Event\RateLimitEvent;
 
@@ -28,6 +28,6 @@ class ScrapeRateLimitListener
     {
         $payload = [$event->getScraper()->getId(), $event->getUrl()];
 
-        $this->queueManager->add(ScrapeUrlExecutor::NAME, $payload, $event->getRetryDate());
+        $this->queueManager->add(ScrapeUrlExecutor::NAME, $payload, $event->getRetryDate()->getTimestamp() - time());
     }
 }

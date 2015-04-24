@@ -15,28 +15,28 @@ services:
   tree_house.io.worker.listener.source_modification:
     class: %tree_house.io.worker.listener.source_modification.class%
     arguments:
-      - @fm_worker.queue_manager
+      - @tree_house.worker.queue_manager
     tags:
       - { name: tree_house.io.event_listener, event: io.source.process, method: onSourceProcess }
 
   tree_house.io.worker.listener.import_schedule:
     class: %tree_house.io.worker.listener.import_schedule.class%
     arguments:
-      - @fm_worker.queue_manager
+      - @tree_house.worker.queue_manager
     tags:
       - { name: tree_house.io.event_listener, event: io.import.part.scheduled, method: onPartScheduled }
 
   tree_house.io.worker.listener.scrape_url:
     class: %tree_house.io.worker.listener.scrape_url.class%
     arguments:
-      - @fm_worker.queue_manager
+      - @tree_house.worker.queue_manager
     tags:
       - { name: tree_house.io.event_listener, event: io.scrape.url.next, method: onScrapeNextUrl }
 
   tree_house.io.worker.listener.scrape_source:
     class: %tree_house.io.worker.listener.scrape_source.class%
     arguments:
-      - @fm_worker.queue_manager
+      - @tree_house.worker.queue_manager
     tags:
       - { name: tree_house.io.event_listener, event: io.scrape.source.revisit, method: onScrapeRevisitSource }
 
@@ -46,7 +46,7 @@ services:
       - @tree_house.io.export.feed_exporter
       - @doctrine
     tags:
-      - { name: fm_worker.queue.job_executor }
+      - { name: tree_house.worker.executor }
 
   tree_house.io.worker.executor.import_part:
     class: %tree_house.io.queue.executor.import_part.class%
@@ -55,7 +55,7 @@ services:
       - @tree_house.io.import.import_factory
       - @logger
     tags:
-      - { name: fm_worker.queue.job_executor }
+      - { name: tree_house.worker.executor }
 
   tree_house.io.worker.executor.import_schedule:
     class: %tree_house.io.queue.executor.import_schedule.class%
@@ -64,7 +64,7 @@ services:
       - @tree_house.io.import.import_factory
       - @logger
     tags:
-      - { name: fm_worker.queue.job_executor }
+      - { name: tree_house.worker.executor }
 
   tree_house.io.worker.executor.scrape_url:
     class: %tree_house.io.queue.executor.scrape_url.class%
@@ -73,7 +73,7 @@ services:
       - @tree_house.io.scrape.scraper_factory
       - @logger
     tags:
-      - { name: fm_worker.queue.job_executor }
+      - { name: tree_house.worker.executor }
 
   tree_house.io.worker.executor.scrape_source_revisit:
     class: %tree_house.io.queue.executor.scrape_source_revisit.class%
@@ -82,7 +82,7 @@ services:
       - @tree_house.io.scrape.source.revisitor
       - @logger
     tags:
-      - { name: fm_worker.queue.job_executor }
+      - { name: tree_house.worker.executor }
 
   tree_house.io.worker.executor.source_process:
     class: %tree_house.io.queue.executor.source_process.class%
@@ -91,5 +91,5 @@ services:
       - @tree_house.io.source_processor
       - @logger
     tags:
-      - { name: fm_worker.queue.job_executor }
+      - { name: tree_house.worker.executor }
       - { name: monolog.logger, channel: io }
