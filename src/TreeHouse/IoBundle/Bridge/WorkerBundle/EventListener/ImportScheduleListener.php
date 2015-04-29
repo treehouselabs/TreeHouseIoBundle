@@ -14,11 +14,18 @@ class ImportScheduleListener
     protected $queueManager;
 
     /**
-     * @param QueueManager $queueManager
+     * @var integer
      */
-    public function __construct(QueueManager $queueManager)
+    protected $timeToRun;
+
+    /**
+     * @param QueueManager $queueManager
+     * @param integer      $ttr
+     */
+    public function __construct(QueueManager $queueManager, $ttr = 300)
     {
         $this->queueManager = $queueManager;
+        $this->timeToRun    = $ttr;
     }
 
     /**
@@ -26,6 +33,6 @@ class ImportScheduleListener
      */
     public function onPartScheduled(PartEvent $event)
     {
-        $this->queueManager->addForObject(ImportPartExecutor::NAME, $event->getPart());
+        $this->queueManager->addForObject(ImportPartExecutor::NAME, $event->getPart(), null, null, $this->timeToRun);
     }
 }
