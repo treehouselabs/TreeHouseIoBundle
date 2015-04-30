@@ -318,7 +318,7 @@ class Feed
      *
      * @return $this
      */
-    public function setOptions(array $options)
+    public function setOptions(array $options = null)
     {
         $this->options = $options;
 
@@ -338,7 +338,7 @@ class Feed
      *
      * @return $this
      */
-    public function setReaderOptions(array $readerOptions)
+    public function setReaderOptions(array $readerOptions = null)
     {
         $this->readerOptions = $readerOptions;
 
@@ -358,7 +358,7 @@ class Feed
      *
      * @return $this
      */
-    public function setImporterOptions(array $importerOptions)
+    public function setImporterOptions(array $importerOptions = null)
     {
         $this->importerOptions = $importerOptions;
 
@@ -398,7 +398,7 @@ class Feed
      *
      * @return $this
      */
-    public function setDefaultValues(array $defaultValues)
+    public function setDefaultValues(array $defaultValues = null)
     {
         $this->defaultValues = $defaultValues;
 
