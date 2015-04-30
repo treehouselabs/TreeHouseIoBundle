@@ -14,6 +14,16 @@ use TreeHouse\IoBundle\Model\SourceInterface;
 class Feed
 {
     /**
+     * Items from this feed come directly from the source.
+     */
+    const SYNDICATION_DIRECT    = 1;
+
+    /**
+     * Feed contains items from multiple sources, in an aggregated way.
+     */
+    const SYNDICATION_AGGREGATE = 2;
+
+    /**
      * @var integer $id
      *
      * @ORM\Column(type="integer")
@@ -23,7 +33,7 @@ class Feed
     protected $id;
 
     /**
-     * The frequency to import the feed with, in hours
+     * The frequency to import the feed with, in hours.
      *
      * @var integer $frequency
      *
@@ -32,7 +42,7 @@ class Feed
     protected $frequency;
 
     /**
-     * Whether the feed contains all items or not
+     * Whether the feed contains all items or only updates.
      *
      * @var boolean $partial
      *
@@ -41,7 +51,17 @@ class Feed
     protected $partial;
 
     /**
-     * One of the configured feed types
+     * Specifies where the feed's items come from.
+     * Default options are 'direct' and 'aggregate', but these can be extended.
+     *
+     * @var integer $syndication
+     *
+     * @ORM\Column(type="smallint")
+     */
+    protected $syndication = self::SYNDICATION_DIRECT;
+
+    /**
+     * One of the configured feed types.
      *
      * @var string $type
      *
@@ -50,7 +70,7 @@ class Feed
     protected $type;
 
     /**
-     * One of the configured reader types
+     * One of the configured reader types.
      *
      * @var string $readerType
      *
@@ -59,7 +79,7 @@ class Feed
     protected $readerType;
 
     /**
-     * One of the configured importer types
+     * One of the configured importer types.
      *
      * @var string $importerType
      *
@@ -68,7 +88,7 @@ class Feed
     protected $importerType;
 
     /**
-     * Options to be passed to the feed type
+     * Options to be passed to the feed type.
      *
      * @var array $options
      *
@@ -77,7 +97,7 @@ class Feed
     protected $options;
 
     /**
-     * Options to be passed to the feed reader
+     * Options to be passed to the feed reader.
      *
      * @var array $readerOptions
      *
@@ -86,7 +106,7 @@ class Feed
     protected $readerOptions;
 
     /**
-     * Options to be passed to the feed importer
+     * Options to be passed to the feed importer.
      *
      * @var array $importerOptions
      *
@@ -95,7 +115,7 @@ class Feed
     protected $importerOptions;
 
     /**
-     * Configuration to use for downloading the feed
+     * Configuration to use for downloading the feed.
      *
      * @var array $transportConfig
      *
@@ -104,7 +124,7 @@ class Feed
     protected $transportConfig;
 
     /**
-     * Can contain key/value pairs to be used as defaults if the feed doesn't supply them
+     * Can contain key/value pairs to be used as defaults if the feed doesn't supply them.
      *
      * @var array $defaultValues
      *
@@ -113,6 +133,8 @@ class Feed
     protected $defaultValues;
 
     /**
+     * The feed's origin.
+     *
      * @var OriginInterface
      *
      * @ORM\ManyToOne(targetEntity="TreeHouse\IoBundle\Model\OriginInterface", inversedBy="feeds", cascade={"persist"})
@@ -120,6 +142,8 @@ class Feed
     protected $origin;
 
     /**
+     * Sources that were imported using this feed.
+     *
      * @var SourceInterface
      *
      * @ORM\OneToMany(targetEntity="TreeHouse\IoBundle\Model\SourceInterface", mappedBy="feed", cascade={"persist", "remove"})
@@ -127,6 +151,8 @@ class Feed
     protected $sources;
 
     /**
+     * A specific supplier (a company, software package, etc.) that's providing this feed.
+     *
      * @var FeedSupplier
      *
      * @ORM\ManyToOne(targetEntity="FeedSupplier", inversedBy="feeds", cascade={"persist"})
@@ -134,6 +160,8 @@ class Feed
     protected $supplier;
 
     /**
+     * Imports for this feed.
+     *
      * @var ArrayCollection|Import[]
      *
      * @ORM\OneToMany(targetEntity="Import", mappedBy="feed", cascade={"persist","remove"})
@@ -203,6 +231,26 @@ class Feed
     public function isPartial()
     {
         return $this->partial;
+    }
+
+    /**
+     * @param integer $syndication
+     *
+     * @return $this
+     */
+    public function setSyndication($syndication)
+    {
+        $this->syndication = $syndication;
+
+        return $this;
+    }
+
+    /**
+     * @return integer
+     */
+    public function getSyndication()
+    {
+        return $this->syndication;
     }
 
     /**
