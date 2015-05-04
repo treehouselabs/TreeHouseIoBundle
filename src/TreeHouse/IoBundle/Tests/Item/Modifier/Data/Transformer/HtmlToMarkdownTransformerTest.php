@@ -18,12 +18,10 @@ class HtmlToMarkdownTransformerTest extends \PHPUnit_Framework_TestCase
 
         $transformer = new HtmlToMarkdownTransformer($markdownify, $purifier);
 
-        $html = trim(file_get_contents($htmlPath));
+        $html     = trim(file_get_contents($htmlPath));
         $expected = trim(file_get_contents($markdownPath));
 
-        $actual = $transformer->transform($html);
-
-        $this->assertEquals($expected, $actual);
+        $this->assertEquals($expected, $transformer->transform($html));
     }
 
     public function transformDataProvider()

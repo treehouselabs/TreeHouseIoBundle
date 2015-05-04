@@ -56,6 +56,7 @@ class HtmlToMarkdownTransformer implements TransformerInterface
         // purify the html first
         $value = $this->purifier->purify($value);
 
+        // perform some replacements...
         $replacements = [
             [['/>\s+</', '/\s+<\//'],            ['><', '</']],   # remove whitespace/newlines between tags: this can cause
                                                                   # trailing whitespace after markdownifying
@@ -63,7 +64,6 @@ class HtmlToMarkdownTransformer implements TransformerInterface
             ['/([^>])\n([^<])/',                 '\\1<br>\\2'],   # replace newlines with <br> if the newline is not between 2 tags
             ['/(<(p|li)>)<br\s?\/?>/i',          '\\1'],          # remove <br>'s at the beginning of a paragraph
             ['/<br\s?\/?>(<\/(p|li)>)/i',        '\\1'],          # remove <br>'s at the end of a paragraph
-            ['/•/',                              '*'],            # replace •-bullets
         ];
 
         foreach ($replacements as list($search, $replace)) {
@@ -73,12 +73,20 @@ class HtmlToMarkdownTransformer implements TransformerInterface
         // convert to markdown
         $value = @$this->converter->parseString($value);
 
+        // Fix different types of bullets. What this does is check each line if it starts with any of "-×•○",
+        // not followed by another bullet, and normalizes it to "* text".
+        $value = preg_replace('/^[\-×•○]\s*([^\-×•○])/mu',  '* $1', $value);
+
+        // Now make sure there's a newline before 2 consecutive lines that start with a bullet.
+        // This could lead to superfluous newlines, but they will be corrected later on.
+        $value = preg_replace('/(\n\* [^\n]+){2,}/', "\n$0", "\n".$value);
+
         // remove trailing spaces/tabs
         $value = preg_replace('/[ \t]+$/m', '', $value);
 
         // remove excessive newlines
         $value = preg_replace('/\n{3,}/m', "\n\n", $value);
 
-        return $value;
+        return trim($value);
     }
 }
