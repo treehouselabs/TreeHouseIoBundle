@@ -104,6 +104,7 @@ class ImportJob implements LoggerAwareInterface
 
         // start import if necessary
         if (!$import->isStarted()) {
+            $this->importer->dispatchEvent(ImportEvents::IMPORT_START, new ImportEvent($import));
             $this->repository->startImport($import);
         }
 
