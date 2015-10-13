@@ -17,23 +17,24 @@
   "require": {
     "php":                                ">=5.5",
     "psr/log":                            "~1.0",
+    "psr/http-message":                   "~1.0",
     "symfony/symfony":                    "~2.6",
     "symfony/monolog-bundle":             "~2.6",
     "doctrine/orm":                       "~2.3",
     "doctrine/doctrine-bundle":           "~1.2",
-    "guzzlehttp/guzzle":                  "~5.0",
+    "guzzlehttp/guzzle":                  "~6.0",
     "fzaninotto/faker":                   "~1.2",
     "pk/command-extra-bundle":            "~1.0",
     "treehouselabs/feeder":               "dev-master as 1.0"
   },
   "require-dev": {
-    "phpunit/phpunit":                    "~4.1",
+    "phpunit/phpunit":                    "~4.5",
     "doctrine/doctrine-fixtures-bundle":  "~2.2",
     "sensio/distribution-bundle":         "~3.0",
     "predis/predis":                      "~1.0",
     "pixel418/markdownify":               "~2.1",
     "ezyang/htmlpurifier":                "~4.5",
-    "treehouselabs/worker-bundle":        "dev-master as 1.0"
+    "treehouselabs/worker-bundle":        "~1.0"
   },
   "suggest": {
     "pk/markdownify-bundle":        "To integrate Markdownify in your Symfony application",
@@ -44,7 +45,14 @@
       "TreeHouse\\IoBundle\\": "src/TreeHouse/IoBundle/"
     }
   },
+  "autoload-dev": {
+    "psr-4": {
+      "TreeHouse\\IoBundle\\Tests\\": "tests/src/TreeHouse/IoBundle/Tests/",
+      "TreeHouse\\IoIntegrationBundle\\": "tests/src/TreeHouse/IoIntegrationBundle/"
+    }
+  },
   "scripts": {
+    "test": "phpunit",
     "post-install-cmd": [
       "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap"
     ],

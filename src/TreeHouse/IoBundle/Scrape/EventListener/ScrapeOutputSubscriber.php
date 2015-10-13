@@ -2,9 +2,9 @@
 
 namespace TreeHouse\IoBundle\Scrape\EventListener;
 
+use GuzzleHttp\Psr7\Response;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpFoundation\Response;
 use TreeHouse\Feeder\Event\FailedItemModificationEvent;
 use TreeHouse\Feeder\FeedEvents;
 use TreeHouse\IoBundle\Scrape\Event\FailedItemEvent;
@@ -112,7 +112,7 @@ class ScrapeOutputSubscriber implements EventSubscriberInterface
         $response = $event->getResponse();
 
         $code = $response->getStatusCode();
-        $text = Response::$statusTexts[$code];
+        $text = (new Response($code))->getReasonPhrase();
 
         $this->output->writeln(sprintf('Server replied with response <info>%d (%s)</info>', $code, $text));
     }

@@ -3,7 +3,7 @@
 namespace TreeHouse\IoBundle\Scrape\Crawler;
 
 use Faker\Provider\UserAgent;
-use Symfony\Component\HttpFoundation\Response;
+use Psr\Http\Message\ResponseInterface;
 use TreeHouse\IoBundle\Scrape\Crawler\Client\ClientInterface;
 use TreeHouse\IoBundle\Scrape\Crawler\Log\RequestLoggerInterface;
 use TreeHouse\IoBundle\Scrape\Crawler\RateLimit\RateLimitInterface;
@@ -14,37 +14,37 @@ use TreeHouse\IoBundle\Scrape\Exception\UnexpectedResponseException;
 abstract class AbstractCrawler implements CrawlerInterface
 {
     /**
-     * The client executing the http requests
+     * The client executing the http requests.
      *
      * @var ClientInterface
      */
     protected $client;
 
     /**
-     * A logger that remembers crawled requests
+     * A logger that remembers crawled requests.
      *
      * @var RequestLoggerInterface
      */
     protected $logger;
 
     /**
-     * The rate limit to apply when crawling
+     * The rate limit to apply when crawling.
      *
      * @var RateLimitInterface
      */
     protected $rateLimit;
 
     /**
-     * Whether to randomize user agents on requests
+     * Whether to randomize user agents on requests.
      *
-     * @var boolean
+     * @var bool
      */
     protected $randomizeUserAgent = false;
 
     /**
-     * The response of the last crawled page
+     * The response of the last crawled page.
      *
-     * @var Response
+     * @var ResponseInterface
      */
     protected $response;
 
@@ -59,13 +59,13 @@ abstract class AbstractCrawler implements CrawlerInterface
      * @param ClientInterface        $client
      * @param RequestLoggerInterface $logger
      * @param RateLimitInterface     $ratelimit
-     * @param boolean                $randomizeUserAgent
+     * @param bool                   $randomizeUserAgent
      */
     public function __construct(ClientInterface $client, RequestLoggerInterface $logger, RateLimitInterface $ratelimit, $randomizeUserAgent = false)
     {
-        $this->client             = $client;
-        $this->logger             = $logger;
-        $this->rateLimit          = $ratelimit;
+        $this->client = $client;
+        $this->logger = $logger;
+        $this->rateLimit = $ratelimit;
         $this->randomizeUserAgent = $randomizeUserAgent;
     }
 
@@ -134,12 +134,12 @@ abstract class AbstractCrawler implements CrawlerInterface
 
         $this->logger->logRequest($url, new \DateTime());
 
-        list ($this->url, $this->response) = $this->client->fetch($url, $this->getUserAgent($url));
+        list($this->url, $this->response) = $this->client->fetch($url, $this->getUserAgent($url));
 
-        if ($this->response->getStatusCode() === Response::HTTP_TOO_MANY_REQUESTS) {
+        if ($this->response->getStatusCode() === 429) {
             throw new RateLimitException(
                 $url,
-                sprintf('Server replied with response %d (Too Many Requests)', Response::HTTP_TOO_MANY_REQUESTS),
+                sprintf('Server replied with response %d (Too Many Requests)', 429),
                 $this->getRetryAfterDate()
             );
         }
@@ -152,7 +152,15 @@ abstract class AbstractCrawler implements CrawlerInterface
             throw new UnexpectedResponseException($url, $this->response);
         }
 
-        return $this->response->getContent();
+        $body = $this->response->getBody();
+        $contents = $body->getContents();
+
+        // rewind stream, in case we need to use the last response
+        if ($body->isSeekable()) {
+            $body->rewind();
+        }
+
+        return $contents;
     }
 
     /**
@@ -179,7 +187,7 @@ abstract class AbstractCrawler implements CrawlerInterface
      */
     protected function getRetryAfterDate()
     {
-        if (null === $date = $this->response->headers->get('Retry-After')) {
+        if (null === $date = $this->response->getHeaderLine('Retry-After')) {
             return null;
         }
 
@@ -197,11 +205,11 @@ abstract class AbstractCrawler implements CrawlerInterface
     /**
      * Returns whether the last response is a 200 OK.
      *
-     * @return boolean
+     * @return bool
      */
     protected function islastResponseOk()
     {
-        return $this->getLastResponse()->getStatusCode() === Response::HTTP_OK;
+        return $this->getLastResponse()->getStatusCode() === 200;
     }
 
     /**
@@ -212,10 +220,10 @@ abstract class AbstractCrawler implements CrawlerInterface
      * In other words: returns true if the last response is not the actual page
      * that was requested.
      *
-     * @return boolean
+     * @return bool
      */
     protected function islastResponseNotFound()
     {
-        return in_array($this->getLastResponse()->getStatusCode(), [Response::HTTP_NOT_FOUND, Response::HTTP_GONE]);
+        return in_array($this->getLastResponse()->getStatusCode(), [404, 410]);
     }
 }

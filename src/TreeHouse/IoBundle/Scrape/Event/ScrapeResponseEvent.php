@@ -2,22 +2,22 @@
 
 namespace TreeHouse\IoBundle\Scrape\Event;
 
-use Symfony\Component\HttpFoundation\Response;
+use Psr\Http\Message\ResponseInterface;
 use TreeHouse\IoBundle\Entity\Scraper;
 
 class ScrapeResponseEvent extends ScrapeUrlEvent
 {
     /**
-     * @var Response
+     * @var ResponseInterface
      */
     protected $response;
 
     /**
      * @param Scraper  $scraper
      * @param string   $url
-     * @param Response $response
+     * @param ResponseInterface $response
      */
-    public function __construct(Scraper $scraper, $url, Response $response)
+    public function __construct(Scraper $scraper, $url, ResponseInterface $response)
     {
         parent::__construct($scraper, $url);
 
@@ -25,7 +25,7 @@ class ScrapeResponseEvent extends ScrapeUrlEvent
     }
 
     /**
-     * @return Response
+     * @return ResponseInterface
      */
     public function getResponse()
     {

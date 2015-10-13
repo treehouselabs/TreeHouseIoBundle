@@ -2,7 +2,7 @@
 
 namespace TreeHouse\IoBundle\Scrape\Crawler\Client;
 
-use Symfony\Component\HttpFoundation\Response;
+use Psr\Http\Message\ResponseInterface;
 use TreeHouse\IoBundle\Scrape\Exception\CrawlException;
 
 interface ClientInterface
@@ -13,7 +13,7 @@ interface ClientInterface
      *
      * @throws CrawlException
      *
-     * @return array<string, Response> A tuple consisting of the effective url and the response
+     * @return array<string, ResponseInterface> A tuple consisting of the effective url and the response
      */
     public function fetch($url, $userAgent = null);
 }

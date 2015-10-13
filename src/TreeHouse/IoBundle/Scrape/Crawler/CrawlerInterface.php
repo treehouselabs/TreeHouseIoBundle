@@ -2,7 +2,7 @@
 
 namespace TreeHouse\IoBundle\Scrape\Crawler;
 
-use Symfony\Component\HttpFoundation\Response;
+use Psr\Http\Message\ResponseInterface;
 use TreeHouse\IoBundle\Scrape\Crawler\Client\ClientInterface;
 use TreeHouse\IoBundle\Scrape\Crawler\Log\RequestLoggerInterface;
 use TreeHouse\IoBundle\Scrape\Crawler\RateLimit\RateLimitInterface;
@@ -33,7 +33,7 @@ interface CrawlerInterface
      *
      * @throws \RuntimeException When no page has been crawled yet.
      *
-     * @return Response
+     * @return ResponseInterface
      */
     public function getLastResponse();
 

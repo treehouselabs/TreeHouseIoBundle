@@ -2,7 +2,7 @@
 
 namespace TreeHouse\IoBundle\Scrape;
 
-use GuzzleHttp\Url;
+use GuzzleHttp\Psr7\Uri;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use TreeHouse\Feeder\Exception\FilterException;
@@ -214,6 +214,6 @@ class Scraper implements ScraperInterface
      */
     protected function normalizeUrl($url)
     {
-        return (string) Url::fromString($url);
+        return (string) new Uri($url);
     }
 }
