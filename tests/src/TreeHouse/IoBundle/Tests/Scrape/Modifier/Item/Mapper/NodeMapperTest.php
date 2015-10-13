@@ -28,14 +28,14 @@ class NodeMapperTest extends \PHPUnit_Framework_TestCase
                 [
                     'foo' => 'bar',
                     'bar' => ['baz', 'extractText'],
-                ]
+                ],
             ],
             [
                 [
                     'foo' => 'bar',
                     'bar' => ['baz', function () { }],
-                ]
-            ]
+                ],
+            ],
         ];
     }
 
@@ -57,7 +57,7 @@ class NodeMapperTest extends \PHPUnit_Framework_TestCase
             [
                 [
                     'bar' => ['baz', []],
-                ]
+                ],
             ],
         ];
     }

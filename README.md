@@ -1,11 +1,19 @@
 io-bundle
 =========
 
+[![Latest Version on Packagist][ico-version]][link-packagist]
+[![Software License][ico-license]](LICENSE.md)
+[![Build Status][ico-travis]][link-travis]
+[![Coverage Status][ico-scrutinizer]][link-scrutinizer]
+[![Quality Score][ico-code-quality]][link-code-quality]
+
 Bundle that facilitates importing/exporting data
 
-[![Build Status](https://travis-ci.org/treehouselabs/TreeHouseIoBundle.svg)](https://travis-ci.org/treehouselabs/TreeHouseIoBundle)
-[![Code Coverage](https://scrutinizer-ci.com/g/treehouselabs/TreeHouseIoBundle/badges/coverage.png)](https://scrutinizer-ci.com/g/treehouselabs/TreeHouseIoBundle/)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/treehouselabs/TreeHouseIoBundle/badges/quality-score.png)](https://scrutinizer-ci.com/g/treehouselabs/TreeHouseIoBundle/)
+## Installation
+
+```sh
+composer require treehouselabs/io-bundle:~2.0
+```
 
 ## Documentation
 
@@ -18,3 +26,41 @@ Bundle that facilitates importing/exporting data
 [origins-sources]: /docs/02-origins-sources.md
 [importing]:       /docs/03-importing.md
 [processing]:      /docs/04-processing.md
+
+
+## Testing
+
+``` bash
+composer test
+```
+
+## Security
+
+If you discover any security related issues, please email peter@treehouse.nl instead of using the issue tracker.
+
+
+## License
+
+The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+
+
+## Credits
+
+- [Peter Kruithof][link-author]
+- [All Contributors][link-contributors]
+
+
+[ico-version]: https://img.shields.io/packagist/v/treehouselabs/io-bundle.svg?style=flat-square
+[ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
+[ico-travis]: https://img.shields.io/travis/treehouselabs/feeder/TreeHouseIoBundle.svg?style=flat-square
+[ico-scrutinizer]: https://img.shields.io/scrutinizer/coverage/g/treehouselabs/TreeHouseIoBundle.svg?style=flat-square
+[ico-code-quality]: https://img.shields.io/scrutinizer/g/treehouselabs/TreeHouseIoBundle.svg?style=flat-square
+[ico-downloads]: https://img.shields.io/packagist/dt/treehouselabs/io-bundle.svg?style=flat-square
+
+[link-packagist]: https://packagist.org/packages/treehouselabs/io-bundle
+[link-travis]: https://travis-ci.org/treehouselabs/TreeHouseIoBundle
+[link-scrutinizer]: https://scrutinizer-ci.com/g/treehouselabs/TreeHouseIoBundle/code-structure
+[link-code-quality]: https://scrutinizer-ci.com/g/treehouselabs/TreeHouseIoBundle
+[link-downloads]: https://packagist.org/packages/treehouselabs/io-bundle
+[link-author]: https://github.com/treehouselabs
+[link-contributors]: ../../contributors

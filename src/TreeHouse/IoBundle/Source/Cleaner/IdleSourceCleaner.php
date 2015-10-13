@@ -47,10 +47,10 @@ class IdleSourceCleaner implements SourceCleanerInterface
         EventDispatcherInterface $dispatcher,
         LoggerInterface $logger
     ) {
-        $this->doctrine        = $doctrine;
-        $this->sourceManager   = $sourceManager;
+        $this->doctrine = $doctrine;
+        $this->sourceManager = $sourceManager;
         $this->eventDispatcher = $dispatcher;
-        $this->logger          = $logger;
+        $this->logger = $logger;
     }
 
     /**
@@ -111,7 +111,7 @@ class IdleSourceCleaner implements SourceCleanerInterface
 
         // fail safe: see if percentage of sources to be removed is not too high
         $total = $sourceRepo->countByFeed($feed);
-        $max   = $this->getThreshold($total);
+        $max = $this->getThreshold($total);
 
         // see if threshold is reached
         if ($count > $max) {
@@ -194,16 +194,16 @@ class IdleSourceCleaner implements SourceCleanerInterface
     /**
      * Calculates maximum number of cleanups that may take place.
      *
-     * @param integer $total
-     * @param integer $factor
+     * @param int $total
+     * @param int $factor
      *
-     * @return double
+     * @return float
      *
      * @see http://math.stackexchange.com/a/398263/78794
      */
     protected function getThreshold($total, $factor = 6)
     {
-        $ratio = (3 * pow(100, 1/$factor) - 3) / ((17 * pow($total, 1/$factor)) + (3 * pow(100, 1/$factor)) - 20);
+        $ratio = (3 * pow(100, 1 / $factor) - 3) / ((17 * pow($total, 1 / $factor)) + (3 * pow(100, 1 / $factor)) - 20);
 
         return ceil($total * $ratio);
     }

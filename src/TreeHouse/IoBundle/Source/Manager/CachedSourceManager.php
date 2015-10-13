@@ -151,12 +151,12 @@ class CachedSourceManager implements SourceManagerInterface
     public function clear()
     {
         $this->sourceManager->clear();
-        $this->sources       = [];
+        $this->sources = [];
         $this->originSources = [];
     }
 
     /**
-     * Adds source to the internal cache
+     * Adds source to the internal cache.
      *
      * @param SourceInterface $source
      */
@@ -190,7 +190,7 @@ class CachedSourceManager implements SourceManagerInterface
     }
 
     /**
-     * @param integer $sourceId
+     * @param int $sourceId
      *
      * @return SourceInterface|null
      */
@@ -222,7 +222,6 @@ class CachedSourceManager implements SourceManagerInterface
         }
 
         return $this->originSources[$hash][$originalId];
-
     }
 
     /**
@@ -252,7 +251,7 @@ class CachedSourceManager implements SourceManagerInterface
     }
 
     /**
-     * Returns a unique hash for a feed
+     * Returns a unique hash for a feed.
      *
      * @param Feed $feed
      *
@@ -264,7 +263,7 @@ class CachedSourceManager implements SourceManagerInterface
     }
 
     /**
-     * Returns a unique hash for a scraper
+     * Returns a unique hash for a scraper.
      *
      * @param Scraper $scraper
      *

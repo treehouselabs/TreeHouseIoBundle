@@ -5,12 +5,12 @@ namespace TreeHouse\IoBundle\Scrape\Crawler\RateLimit;
 trait EnablingTrait
 {
     /**
-     * @var boolean
+     * @var bool
      */
     protected $enabled = true;
 
     /**
-     * Disables
+     * Disables.
      */
     public function disable()
     {
@@ -18,7 +18,7 @@ trait EnablingTrait
     }
 
     /**
-     * Enables
+     * Enables.
      */
     public function enable()
     {
@@ -26,7 +26,7 @@ trait EnablingTrait
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isEnabled()
     {

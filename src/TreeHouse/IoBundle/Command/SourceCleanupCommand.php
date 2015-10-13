@@ -44,7 +44,7 @@ class SourceCleanupCommand extends Command
     {
         $this->sourceCleaner = $sourceCleaner;
         $this->originManager = $originManager;
-        $this->logger        = $logger;
+        $this->logger = $logger;
 
         parent::__construct();
     }
@@ -72,10 +72,10 @@ class SourceCleanupCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $feeds       = $input->getOption('feed');
-        $force       = $input->getOption('force');
+        $feeds = $input->getOption('feed');
+        $force = $input->getOption('force');
         $interactive = $input->isInteractive();
-        $dispatcher  = $this->sourceCleaner->getEventDispatcher();
+        $dispatcher = $this->sourceCleaner->getEventDispatcher();
 
         // listen to clean event
         $dispatcher->addListener(
@@ -89,7 +89,7 @@ class SourceCleanupCommand extends Command
         );
 
         $function = $this->getThresholdVotingFunction($input, $output, $force, $interactive);
-        $voter    = new ThresholdVoter($function, $dispatcher);
+        $voter = new ThresholdVoter($function, $dispatcher);
 
         if (!empty($feeds)) {
             $numCleaned = $this->cleanFeeds($voter, $feeds);
@@ -108,7 +108,7 @@ class SourceCleanupCommand extends Command
      *
      * @throws \RuntimeException
      *
-     * @return integer
+     * @return int
      */
     protected function cleanFeeds(ThresholdVoterInterface $voter, array $feeds)
     {
@@ -139,7 +139,7 @@ class SourceCleanupCommand extends Command
     /**
      * @param ThresholdVoterInterface $voter
      *
-     * @return integer
+     * @return int
      */
     protected function cleanAll(ThresholdVoterInterface $voter)
     {
@@ -149,8 +149,8 @@ class SourceCleanupCommand extends Command
     /**
      * @param InputInterface  $input
      * @param OutputInterface $output
-     * @param boolean         $force
-     * @param boolean         $interactive
+     * @param bool            $force
+     * @param bool            $interactive
      *
      * @return \Closure
      */
@@ -167,7 +167,7 @@ class SourceCleanupCommand extends Command
 
             // see if we can ask the user to confirm cleanup
             $question = new ConfirmationQuestion('<question>> Clean these sources anyway? [y]</question> ');
-            $helper   = new QuestionHelper();
+            $helper = new QuestionHelper();
 
             return $interactive && $helper->ask($input, $output, $question);
         };

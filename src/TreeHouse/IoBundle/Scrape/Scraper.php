@@ -46,7 +46,7 @@ class Scraper implements ScraperInterface
     protected $eventDispatcher;
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $async = false;
 
@@ -58,9 +58,9 @@ class Scraper implements ScraperInterface
      */
     public function __construct(CrawlerInterface $crawler, ParserInterface $parser, HandlerInterface $handler, EventDispatcherInterface $dispatcher = null)
     {
-        $this->crawler         = $crawler;
-        $this->parser          = $parser;
-        $this->handler         = $handler;
+        $this->crawler = $crawler;
+        $this->parser = $parser;
+        $this->handler = $handler;
         $this->eventDispatcher = $dispatcher ?: new EventDispatcher();
     }
 

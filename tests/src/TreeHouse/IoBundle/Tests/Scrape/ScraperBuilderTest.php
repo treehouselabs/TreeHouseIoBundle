@@ -29,7 +29,7 @@ class ScraperBuilderTest extends \PHPUnit_Framework_TestCase
     public function testBuild()
     {
         $crawler = $this->getMockForAbstractClass(CrawlerInterface::class);
-        $parser  = $this->getMockForAbstractClass(ParserInterface::class);
+        $parser = $this->getMockForAbstractClass(ParserInterface::class);
         $handler = $this->getMockForAbstractClass(HandlerInterface::class);
 
         $builder = new ScraperBuilder();
@@ -41,12 +41,12 @@ class ScraperBuilderTest extends \PHPUnit_Framework_TestCase
     public function testBuildWithDispatcher()
     {
         $crawler = $this->getMockForAbstractClass(CrawlerInterface::class);
-        $parser  = $this->getMockForAbstractClass(ParserInterface::class);
+        $parser = $this->getMockForAbstractClass(ParserInterface::class);
         $handler = $this->getMockForAbstractClass(HandlerInterface::class);
 
         $dispatcher = new EventDispatcher();
-        $builder    = new ScraperBuilder($dispatcher);
-        $scraper    = $builder->build($crawler, $parser, $handler);
+        $builder = new ScraperBuilder($dispatcher);
+        $scraper = $builder->build($crawler, $parser, $handler);
 
         $this->assertSame($dispatcher, $scraper->getEventDispatcher());
     }

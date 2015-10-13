@@ -65,7 +65,7 @@ class ForeignMappingTransformerTest extends \PHPUnit_Framework_TestCase
             ],
             $transformer->transform([
                 0 => [1, 2],
-                1 => [2, 3]
+                1 => [2, 3],
             ]),
             'Merge multidimensional arrays'
         );

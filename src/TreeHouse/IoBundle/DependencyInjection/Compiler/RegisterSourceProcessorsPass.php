@@ -15,7 +15,7 @@ class RegisterSourceProcessorsPass implements CompilerPassInterface
     {
         $definition = $container->getDefinition('tree_house.io.source.processor.delegating');
 
-        $passes = array();
+        $passes = [];
         foreach ($container->findTaggedServiceIds('tree_house.io.source_processor') as $id => $instances) {
             $passes[$id] = reset($instances);
         }

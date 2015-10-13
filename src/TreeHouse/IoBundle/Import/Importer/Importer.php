@@ -45,7 +45,7 @@ class Importer implements EventSubscriberInterface
     protected $result;
 
     /**
-     * @var integer
+     * @var int
      */
     protected $batchSize = 20;
 
@@ -53,14 +53,14 @@ class Importer implements EventSubscriberInterface
      * @param Import                   $import
      * @param HandlerInterface         $handler
      * @param EventDispatcherInterface $dispatcher
-     * @param integer                  $batchSize
+     * @param int                      $batchSize
      */
     public function __construct(Import $import, HandlerInterface $handler, EventDispatcherInterface $dispatcher, $batchSize = 20)
     {
-        $this->import          = $import;
-        $this->handler         = $handler;
+        $this->import = $import;
+        $this->handler = $handler;
         $this->eventDispatcher = $dispatcher;
-        $this->result          = new ImportResult();
+        $this->result = new ImportResult();
 
         $this->setBatchSize($batchSize);
         $this->eventDispatcher->addSubscriber($this);
@@ -89,8 +89,8 @@ class Importer implements EventSubscriberInterface
     {
         return [
             FeedEvents::ITEM_FILTERED => [['onItemFiltered']],
-            FeedEvents::ITEM_INVALID  => [['onItemInvalid']],
-            FeedEvents::ITEM_FAILED =>   [['onItemFailed']]
+            FeedEvents::ITEM_INVALID => [['onItemInvalid']],
+            FeedEvents::ITEM_FAILED => [['onItemFailed']],
         ];
     }
 
@@ -103,7 +103,7 @@ class Importer implements EventSubscriberInterface
     }
 
     /**
-     * @param integer $size
+     * @param int $size
      *
      * @throws \InvalidArgumentException When size is not a positive number
      */
@@ -119,7 +119,7 @@ class Importer implements EventSubscriberInterface
     }
 
     /**
-     * Dispatched when item is filtered from the feed
+     * Dispatched when item is filtered from the feed.
      *
      * @param ItemNotModifiedEvent $event
      */
@@ -129,7 +129,7 @@ class Importer implements EventSubscriberInterface
     }
 
     /**
-     * Dispatched when item failed during modification
+     * Dispatched when item failed during modification.
      *
      * @param ItemNotModifiedEvent $event
      */
@@ -139,7 +139,7 @@ class Importer implements EventSubscriberInterface
     }
 
     /**
-     * Dispatched when item is processed but found invalid
+     * Dispatched when item is processed but found invalid.
      *
      * @param InvalidItemEvent $event
      */
@@ -158,7 +158,7 @@ class Importer implements EventSubscriberInterface
     }
 
     /**
-     * Runs the import
+     * Runs the import.
      *
      * @param Feed $feed
      */
@@ -168,7 +168,6 @@ class Importer implements EventSubscriberInterface
             // dispatch event for next item
             $event = new ItemEvent($this, $item);
             $this->eventDispatcher->dispatch(ImportEvents::ITEM_START, $event);
-
             // import the item
             try {
                 $source = $this->handler->handle($item);
@@ -226,7 +225,7 @@ class Importer implements EventSubscriberInterface
     }
 
     /**
-     * Dispatches an event indicating a skipped item
+     * Dispatches an event indicating a skipped item.
      *
      * @param FeedItemBag $item
      * @param string      $reason
@@ -240,7 +239,7 @@ class Importer implements EventSubscriberInterface
     }
 
     /**
-     * Dispatches an event indicating a failed item
+     * Dispatches an event indicating a failed item.
      *
      * @param FeedItemBag $item
      * @param string      $reason
@@ -254,7 +253,7 @@ class Importer implements EventSubscriberInterface
     }
 
     /**
-     * Dispatches exception event
+     * Dispatches exception event.
      *
      * @param \Exception $exception
      */
@@ -264,7 +263,7 @@ class Importer implements EventSubscriberInterface
     }
 
     /**
-     * Flushes outstanding changes
+     * Flushes outstanding changes.
      */
     protected function flush()
     {

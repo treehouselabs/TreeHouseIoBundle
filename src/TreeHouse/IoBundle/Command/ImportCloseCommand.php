@@ -87,7 +87,7 @@ class ImportCloseCommand extends Command
     }
 
     /**
-     * @param integer $id
+     * @param int $id
      *
      * @return Import
      */

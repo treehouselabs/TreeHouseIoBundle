@@ -42,8 +42,8 @@ class ScrapeRevisitSourceExecutor extends AbstractExecutor implements ObjectPayl
     public function __construct(SourceManagerInterface $sourceManager, SourceRevisitor $revisitor, LoggerInterface $logger)
     {
         $this->sourceManager = $sourceManager;
-        $this->revisitor     = $revisitor;
-        $this->logger        = $logger;
+        $this->revisitor = $revisitor;
+        $this->logger = $logger;
     }
 
     /**

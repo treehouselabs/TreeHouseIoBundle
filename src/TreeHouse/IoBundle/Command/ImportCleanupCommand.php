@@ -41,7 +41,7 @@ class ImportCleanupCommand extends Command
         $output->writeln('<info>Removing imports without any parts</info>');
 
         $doctrine = $this->doctrine->getManager();
-        $imports  = $doctrine->getRepository('TreeHouseIoBundle:Import')->findByNumberOfParts(0);
+        $imports = $doctrine->getRepository('TreeHouseIoBundle:Import')->findByNumberOfParts(0);
 
         foreach ($imports as $import) {
             $output->writeln(

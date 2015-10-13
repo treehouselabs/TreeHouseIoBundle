@@ -45,7 +45,7 @@ class SourceModificationListener
     public function __construct(SourceProcessorInterface $sourceProcessor, EventDispatcherInterface $dispatcher)
     {
         $this->sourceProcessor = $sourceProcessor;
-        $this->dispatcher      = $dispatcher;
+        $this->dispatcher = $dispatcher;
     }
 
     /**
@@ -96,7 +96,7 @@ class SourceModificationListener
      * @param SourceInterface $source
      * @param UnitOfWork      $uow
      *
-     * @return boolean
+     * @return bool
      */
     protected function isSourceModified(SourceInterface $source, UnitOfWork $uow)
     {
@@ -160,7 +160,7 @@ class SourceModificationListener
     }
 
     /**
-     * Updates modification date for a source
+     * Updates modification date for a source.
      *
      * @param SourceInterface $source
      * @param UnitOfWork      $uow

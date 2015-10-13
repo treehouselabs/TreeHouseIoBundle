@@ -30,7 +30,7 @@ class ImportRotateCommand extends Command
      */
     public function __construct(ManagerRegistry $doctrine, ImportRotator $importRotator)
     {
-        $this->doctrine      = $doctrine;
+        $this->doctrine = $doctrine;
         $this->importRotator = $importRotator;
 
         parent::__construct();

@@ -10,9 +10,10 @@ use Symfony\Component\Yaml\Yaml;
 class TestCase extends WebTestCase
 {
     /**
-     * Shortcut to the Container's get method
+     * Shortcut to the Container's get method.
      *
-     * @param  string $serviceId
+     * @param string $serviceId
+     *
      * @return object
      */
     public function get($serviceId)
@@ -21,7 +22,8 @@ class TestCase extends WebTestCase
     }
 
     /**
-     * @param  array              $options Kernel options
+     * @param array $options Kernel options
+     *
      * @return ContainerInterface
      */
     public static function getContainer(array $options = [])
@@ -44,15 +46,16 @@ class TestCase extends WebTestCase
     }
 
     /**
-     * Returns fixtures of a type
+     * Returns fixtures of a type.
      *
-     * @param  string $type
+     * @param string $type
+     *
      * @return array
      */
     public function getFixtures($type)
     {
         $loader = new Yaml();
 
-        return $loader->parse(sprintf(__DIR__.'/../Resources/fixtures/%s.yml', $type));
+        return $loader->parse(sprintf(__DIR__ . '/../Resources/fixtures/%s.yml', $type));
     }
 }

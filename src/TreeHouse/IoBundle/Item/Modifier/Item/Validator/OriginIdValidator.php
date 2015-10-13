@@ -9,7 +9,7 @@ use TreeHouse\IoBundle\Import\Feed\FeedItemBag;
 
 /**
  * Validates an origin for a valid external id.
- * The id is considered valid if it is one of:
+ * The id is considered valid if it is one of:.
  *
  * * a positive integer
  * * a non-empty string without whitespace
@@ -18,7 +18,7 @@ class OriginIdValidator implements ValidatorInterface
 {
     public function validate(ParameterBag $item)
     {
-        /** @var FeedItemBag $item */
+        /* @var FeedItemBag $item */
         $originalId = $item->getOriginalId();
 
         // non-scalar values

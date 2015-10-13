@@ -13,52 +13,42 @@ interface OriginManagerInterface
     public function getRepository();
 
     /**
-     * Finds an existing origin by id
+     * Finds an existing origin by id.
      *
-     * @param integer $originId
+     * @param int $originId
      *
      * @return OriginInterface
      */
     public function findById($originId);
 
     /**
-     * Persists a (new) origin
+     * Persists a (new) origin.
      *
      * @param OriginInterface $origin
-     *
-     * @return void
      */
     public function persist(OriginInterface $origin);
 
     /**
-     * Persists an existing origin
+     * Persists an existing origin.
      *
      * @param OriginInterface $origin
-     *
-     * @return void
      */
     public function remove(OriginInterface $origin);
 
     /**
-     * Detaches a origin, making all changes irrelevant
+     * Detaches a origin, making all changes irrelevant.
      *
      * @param OriginInterface $origin
-     *
-     * @return void
      */
     public function detach(OriginInterface $origin);
 
     /**
-     * Flushes all outstanding changes in origins
-     *
-     * @return void
+     * Flushes all outstanding changes in origins.
      */
     public function flush();
 
     /**
-     * Clears caches
-     *
-     * @return void
+     * Clears caches.
      */
     public function clear();
 }

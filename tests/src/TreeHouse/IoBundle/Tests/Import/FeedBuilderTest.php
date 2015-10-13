@@ -114,7 +114,7 @@ class FeedBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertNotContains(
             $modifierB,
             array_map(function (array $mod) {
-                list($modifier,) = $mod;
+                list($modifier) = $mod;
 
                 return $modifier;
             }, $this->builder->getModifiers())
@@ -137,7 +137,7 @@ class FeedBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertNotContains(
             $modifierB,
             array_map(function (array $mod) {
-                list($modifier,) = $mod;
+                list($modifier) = $mod;
 
                 return $modifier;
             }, $this->builder->getModifiers())

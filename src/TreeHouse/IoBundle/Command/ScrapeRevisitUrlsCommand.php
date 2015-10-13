@@ -38,9 +38,9 @@ class ScrapeRevisitUrlsCommand extends Command
      */
     public function __construct(ManagerRegistry $doctrine, SourceManagerInterface $sourceManager, SourceRevisitor $revisitor)
     {
-        $this->doctrine      = $doctrine;
+        $this->doctrine = $doctrine;
         $this->sourceManager = $sourceManager;
-        $this->revisitor     = $revisitor;
+        $this->revisitor = $revisitor;
 
         parent::__construct();
     }
@@ -67,8 +67,8 @@ class ScrapeRevisitUrlsCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $async    = $input->getOption('async');
-        $noLimit  = $input->getOption('no-limit');
+        $async = $input->getOption('async');
+        $noLimit = $input->getOption('no-limit');
         $scrapers = $this->findScrapers($input->getArgument('scraper'));
 
         foreach ($scrapers as $scraperEntity) {
@@ -76,7 +76,7 @@ class ScrapeRevisitUrlsCommand extends Command
 
             $builder = $this->sourceManager->getRepository()->queryByScraperAndUnvisitedSince($scraperEntity, $date);
             foreach ($builder->getQuery()->iterate() as list($source)) {
-                /** @var SourceInterface $source */
+                /* @var SourceInterface $source */
                 try {
                     $output->writeln(sprintf('Revisiting <info>%s</info>', $source->getOriginalUrl()));
 

@@ -41,9 +41,9 @@ class ImportScheduleExecutor extends AbstractExecutor implements ObjectPayloadIn
      */
     public function __construct(ImportScheduler $scheduler, ImportFactory $importFactory, LoggerInterface $logger)
     {
-        $this->scheduler     = $scheduler;
+        $this->scheduler = $scheduler;
         $this->importFactory = $importFactory;
-        $this->logger        = $logger;
+        $this->logger = $logger;
     }
 
     /**
@@ -98,7 +98,7 @@ class ImportScheduleExecutor extends AbstractExecutor implements ObjectPayloadIn
     {
         /** @var Feed $feed */
         /** @var bool $force */
-        list ($feed, $force) = $payload;
+        list($feed, $force) = $payload;
 
         try {
             $import = $this->importFactory->createImport($feed, new \DateTime(), $force);

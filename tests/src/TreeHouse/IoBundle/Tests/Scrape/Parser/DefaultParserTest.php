@@ -212,8 +212,8 @@ class DefaultParserTest extends \PHPUnit_Framework_TestCase
     protected function createItem()
     {
         $scraper = new Scraper();
-        $url     = 'http://example.org';
-        $html    = '<html><body>Test</body></html>';
+        $url = 'http://example.org';
+        $html = '<html><body>Test</body></html>';
 
         $item = new ScrapedItemBag($scraper, $url, $html);
 

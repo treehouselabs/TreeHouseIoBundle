@@ -21,7 +21,7 @@ class RedisRequestLogger implements RequestLoggerInterface
     public function __construct(\Redis $redis, $key = 'crawler_requests')
     {
         $this->redis = $redis;
-        $this->key   = $key;
+        $this->key = $key;
     }
 
     /**
@@ -34,7 +34,7 @@ class RedisRequestLogger implements RequestLoggerInterface
         }
 
         $timestamp = $date->getTimestamp();
-        $hashKey   = $this->getHashKey($timestamp, $url);
+        $hashKey = $this->getHashKey($timestamp, $url);
 
         $this->redis->zAdd($this->key, $timestamp, $hashKey);
     }
@@ -45,11 +45,11 @@ class RedisRequestLogger implements RequestLoggerInterface
     public function getRequestsSince(\DateTime $date = null)
     {
         $start = $date ? $date->getTimestamp() : '-inf';
-        $end   = time();
+        $end = time();
 
         return array_map(
             function ($hash) {
-                list ($timestamp, $url) = explode('#', $hash, 2);
+                list($timestamp, $url) = explode('#', $hash, 2);
 
                 return [intval($timestamp), $url];
             },
@@ -58,8 +58,8 @@ class RedisRequestLogger implements RequestLoggerInterface
     }
 
     /**
-     * @param integer $timestamp
-     * @param string  $url
+     * @param int    $timestamp
+     * @param string $url
      *
      * @return string
      */

@@ -2,20 +2,20 @@
 
 namespace TreeHouse\IoBundle\Model;
 
-use TreeHouse\IoBundle\Entity\Scraper;
 use TreeHouse\IoBundle\Entity\Feed;
+use TreeHouse\IoBundle\Entity\Scraper;
 
 interface SourceInterface
 {
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId();
 
     /**
-     * Set originalId
+     * Set originalId.
      *
      * @param string $originalId
      *
@@ -24,14 +24,14 @@ interface SourceInterface
     public function setOriginalId($originalId);
 
     /**
-     * Get originalId
+     * Get originalId.
      *
      * @return string
      */
     public function getOriginalId();
 
     /**
-     * Set originalUrl
+     * Set originalUrl.
      *
      * @param string $originalUrl
      *
@@ -40,30 +40,30 @@ interface SourceInterface
     public function setOriginalUrl($originalUrl);
 
     /**
-     * Get originalUrl
+     * Get originalUrl.
      *
      * @return string
      */
     public function getOriginalUrl();
 
     /**
-     * Set blocked
+     * Set blocked.
      *
-     * @param boolean $blocked
+     * @param bool $blocked
      *
      * @return $this
      */
     public function setBlocked($blocked);
 
     /**
-     * Get blocked
+     * Get blocked.
      *
-     * @return boolean
+     * @return bool
      */
     public function isBlocked();
 
     /**
-     * Set data
+     * Set data.
      *
      * @param array $data
      *
@@ -72,14 +72,14 @@ interface SourceInterface
     public function setData($data);
 
     /**
-     * Get data
+     * Get data.
      *
      * @return array
      */
     public function getData();
 
     /**
-     * Set raw source data
+     * Set raw source data.
      *
      * @param string $rawData
      *
@@ -88,14 +88,14 @@ interface SourceInterface
     public function setRawData($rawData);
 
     /**
-     * Get raw source data
+     * Get raw source data.
      *
      * @return array
      */
     public function getRawData();
 
     /**
-     * Set messages
+     * Set messages.
      *
      * @param array $messages
      *
@@ -104,14 +104,14 @@ interface SourceInterface
     public function setMessages($messages);
 
     /**
-     * Get messages
+     * Get messages.
      *
      * @return array
      */
     public function getMessages();
 
     /**
-     * Set feed
+     * Set feed.
      *
      * @param Feed $feed
      *
@@ -120,14 +120,14 @@ interface SourceInterface
     public function setFeed(Feed $feed = null);
 
     /**
-     * Get feed
+     * Get feed.
      *
      * @return Feed
      */
     public function getFeed();
 
     /**
-     * Set scraper
+     * Set scraper.
      *
      * @param Scraper $scraper
      *
@@ -136,21 +136,21 @@ interface SourceInterface
     public function setScraper(Scraper $scraper = null);
 
     /**
-     * Get scraper
+     * Get scraper.
      *
      * @return Scraper
      */
     public function getScraper();
 
     /**
-     * Get origin
+     * Get origin.
      *
      * @return OriginInterface
      */
     public function getOrigin();
 
     /**
-     * Set datetimeCreated
+     * Set datetimeCreated.
      *
      * @param \DateTime $datetimeCreated
      *
@@ -159,14 +159,14 @@ interface SourceInterface
     public function setDatetimeCreated(\DateTime $datetimeCreated);
 
     /**
-     * Get datetimeCreated
+     * Get datetimeCreated.
      *
      * @return \DateTime
      */
     public function getDatetimeCreated();
 
     /**
-     * Set datetimeModified
+     * Set datetimeModified.
      *
      * @param \DateTime $datetimeModified
      *
@@ -175,14 +175,14 @@ interface SourceInterface
     public function setDatetimeModified(\DateTime $datetimeModified);
 
     /**
-     * Get datetimeModified
+     * Get datetimeModified.
      *
      * @return \DateTime
      */
     public function getDatetimeModified();
 
     /**
-     * Set datetimeLastVisited
+     * Set datetimeLastVisited.
      *
      * @param \DateTime $datetimeLastVisited
      *
@@ -191,7 +191,7 @@ interface SourceInterface
     public function setDatetimeLastVisited(\DateTime $datetimeLastVisited);
 
     /**
-     * Get datetimeLastVisited
+     * Get datetimeLastVisited.
      *
      * @return \DateTime
      */

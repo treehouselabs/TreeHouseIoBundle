@@ -25,7 +25,7 @@ class HtmlToMarkdownTransformer implements TransformerInterface
     public function __construct(Converter $converter, \HTMLPurifier $purifier)
     {
         $this->converter = $converter;
-        $this->purifier  = $purifier;
+        $this->purifier = $purifier;
     }
 
     /**
@@ -79,7 +79,7 @@ class HtmlToMarkdownTransformer implements TransformerInterface
 
         // Now make sure there's a newline before 2 consecutive lines that start with a bullet.
         // This could lead to superfluous newlines, but they will be corrected later on.
-        $value = preg_replace('/(\n\* [^\n]+){2,}/', "\n$0", "\n".$value);
+        $value = preg_replace('/(\n\* [^\n]+){2,}/', "\n$0", "\n" . $value);
 
         // remove trailing spaces/tabs
         $value = preg_replace('/[ \t]+$/m', '', $value);

@@ -5,12 +5,12 @@ namespace TreeHouse\IoBundle\Scrape\Crawler\RateLimit;
 interface RateLimitInterface
 {
     /**
-     * @return boolean
+     * @return bool
      */
     public function limitReached();
 
     /**
-     * Returns a string representation of the rate limit
+     * Returns a string representation of the rate limit.
      *
      * @return string
      */

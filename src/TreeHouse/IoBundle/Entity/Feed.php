@@ -16,7 +16,7 @@ class Feed
     /**
      * Items from this feed come directly from the source.
      */
-    const SYNDICATION_DIRECT    = 1;
+    const SYNDICATION_DIRECT = 1;
 
     /**
      * Feed contains items from multiple sources, in an aggregated way.
@@ -24,7 +24,7 @@ class Feed
     const SYNDICATION_AGGREGATE = 2;
 
     /**
-     * @var integer $id
+     * @var int
      *
      * @ORM\Column(type="integer")
      * @ORM\Id
@@ -35,7 +35,7 @@ class Feed
     /**
      * The frequency to import the feed with, in hours.
      *
-     * @var integer $frequency
+     * @var int
      *
      * @ORM\Column(type="integer")
      */
@@ -44,7 +44,7 @@ class Feed
     /**
      * Whether the feed contains all items or only updates.
      *
-     * @var boolean $partial
+     * @var bool
      *
      * @ORM\Column(type="boolean")
      */
@@ -54,7 +54,7 @@ class Feed
      * Specifies where the feed's items come from.
      * Default options are 'direct' and 'aggregate', but these can be extended.
      *
-     * @var integer $syndication
+     * @var int
      *
      * @ORM\Column(type="smallint")
      */
@@ -63,7 +63,7 @@ class Feed
     /**
      * One of the configured feed types.
      *
-     * @var string $type
+     * @var string
      *
      * @ORM\Column(type="string")
      */
@@ -72,7 +72,7 @@ class Feed
     /**
      * One of the configured reader types.
      *
-     * @var string $readerType
+     * @var string
      *
      * @ORM\Column(type="string")
      */
@@ -81,7 +81,7 @@ class Feed
     /**
      * One of the configured importer types.
      *
-     * @var string $importerType
+     * @var string
      *
      * @ORM\Column(type="string")
      */
@@ -90,7 +90,7 @@ class Feed
     /**
      * Options to be passed to the feed type.
      *
-     * @var array $options
+     * @var array
      *
      * @ORM\Column(type="json_array", nullable=true)
      */
@@ -99,7 +99,7 @@ class Feed
     /**
      * Options to be passed to the feed reader.
      *
-     * @var array $readerOptions
+     * @var array
      *
      * @ORM\Column(type="json_array", nullable=true)
      */
@@ -108,7 +108,7 @@ class Feed
     /**
      * Options to be passed to the feed importer.
      *
-     * @var array $importerOptions
+     * @var array
      *
      * @ORM\Column(type="json_array", nullable=true)
      */
@@ -117,7 +117,7 @@ class Feed
     /**
      * Configuration to use for downloading the feed.
      *
-     * @var array $transportConfig
+     * @var array
      *
      * @ORM\Column(type="json_array")
      */
@@ -126,7 +126,7 @@ class Feed
     /**
      * Can contain key/value pairs to be used as defaults if the feed doesn't supply them.
      *
-     * @var array $defaultValues
+     * @var array
      *
      * @ORM\Column(type="json_array", nullable=true)
      */
@@ -169,7 +169,7 @@ class Feed
     protected $imports;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -186,7 +186,7 @@ class Feed
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -194,7 +194,7 @@ class Feed
     }
 
     /**
-     * @param integer $frequency
+     * @param int $frequency
      *
      * @return $this
      */
@@ -206,7 +206,7 @@ class Feed
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function getFrequency()
     {
@@ -214,7 +214,7 @@ class Feed
     }
 
     /**
-     * @param boolean $partial
+     * @param bool $partial
      *
      * @return $this
      */
@@ -226,7 +226,7 @@ class Feed
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isPartial()
     {
@@ -234,7 +234,7 @@ class Feed
     }
 
     /**
-     * @param integer $syndication
+     * @param int $syndication
      *
      * @return $this
      */
@@ -246,7 +246,7 @@ class Feed
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function getSyndication()
     {

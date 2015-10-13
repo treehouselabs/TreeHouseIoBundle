@@ -15,26 +15,26 @@ interface SourceManagerInterface
     public function getRepository();
 
     /**
-     * Finds an existing source by id
+     * Finds an existing source by id.
      *
-     * @param integer $sourceId
+     * @param int $sourceId
      *
      * @return SourceInterface
      */
     public function findById($sourceId);
 
     /**
-     * Finds source object for a given feed and original id
+     * Finds source object for a given feed and original id.
      *
-     * @param Feed    $feed
-     * @param integer $originalId
+     * @param Feed $feed
+     * @param int  $originalId
      *
      * @return SourceInterface
      */
     public function findSourceByFeed(Feed $feed, $originalId);
 
     /**
-     * Finds source object for a given scraper and original url
+     * Finds source object for a given scraper and original url.
      *
      * @param Scraper $scraper
      * @param string  $originalId
@@ -44,18 +44,18 @@ interface SourceManagerInterface
     public function findSourceByScraper(Scraper $scraper, $originalId);
 
     /**
-     * Finds source object for a given original id, optionally creates a new one if a source cannot be found
+     * Finds source object for a given original id, optionally creates a new one if a source cannot be found.
      *
-     * @param Feed    $feed
-     * @param integer $originalId
-     * @param string  $originalUrl
+     * @param Feed   $feed
+     * @param int    $originalId
+     * @param string $originalUrl
      *
      * @return SourceInterface
      */
     public function findSourceByFeedOrCreate(Feed $feed, $originalId, $originalUrl = null);
 
     /**
-     * Finds source object for a given original id, optionally creates a new one if a source cannot be found
+     * Finds source object for a given original id, optionally creates a new one if a source cannot be found.
      *
      * @param Scraper $scraper
      * @param string  $originalId
@@ -66,45 +66,35 @@ interface SourceManagerInterface
     public function findSourceByScraperOrCreate(Scraper $scraper, $originalId, $originalUrl);
 
     /**
-     * Persists a (new) source
+     * Persists a (new) source.
      *
      * @param SourceInterface $source
-     *
-     * @return void
      */
     public function persist(SourceInterface $source);
 
     /**
-     * Persists an existing source
+     * Persists an existing source.
      *
      * @param SourceInterface $source
-     *
-     * @return void
      */
     public function remove(SourceInterface $source);
 
     /**
-     * Detaches a source, making all changes irrelevant
+     * Detaches a source, making all changes irrelevant.
      *
      * @param SourceInterface $source
-     *
-     * @return void
      */
     public function detach(SourceInterface $source);
 
     /**
-     * Flushes all outstanding changes in sources
+     * Flushes all outstanding changes in sources.
      *
      * @param SourceInterface $source
-     *
-     * @return void
      */
     public function flush(SourceInterface $source = null);
 
     /**
-     * Clears caches
-     *
-     * @return void
+     * Clears caches.
      */
     public function clear();
 }

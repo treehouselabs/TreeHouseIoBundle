@@ -11,7 +11,7 @@ class FeedRepository extends EntityRepository
      * frequency is stored as number of hours, so a higher number actually means
      * a smaller frequency.
      *
-     * @return integer
+     * @return int
      */
     public function findHighestFrequencyValue()
     {

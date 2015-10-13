@@ -13,8 +13,8 @@ class ScrapeResponseEvent extends ScrapeUrlEvent
     protected $response;
 
     /**
-     * @param Scraper  $scraper
-     * @param string   $url
+     * @param Scraper           $scraper
+     * @param string            $url
      * @param ResponseInterface $response
      */
     public function __construct(Scraper $scraper, $url, ResponseInterface $response)

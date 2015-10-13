@@ -29,7 +29,7 @@ class ImportLogViewCommand extends Command
      */
     public function __construct(ManagerRegistry $doctrine, ItemLoggerInterface $itemLogger)
     {
-        $this->doctrine   = $doctrine;
+        $this->doctrine = $doctrine;
         $this->itemLogger = $itemLogger;
 
         parent::__construct();
@@ -56,15 +56,15 @@ class ImportLogViewCommand extends Command
             return 1;
         }
 
-        $items   = 0;
+        $items = 0;
         $success = 0;
-        $failed  = 0;
+        $failed = 0;
         $skipped = 0;
 
         foreach ($this->itemLogger->getImportedItems($import) as $item) {
             $output->writeln(sprintf('<info>%s</info>:', $item['item']));
 
-            $items++;
+            ++$items;
 
             foreach ($item as $key => $value) {
                 if ($key === 'item') {
@@ -96,7 +96,7 @@ class ImportLogViewCommand extends Command
     }
 
     /**
-     * @param integer $id
+     * @param int $id
      *
      * @return Import
      */

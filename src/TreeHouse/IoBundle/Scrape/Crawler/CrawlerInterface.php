@@ -29,7 +29,7 @@ interface CrawlerInterface
     public function getRateLimit();
 
     /**
-     * Returns the response of the last crawled page
+     * Returns the response of the last crawled page.
      *
      * @throws \RuntimeException When no page has been crawled yet.
      *

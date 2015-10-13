@@ -28,8 +28,8 @@ class ImporterBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testBuild()
     {
-        $type    = $this->getImporterTypeMock();
-        $import  = new Import();
+        $type = $this->getImporterTypeMock();
+        $import = new Import();
         $handler = $this->getHandlerMock();
 
         $importer = $this->builder->build($type, $import, $handler, []);

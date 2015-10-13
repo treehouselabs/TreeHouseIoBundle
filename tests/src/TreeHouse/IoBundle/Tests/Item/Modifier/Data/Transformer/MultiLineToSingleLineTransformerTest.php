@@ -19,9 +19,9 @@ class MultiLineToSingleLineTransformerTest extends \PHPUnit_Framework_TestCase
     public function transformProvider()
     {
         return [
-            ["Line1\nLine2", "Line1 Line2"],
-            ["Line1\n\nLine2", "Line1 Line2"],
-            ["Line1\n \nLine2\n", "Line1 Line2"],
+            ["Line1\nLine2", 'Line1 Line2'],
+            ["Line1\n\nLine2", 'Line1 Line2'],
+            ["Line1\n \nLine2\n", 'Line1 Line2'],
         ];
     }
 }

@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 class FeedSupplier
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Id
      * @ORM\Column(type="integer")
@@ -35,7 +35,7 @@ class FeedSupplier
     protected $feeds;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -43,7 +43,7 @@ class FeedSupplier
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function getId()
     {

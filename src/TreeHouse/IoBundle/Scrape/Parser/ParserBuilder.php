@@ -50,8 +50,8 @@ class ParserBuilder implements ParserBuilderInterface
 
     /**
      * @param ModifierInterface $modifier
-     * @param integer           $position Defaults to the next highest position
-     * @param boolean           $continue Will be determined based on modifier type
+     * @param int               $position Defaults to the next highest position
+     * @param bool              $continue Will be determined based on modifier type
      *
      * @throws \InvalidArgumentException If there already is a modifier at the given position
      */
@@ -73,18 +73,18 @@ class ParserBuilder implements ParserBuilderInterface
     }
 
     /**
-     * Adds the given modifier between the start and end index, if there is a vacant position
+     * Adds the given modifier between the start and end index, if there is a vacant position.
      *
      * @param ModifierInterface $modifier
-     * @param integer           $startIndex
-     * @param integer           $endIndex
-     * @param boolean           $continue
+     * @param int               $startIndex
+     * @param int               $endIndex
+     * @param bool              $continue
      *
      * @throws \OutOfBoundsException
      */
     public function addModifierBetween(ModifierInterface $modifier, $startIndex, $endIndex, $continue = null)
     {
-        for ($position = $startIndex; $position <= $endIndex; $position++) {
+        for ($position = $startIndex; $position <= $endIndex; ++$position) {
             if (!$this->hasModifierAt($position)) {
                 $this->addModifier($modifier, $position, $continue);
 
@@ -96,12 +96,12 @@ class ParserBuilder implements ParserBuilderInterface
     }
 
     /**
-     * Shortcut for adding a field-value transformer
+     * Shortcut for adding a field-value transformer.
      *
      * @param TransformerInterface $transformer
      * @param string               $field
-     * @param integer              $position
-     * @param boolean              $continue
+     * @param int                  $position
+     * @param bool                 $continue
      */
     public function addTransformer(TransformerInterface $transformer, $field, $position = null, $continue = true)
     {
@@ -109,13 +109,13 @@ class ParserBuilder implements ParserBuilderInterface
     }
 
     /**
-     * Adds the given transformer between the start and end index, if there is a vacant position
+     * Adds the given transformer between the start and end index, if there is a vacant position.
      *
      * @param TransformerInterface $transformer
      * @param string               $field
-     * @param integer              $startIndex
-     * @param integer              $endIndex
-     * @param boolean              $continue
+     * @param int                  $startIndex
+     * @param int                  $endIndex
+     * @param bool                 $continue
      *
      * @throws \OutOfBoundsException
      */
@@ -125,9 +125,9 @@ class ParserBuilder implements ParserBuilderInterface
     }
 
     /**
-     * @param integer $position
+     * @param int $position
      *
-     * @return boolean
+     * @return bool
      */
     public function hasModifierAt($position)
     {
@@ -135,13 +135,13 @@ class ParserBuilder implements ParserBuilderInterface
     }
 
     /**
-     * Removes existing modifier
+     * Removes existing modifier.
      *
      * @param ModifierInterface $modifier
      */
     public function removeModifier(ModifierInterface $modifier)
     {
-        foreach ($this->modifiers as $position => list($mod,)) {
+        foreach ($this->modifiers as $position => list($mod)) {
             if ($mod === $modifier) {
                 unset($this->modifiers[$position]);
             }
@@ -149,9 +149,9 @@ class ParserBuilder implements ParserBuilderInterface
     }
 
     /**
-     * Removes modifier at an existing position
+     * Removes modifier at an existing position.
      *
-     * @param integer $position
+     * @param int $position
      *
      * @throws \OutOfBoundsException If modifier does not exist
      */

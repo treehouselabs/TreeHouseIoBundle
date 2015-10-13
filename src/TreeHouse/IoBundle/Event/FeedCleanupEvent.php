@@ -12,8 +12,8 @@ class FeedCleanupEvent extends CleanupEvent
     protected $feed;
 
     /**
-     * @param Feed    $feed
-     * @param integer $numCleaned
+     * @param Feed $feed
+     * @param int  $numCleaned
      */
     public function __construct(Feed $feed, $numCleaned)
     {

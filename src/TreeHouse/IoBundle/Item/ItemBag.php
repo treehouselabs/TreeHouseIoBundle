@@ -22,7 +22,7 @@ abstract class ItemBag extends ParameterBag
     protected $datetimeModified;
 
     /**
-     * Implementing classes must have a toString method
+     * Implementing classes must have a toString method.
      *
      * @return string
      */
@@ -77,7 +77,7 @@ abstract class ItemBag extends ParameterBag
     }
 
     /**
-     * Returns all data from the item, ordered by key
+     * Returns all data from the item, ordered by key.
      */
     public function all()
     {

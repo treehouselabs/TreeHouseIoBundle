@@ -34,7 +34,7 @@ class ScrapeStartCommand extends Command
     public function __construct(ManagerRegistry $doctrine, ScraperFactory $factory)
     {
         $this->doctrine = $doctrine;
-        $this->factory  = $factory;
+        $this->factory = $factory;
 
         parent::__construct();
     }

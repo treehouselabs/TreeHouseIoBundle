@@ -7,11 +7,11 @@ use Psr\Http\Message\ResponseInterface;
 class NotFoundException extends UnexpectedResponseException
 {
     /**
-     * @param string     $url
-     * @param ResponseInterface   $response
-     * @param string     $message
-     * @param integer    $code
-     * @param \Exception $previous
+     * @param string            $url
+     * @param ResponseInterface $response
+     * @param string            $message
+     * @param int               $code
+     * @param \Exception        $previous
      */
     public function __construct($url, ResponseInterface $response, $message = '', $code = 0, \Exception $previous = null)
     {

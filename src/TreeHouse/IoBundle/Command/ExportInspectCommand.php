@@ -12,7 +12,7 @@ use TreeHouse\IoBundle\Export\FeedExporter;
 
 class ExportInspectCommand extends Command
 {
-    const EVALUATE_COUNT      = 'count';
+    const EVALUATE_COUNT = 'count';
     const EVALUATE_EXPRESSION = 'expression';
 
     /**
@@ -117,7 +117,7 @@ EOT
             return 1;
         }
 
-        $evaluationMethod     = $input->getOption('evaluate');
+        $evaluationMethod = $input->getOption('evaluate');
         $evaluationExpression = $input->getOption('expression');
 
         if (!$evaluationMethod && $evaluationExpression) {
@@ -186,7 +186,7 @@ EOT
         while ($this->reader->read()) {
             if ($this->reader->nodeType === \XMLReader::ELEMENT && $this->reader->name === 'listing') {
                 $progress->advance();
-                $total++;
+                ++$total;
 
                 $node = $this->reader->expand();
                 $doc = new \DOMDocument();
@@ -212,7 +212,7 @@ EOT
     /**
      * @param OutputInterface $output
      * @param array           $results
-     * @param integer         $total
+     * @param int             $total
      */
     protected function evaluateCount(OutputInterface $output, array $results, $total)
     {
@@ -232,7 +232,7 @@ EOT
      * @param OutputInterface $output
      * @param string          $evaluationExpression
      * @param array           $results
-     * @param integer         $total
+     * @param int             $total
      */
     protected function evaluateResult(OutputInterface $output, $evaluationExpression, array $results, $total)
     {

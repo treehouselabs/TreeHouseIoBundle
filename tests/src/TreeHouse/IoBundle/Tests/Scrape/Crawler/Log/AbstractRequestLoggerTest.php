@@ -21,7 +21,7 @@ abstract class AbstractRequestLoggerTest extends \PHPUnit_Framework_TestCase
         $this->logger = $this->getLogger();
 
         $this->requests = [
-            strtotime('-1 minute')  => 'http://example/org/1',
+            strtotime('-1 minute') => 'http://example/org/1',
             strtotime('-2 minutes') => 'http://example/org/2',
             strtotime('-5 minutes') => 'http://example/org/3',
             strtotime('-6 minutes') => 'http://example/org/4',
@@ -36,7 +36,7 @@ abstract class AbstractRequestLoggerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests a slice of the logged requests
+     * Tests a slice of the logged requests.
      */
     public function testLoggedRequest()
     {
@@ -47,7 +47,7 @@ abstract class AbstractRequestLoggerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests an interval in which no requests were logged
+     * Tests an interval in which no requests were logged.
      */
     public function testNoLoggedRequests()
     {
@@ -55,7 +55,7 @@ abstract class AbstractRequestLoggerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests fetching of all logged requests
+     * Tests fetching of all logged requests.
      */
     public function testAllLoggedRequests()
     {

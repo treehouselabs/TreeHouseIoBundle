@@ -37,9 +37,9 @@ class ImportPartCommand extends Command
      */
     public function __construct(ManagerRegistry $doctrine, ImportFactory $importFactory, LoggerInterface $logger)
     {
-        $this->doctrine      = $doctrine;
+        $this->doctrine = $doctrine;
         $this->importFactory = $importFactory;
-        $this->logger        = $logger;
+        $this->logger = $logger;
 
         parent::__construct();
     }
@@ -106,7 +106,7 @@ class ImportPartCommand extends Command
     }
 
     /**
-     * @param integer $importId
+     * @param int $importId
      *
      * @return ImportPart[]
      */
@@ -116,7 +116,7 @@ class ImportPartCommand extends Command
     }
 
     /**
-     * @param integer $id
+     * @param int $id
      *
      * @return ImportPart
      */

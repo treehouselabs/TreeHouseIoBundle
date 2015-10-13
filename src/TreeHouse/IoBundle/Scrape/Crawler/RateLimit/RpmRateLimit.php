@@ -20,27 +20,27 @@ class RpmRateLimit implements RateLimitInterface, EnablingRateLimitInterface
     protected $logger;
 
     /**
-     * @var integer
+     * @var int
      */
     protected $rpm;
 
     /**
-     * The number of requests that may occur in a single time unit
+     * The number of requests that may occur in a single time unit.
      *
      * @var float
      */
     protected $maxAmount;
 
     /**
-     * The number of seconds that constitutes a minimum time unit to work with
+     * The number of seconds that constitutes a minimum time unit to work with.
      *
-     * @var integer
+     * @var int
      */
     protected $timeUnit = 1;
 
     /**
      * @param RequestLoggerInterface $logger
-     * @param integer                $rpm
+     * @param int                    $rpm
      */
     public function __construct(RequestLoggerInterface $logger, $rpm)
     {
@@ -49,7 +49,7 @@ class RpmRateLimit implements RateLimitInterface, EnablingRateLimitInterface
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function getRpm()
     {
@@ -57,7 +57,7 @@ class RpmRateLimit implements RateLimitInterface, EnablingRateLimitInterface
     }
 
     /**
-     * @param integer $rpm
+     * @param int $rpm
      */
     public function setRpm($rpm)
     {
@@ -81,7 +81,7 @@ class RpmRateLimit implements RateLimitInterface, EnablingRateLimitInterface
             return false;
         }
 
-        $date     = new \DateTime(sprintf('-%d seconds', $this->timeUnit));
+        $date = new \DateTime(sprintf('-%d seconds', $this->timeUnit));
         $requests = $this->logger->getRequestsSince($date);
 
         return sizeof($requests) >= $this->maxAmount;

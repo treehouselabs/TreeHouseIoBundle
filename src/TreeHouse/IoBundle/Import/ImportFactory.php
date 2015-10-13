@@ -76,12 +76,12 @@ class ImportFactory implements EventSubscriberInterface
         ImportStorage $importStorage,
         EventDispatcherInterface $dispatcher
     ) {
-        $this->doctrine               = $doctrine;
-        $this->importRegistry         = $importRegistry;
+        $this->doctrine = $doctrine;
+        $this->importRegistry = $importRegistry;
         $this->importerBuilderFactory = $importerBuilderFactory;
-        $this->readerBuilderFactory   = $readerBuilderFactory;
-        $this->importStorage          = $importStorage;
-        $this->eventDispatcher        = $dispatcher;
+        $this->readerBuilderFactory = $readerBuilderFactory;
+        $this->importStorage = $importStorage;
+        $this->eventDispatcher = $dispatcher;
     }
 
     /**
@@ -115,7 +115,7 @@ class ImportFactory implements EventSubscriberInterface
      * Relays an event to the main dispatcher in the manager.
      * This is done so listeners can subscribe to this class,
      * while each importer starts with a new dispatcher.
-
+     
      * @param Event  $event
      * @param string $name
      */
@@ -164,8 +164,8 @@ class ImportFactory implements EventSubscriberInterface
      *
      * @param FeedEntity $feed         The feed to create the import for
      * @param \DateTime  $scheduleDate The date this import should start
-     * @param boolean    $forced       Whether to handle items that would normally be skipped
-     * @param boolean    $partial      If left out, it will be determined based on feed
+     * @param bool       $forced       Whether to handle items that would normally be skipped
+     * @param bool       $partial      If left out, it will be determined based on feed
      *
      * @throws UnfinishedImportException When an existing (and running) import is found
      *
@@ -207,13 +207,13 @@ class ImportFactory implements EventSubscriberInterface
      */
     public function createImportJob(ImportPart $part, EventDispatcherInterface $dispatcher = null)
     {
-        $import     = $part->getImport();
-        $feed       = $import->getFeed();
+        $import = $part->getImport();
+        $feed = $import->getFeed();
         $dispatcher = $dispatcher ?: $this->createEventDispatcher();
 
-        $importer  = $this->createImporter($import, $dispatcher, $this->getDefaultImporterOptions($import));
-        $reader    = $this->createImportPartReader($part, $dispatcher, $this->getDefaultReaderOptions($import));
-        $feed      = $this->createFeed($feed, $reader, $dispatcher, $this->getDefaultFeedOptions($import));
+        $importer = $this->createImporter($import, $dispatcher, $this->getDefaultImporterOptions($import));
+        $reader = $this->createImportPartReader($part, $dispatcher, $this->getDefaultReaderOptions($import));
+        $feed = $this->createFeed($feed, $reader, $dispatcher, $this->getDefaultFeedOptions($import));
         $processor = $this->getImportProcessor($import);
 
         return new ImportJob($part, $feed, $processor, $importer, $this->getRepository());
@@ -228,7 +228,7 @@ class ImportFactory implements EventSubscriberInterface
      */
     protected function createImporter(Import $import, EventDispatcherInterface $dispatcher, array $options = [])
     {
-        $type    = $this->importRegistry->getImporterType($import->getFeed()->getImporterType());
+        $type = $this->importRegistry->getImporterType($import->getFeed()->getImporterType());
         $handler = $this->getImportHandler($import);
         $options = array_merge($options, $import->getFeed()->getImporterOptions());
 
@@ -241,7 +241,7 @@ class ImportFactory implements EventSubscriberInterface
      * @param Import    $import
      * @param array     $transport
      * @param \DateTime $scheduleDate
-     * @param integer   $position
+     * @param int       $position
      *
      * @return ImportPart
      */
@@ -291,8 +291,8 @@ class ImportFactory implements EventSubscriberInterface
     {
         $destinationDir = $this->importStorage->getImportDir($import);
 
-        $feed    = $import->getFeed();
-        $type    = $this->importRegistry->getReaderType($feed->getReaderType());
+        $feed = $import->getFeed();
+        $type = $this->importRegistry->getReaderType($feed->getReaderType());
         $builder = $this->readerBuilderFactory->create($dispatcher, $destinationDir);
         $options = array_merge($options, $feed->getReaderOptions());
 
@@ -308,8 +308,8 @@ class ImportFactory implements EventSubscriberInterface
      */
     protected function createImportReader(Import $import, EventDispatcherInterface $dispatcher, array $options = [])
     {
-        $feed         = $import->getFeed();
-        $transport    = $feed->getTransportConfig();
+        $feed = $import->getFeed();
+        $transport = $feed->getTransportConfig();
         $resourceType = ReaderBuilderInterface::RESOURCE_TYPE_MAIN;
 
         return $this->createReader($import, $transport, $resourceType, $dispatcher, $options);
@@ -324,8 +324,8 @@ class ImportFactory implements EventSubscriberInterface
      */
     protected function createImportPartReader(ImportPart $importPart, EventDispatcherInterface $dispatcher, array $options = [])
     {
-        $import       = $importPart->getImport();
-        $transport    = $importPart->getTransportConfig();
+        $import = $importPart->getImport();
+        $transport = $importPart->getTransportConfig();
         $resourceType = ReaderBuilderInterface::RESOURCE_TYPE_PART;
 
         return $this->createReader($import, $transport, $resourceType, $dispatcher, $options);
@@ -342,7 +342,7 @@ class ImportFactory implements EventSubscriberInterface
     protected function createFeed(FeedEntity $feed, ReaderInterface $reader, EventDispatcherInterface $dispatcher, array $options = [])
     {
         $builder = new FeedBuilder($dispatcher);
-        $type    = $this->importRegistry->getFeedType($feed->getType());
+        $type = $this->importRegistry->getFeedType($feed->getType());
         $options = array_merge($options, $feed->getOptions());
 
         return $builder->build($type, $reader, $options);
@@ -405,7 +405,7 @@ class ImportFactory implements EventSubscriberInterface
     protected function addImportParts(Import $import)
     {
         $dispatcher = $this->createEventDispatcher();
-        $options    = $this->getDefaultReaderOptions($import);
+        $options = $this->getDefaultReaderOptions($import);
 
         $reader = $this->createImportReader($import, $dispatcher, $options);
 
@@ -446,7 +446,7 @@ class ImportFactory implements EventSubscriberInterface
     }
 
     /**
-     * Returns default options to pass to the feed builder
+     * Returns default options to pass to the feed builder.
      *
      * @param Import $import
      *
@@ -455,14 +455,14 @@ class ImportFactory implements EventSubscriberInterface
     protected function getDefaultFeedOptions(Import $import)
     {
         return [
-            'forced'         => $import->isForced(),
-            'feed'           => $import->getFeed(),
+            'forced' => $import->isForced(),
+            'feed' => $import->getFeed(),
             'default_values' => $import->getFeed()->getDefaultValues(),
         ];
     }
 
     /**
-     * Returns default options to pass to the reader builder
+     * Returns default options to pass to the reader builder.
      *
      * @param Import $import
      *
@@ -472,12 +472,12 @@ class ImportFactory implements EventSubscriberInterface
     {
         return [
             'partial' => $import->isPartial(),
-            'forced'  => $import->isForced(),
+            'forced' => $import->isForced(),
         ];
     }
 
     /**
-     * Returns default options to pass to the importer builder
+     * Returns default options to pass to the importer builder.
      *
      * @param Import $import
      *

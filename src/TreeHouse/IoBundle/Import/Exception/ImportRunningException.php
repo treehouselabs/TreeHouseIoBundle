@@ -14,7 +14,7 @@ class ImportRunningException extends \RuntimeException
     /**
      * @param Import     $import
      * @param string     $message
-     * @param integer    $code
+     * @param int        $code
      * @param \Exception $previous
      */
     public function __construct(Import $import, $message = null, $code = 0, \Exception $previous = null)

@@ -38,7 +38,7 @@ class ParserBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testBuildReturnsParser()
     {
-        $type   = $this->getParserTypeMock();
+        $type = $this->getParserTypeMock();
         $parser = $this->builder->build($type, []);
 
         $this->assertInstanceOf(ParserInterface::class, $parser);
@@ -109,7 +109,7 @@ class ParserBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertNotContains(
             $modifierB,
             array_map(function (array $mod) {
-                list($modifier,) = $mod;
+                list($modifier) = $mod;
 
                 return $modifier;
             }, $this->builder->getModifiers())
@@ -132,7 +132,7 @@ class ParserBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertNotContains(
             $modifierB,
             array_map(function (array $mod) {
-                list($modifier,) = $mod;
+                list($modifier) = $mod;
 
                 return $modifier;
             }, $this->builder->getModifiers())

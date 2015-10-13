@@ -10,22 +10,22 @@ use TreeHouse\IoBundle\Model\OriginInterface;
 class OriginMock implements OriginInterface
 {
     /**
-     * @var integer $id
+     * @var int
      */
     protected $id;
 
     /**
-     * @var string $name
+     * @var string
      */
     protected $name;
 
     /**
-     * @var string $title
+     * @var string
      */
     protected $title;
 
     /**
-     * @var integer $priority
+     * @var int
      */
     protected $priority;
 
@@ -35,12 +35,12 @@ class OriginMock implements OriginInterface
     protected $feeds;
 
     /**
-     * @param integer $id
+     * @param int $id
      */
     public function __construct($id)
     {
-        $this->id      = $id;
-        $this->feeds   = new ArrayCollection();
+        $this->id = $id;
+        $this->feeds = new ArrayCollection();
     }
 
     /**

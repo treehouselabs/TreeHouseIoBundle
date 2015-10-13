@@ -23,7 +23,7 @@ class ExceptionEvent extends Event
      */
     public function __construct(Importer $importer, \Exception $exception)
     {
-        $this->importer  = $importer;
+        $this->importer = $importer;
         $this->exception = $exception;
     }
 

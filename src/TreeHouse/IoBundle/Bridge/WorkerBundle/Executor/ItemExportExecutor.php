@@ -56,7 +56,7 @@ class ItemExportExecutor extends AbstractExecutor implements ObjectPayloadInterf
     public function getObjectPayload($object)
     {
         $class = get_class($object);
-        $meta  = $this->doctrine->getManagerForClass($class)->getClassMetadata($class);
+        $meta = $this->doctrine->getManagerForClass($class)->getClassMetadata($class);
 
         return [$class, $meta->getIdentifierValues($object)];
     }

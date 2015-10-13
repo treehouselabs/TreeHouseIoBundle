@@ -14,7 +14,7 @@ use TreeHouse\IoBundle\Model\OriginInterface;
 class Origin implements OriginInterface
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Id
      * @ORM\Column(type="integer")
@@ -36,7 +36,7 @@ class Origin implements OriginInterface
     protected $title;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(type="integer")
      */
@@ -50,11 +50,11 @@ class Origin implements OriginInterface
     protected $feeds;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
-        $this->feeds   = new ArrayCollection();
+        $this->feeds = new ArrayCollection();
     }
 
     /**

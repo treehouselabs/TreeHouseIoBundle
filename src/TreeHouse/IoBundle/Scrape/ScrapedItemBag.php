@@ -21,8 +21,8 @@ class ScrapedItemBag extends ItemBag
     {
         parent::__construct([]);
 
-        $this->scraper      = $scraper;
-        $this->originalUrl  = $originalUrl;
+        $this->scraper = $scraper;
+        $this->originalUrl = $originalUrl;
         $this->originalData = $originalData;
 
         $this->setOriginalId(md5($originalUrl));

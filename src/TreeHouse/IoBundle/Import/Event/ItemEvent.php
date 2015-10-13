@@ -25,7 +25,7 @@ class ItemEvent extends Event
     public function __construct(Importer $importer, ItemBag $item)
     {
         $this->importer = $importer;
-        $this->item     = $item;
+        $this->item = $item;
     }
 
     /**

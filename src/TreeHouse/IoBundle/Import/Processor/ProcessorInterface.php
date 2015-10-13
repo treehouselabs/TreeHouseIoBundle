@@ -8,11 +8,11 @@ use TreeHouse\IoBundle\Import\Exception\RunningPartException;
 interface ProcessorInterface
 {
     /**
-     * Checks whether the part is being run right now
+     * Checks whether the part is being run right now.
      *
      * @param ImportPart $part
      *
-     * @return boolean
+     * @return bool
      */
     public function isRunning(ImportPart $part);
 

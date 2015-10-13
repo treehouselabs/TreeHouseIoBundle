@@ -37,20 +37,20 @@ class ImportLoggingSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            FeedEvents::FETCH_CACHED             => 'onFetchCached',
-            FeedEvents::PRE_FETCH                => 'onPreFetch',
-            FeedEvents::POST_FETCH               => 'onPostFetch',
-            FeedEvents::RESOURCE_START           => 'onResourceStart',
+            FeedEvents::FETCH_CACHED => 'onFetchCached',
+            FeedEvents::PRE_FETCH => 'onPreFetch',
+            FeedEvents::POST_FETCH => 'onPostFetch',
+            FeedEvents::RESOURCE_START => 'onResourceStart',
             FeedEvents::ITEM_MODIFICATION_FAILED => 'onItemModificationFailure',
-            ImportEvents::ITEM_SUCCESS           => 'onItemSuccess',
-            ImportEvents::ITEM_FAILED            => 'onItemFailed',
-            ImportEvents::ITEM_SKIPPED           => 'onItemSkipped',
-            ImportEvents::PART_CREATED           => 'onPartCreated',
+            ImportEvents::ITEM_SUCCESS => 'onItemSuccess',
+            ImportEvents::ITEM_FAILED => 'onItemFailed',
+            ImportEvents::ITEM_SKIPPED => 'onItemSkipped',
+            ImportEvents::PART_CREATED => 'onPartCreated',
         ];
     }
 
     /**
-     * FeedEvents::FETCH_CACHED event
+     * FeedEvents::FETCH_CACHED event.
      */
     public function onFetchCached()
     {

@@ -14,11 +14,11 @@ class HtmlToMarkdownTransformerTest extends \PHPUnit_Framework_TestCase
     public function testTransform($markdownPath, $htmlPath)
     {
         $markdownify = new ConverterExtra(false, false, false);
-        $purifier    = new \HTMLPurifier($this->getPurifierConfig());
+        $purifier = new \HTMLPurifier($this->getPurifierConfig());
 
         $transformer = new HtmlToMarkdownTransformer($markdownify, $purifier);
 
-        $html     = trim(file_get_contents($htmlPath));
+        $html = trim(file_get_contents($htmlPath));
         $expected = trim(file_get_contents($markdownPath));
 
         $this->assertEquals($expected, $transformer->transform($html));
@@ -27,7 +27,7 @@ class HtmlToMarkdownTransformerTest extends \PHPUnit_Framework_TestCase
     public function transformDataProvider()
     {
         $finder = new Finder();
-        $finder->in(__DIR__.'/fixtures')->name('*.md');
+        $finder->in(__DIR__ . '/fixtures')->name('*.md');
 
         $retval = [];
 
@@ -35,7 +35,7 @@ class HtmlToMarkdownTransformerTest extends \PHPUnit_Framework_TestCase
         foreach ($finder as $file) {
             $markdownPath = $file->getPathName();
             $ext = strrchr($markdownPath, '.');
-            $htmlPath = preg_replace('/'.preg_quote($ext, '/').'$/i', '.html', $markdownPath);
+            $htmlPath = preg_replace('/' . preg_quote($ext, '/') . '$/i', '.html', $markdownPath);
 
             $retval[] = [$markdownPath, $htmlPath];
         }
@@ -49,15 +49,15 @@ class HtmlToMarkdownTransformerTest extends \PHPUnit_Framework_TestCase
     protected function getPurifierConfig()
     {
         return [
-            'Attr.AllowedClasses'                     => [],
-            'AutoFormat.AutoParagraph'                => true,
-            'AutoFormat.RemoveEmpty'                  => true,
-            'AutoFormat.RemoveEmpty.RemoveNbsp'       => true,
+            'Attr.AllowedClasses' => [],
+            'AutoFormat.AutoParagraph' => true,
+            'AutoFormat.RemoveEmpty' => true,
+            'AutoFormat.RemoveEmpty.RemoveNbsp' => true,
             'AutoFormat.RemoveSpansWithoutAttributes' => true,
-            'Core.RemoveProcessingInstructions'       => true,
-            'Cache.SerializerPermissions'             => 0775,
-            'HTML.Allowed'                            => 'div,p,span,br,em,strong,b,i,small,cite,blockquote,q,code,var,samp,kbd,dfn,abbr,sup,sub,h1,h2,h3,ul,li',
-            'HTML.Doctype'                            => 'HTML 4.01 Strict',
+            'Core.RemoveProcessingInstructions' => true,
+            'Cache.SerializerPermissions' => 0775,
+            'HTML.Allowed' => 'div,p,span,br,em,strong,b,i,small,cite,blockquote,q,code,var,samp,kbd,dfn,abbr,sup,sub,h1,h2,h3,ul,li',
+            'HTML.Doctype' => 'HTML 4.01 Strict',
         ];
     }
 }

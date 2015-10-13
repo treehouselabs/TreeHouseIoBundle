@@ -49,8 +49,8 @@ class ScrapedItemBagMapper implements MapperInterface, CrawlerAwareInterface
             throw new \InvalidArgumentException('$modificationDateCallback must be a callable');
         }
 
-        $this->originalIdCallback       = $originalIdCallback;
-        $this->originalUrlCallback      = $originalUrlCallback;
+        $this->originalIdCallback = $originalIdCallback;
+        $this->originalUrlCallback = $originalUrlCallback;
         $this->modificationDateCallback = $modificationDateCallback;
     }
 

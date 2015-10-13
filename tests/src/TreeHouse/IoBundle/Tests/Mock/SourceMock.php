@@ -10,52 +10,52 @@ use TreeHouse\IoBundle\Model\SourceInterface;
 class SourceMock implements SourceInterface
 {
     /**
-     * @var integer $id
+     * @var int
      */
     protected $id;
 
     /**
-     * @var string $originalId
+     * @var string
      */
     protected $originalId;
 
     /**
-     * @var string $originalUrl
+     * @var string
      */
     protected $originalUrl;
 
     /**
-     * @var bool $blocked
+     * @var bool
      */
     protected $blocked;
 
     /**
-     * @var array $data
+     * @var array
      */
     protected $data;
 
     /**
-     * @var string $rawData
+     * @var string
      */
     protected $rawData;
 
     /**
-     * @var array $messages
+     * @var array
      */
     protected $messages;
 
     /**
-     * @var \DateTime $datetimeLastVisited
+     * @var \DateTime
      */
     protected $datetimeLastVisited;
 
     /**
-     * @var \DateTime $datetimeModified
+     * @var \DateTime
      */
     protected $datetimeCreated;
 
     /**
-     * @var \DateTime $datetimeModified
+     * @var \DateTime
      */
     protected $datetimeModified;
 
@@ -75,7 +75,7 @@ class SourceMock implements SourceInterface
     protected $scraper;
 
     /**
-     * @param integer $id
+     * @param int $id
      */
     public function __construct($id)
     {

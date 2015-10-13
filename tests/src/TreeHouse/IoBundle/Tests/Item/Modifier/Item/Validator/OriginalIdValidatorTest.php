@@ -36,7 +36,7 @@ class OriginalIdValidatorTest extends \PHPUnit_Framework_TestCase
             [null],
             [''],
             [' '],
-            [[]]
+            [[]],
         ];
     }
 
@@ -57,7 +57,7 @@ class OriginalIdValidatorTest extends \PHPUnit_Framework_TestCase
             ['123foo'],
             ['foo-1234-bar'],
             ['foo_1234/bar_'],
-            ['1234 foobar']
+            ['1234 foobar'],
         ];
     }
 }

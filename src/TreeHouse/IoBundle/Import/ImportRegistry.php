@@ -38,16 +38,16 @@ class ImportRegistry
     /**
      * @param string $name
      *
+     * @throws \OutOfBoundsException If type with the name is registered
      * @return ReaderTypeInterface
      *
-     * @throws \OutOfBoundsException If type with the name is registered
      */
     public function getReaderType($name)
     {
         if (!array_key_exists($name, $this->readerTypes)) {
             throw new \OutOfBoundsException(
                 sprintf(
-                    'Reader type "%s" is not supported. You can add it by creating a service which implements %s, '.
+                    'Reader type "%s" is not supported. You can add it by creating a service which implements %s, ' .
                     'and tag it with tree_house.io.reader_type',
                     ReaderTypeInterface::class,
                     $name
@@ -67,7 +67,7 @@ class ImportRegistry
     }
 
     /**
-     * Registers a reader type
+     * Registers a reader type.
      *
      * @param ReaderTypeInterface $type
      * @param string              $name
@@ -80,16 +80,16 @@ class ImportRegistry
     /**
      * @param string $name
      *
+     * @throws \OutOfBoundsException If type with the name is registered
      * @return FeedTypeInterface
      *
-     * @throws \OutOfBoundsException If type with the name is registered
      */
     public function getFeedType($name)
     {
         if (!array_key_exists($name, $this->feedTypes)) {
             throw new \OutOfBoundsException(
                 sprintf(
-                    'Feed type "%s" is not supported. You can add it by creating a service which implements %s, '.
+                    'Feed type "%s" is not supported. You can add it by creating a service which implements %s, ' .
                     'and tag it with tree_house.io.feed_type',
                     $name,
                     FeedTypeInterface::class
@@ -109,7 +109,7 @@ class ImportRegistry
     }
 
     /**
-     * Registers a feed type
+     * Registers a feed type.
      *
      * @param FeedTypeInterface $type
      * @param string            $name
@@ -122,16 +122,16 @@ class ImportRegistry
     /**
      * @param string $name
      *
+     * @throws \OutOfBoundsException If no type with the name is registered
      * @return ImporterTypeInterface
      *
-     * @throws \OutOfBoundsException If no type with the name is registered
      */
     public function getImporterType($name)
     {
         if (!array_key_exists($name, $this->importerTypes)) {
             throw new \OutOfBoundsException(
                 sprintf(
-                    'Importer type "%s" is not supported. You can add it by creating a service which implements %s, '.
+                    'Importer type "%s" is not supported. You can add it by creating a service which implements %s, ' .
                     'and tag it with tree_house.io.importer_type',
                     $name,
                     ImporterTypeInterface::class
@@ -151,7 +151,7 @@ class ImportRegistry
     }
 
     /**
-     * Registers an importer type
+     * Registers an importer type.
      *
      * @param ImporterTypeInterface $type
      * @param string                $name
@@ -164,16 +164,16 @@ class ImportRegistry
     /**
      * @param string $name
      *
+     * @throws \OutOfBoundsException If no handler with the name is registered
      * @return HandlerInterface
      *
-     * @throws \OutOfBoundsException If no handler with the name is registered
      */
     public function getHandler($name)
     {
         if (!array_key_exists($name, $this->handlers)) {
             throw new \OutOfBoundsException(
                 sprintf(
-                    'Import handler "%s" is not supported. You can add it by creating a service which implements %s, '.
+                    'Import handler "%s" is not supported. You can add it by creating a service which implements %s, ' .
                     'and tag it with tree_house.io.import_handler',
                     $name,
                     HandlerInterface::class
@@ -193,7 +193,7 @@ class ImportRegistry
     }
 
     /**
-     * Registers a handler
+     * Registers a handler.
      *
      * @param HandlerInterface $handler
      * @param string           $name
@@ -206,16 +206,16 @@ class ImportRegistry
     /**
      * @param string $name
      *
+     * @throws \OutOfBoundsException If no processor with the name is registered
      * @return ProcessorInterface
      *
-     * @throws \OutOfBoundsException If no processor with the name is registered
      */
     public function getProcessor($name)
     {
         if (!array_key_exists($name, $this->processors)) {
             throw new \OutOfBoundsException(
                 sprintf(
-                    'Import processor "%s" is not supported. You can add it by creating a service which implements %s, '.
+                    'Import processor "%s" is not supported. You can add it by creating a service which implements %s, ' .
                     'and tagging it with tree_house.io.import_processor',
                     $name,
                     ProcessorInterface::class
@@ -235,7 +235,7 @@ class ImportRegistry
     }
 
     /**
-     * Registers a processor
+     * Registers a processor.
      *
      * @param ProcessorInterface $processor
      * @param string             $name

@@ -37,7 +37,7 @@ class DelegatingSourceCleaner
      */
     public function __construct(SourceManagerInterface $sourceManager, EventDispatcherInterface $eventDispatcher)
     {
-        $this->sourceManager   = $sourceManager;
+        $this->sourceManager = $sourceManager;
         $this->eventDispatcher = $eventDispatcher;
     }
 
@@ -50,7 +50,7 @@ class DelegatingSourceCleaner
     }
 
     /**
-     * Registers a cleaner
+     * Registers a cleaner.
      *
      * @param SourceCleanerInterface $cleaner
      */
@@ -88,9 +88,9 @@ class DelegatingSourceCleaner
     /**
      * @param AbstractQuery $query
      *
-     * @return integer
-     *
      * @throws \LogicException
+     * @return int
+     *
      */
     public function cleanByQuery(AbstractQuery $query)
     {
@@ -111,7 +111,7 @@ class DelegatingSourceCleaner
             $this->sourceManager->remove($source);
             $this->eventDispatcher->dispatch(IoEvents::POST_CLEAN_SOURCE, new SourceEvent($source));
 
-            $numCleaned++;
+            ++$numCleaned;
 
             if ($numCleaned % 50 === 0) {
                 $this->sourceManager->flush();

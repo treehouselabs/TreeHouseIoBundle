@@ -43,7 +43,7 @@ abstract class AbstractFeedTypeTest extends TestCase
     }
 
     /**
-     * Removes all downloaded fixtures (they're saved in tmp folder)
+     * Removes all downloaded fixtures (they're saved in tmp folder).
      */
     protected function tearDown()
     {
@@ -85,7 +85,7 @@ abstract class AbstractFeedTypeTest extends TestCase
         $this->assertOriginalUrl($fixture);
 
         $expected = $fixture->getExpectedItem()->all();
-        $actual   = $fixture->getActualItem()->all();
+        $actual = $fixture->getActualItem()->all();
 
         foreach ($expected as $key => $expectedValue) {
             $this->assertArrayHasKey(
@@ -111,7 +111,7 @@ abstract class AbstractFeedTypeTest extends TestCase
     }
 
     /**
-     * Asserts a value
+     * Asserts a value.
      *
      * @param $key
      * @param $expectedValue
@@ -134,7 +134,7 @@ abstract class AbstractFeedTypeTest extends TestCase
     }
 
     /**
-     * Normalizes values before asserting them
+     * Normalizes values before asserting them.
      *
      * @param string $key
      * @param mixed  $expectedValue
@@ -162,9 +162,11 @@ abstract class AbstractFeedTypeTest extends TestCase
     }
 
     /**
-     * @param  string            $name     The fixture name
-     * @param  string            $feedType The feed type
+     * @param string $name     The fixture name
+     * @param string $feedType The feed type
+     *
      * @throws \RuntimeException
+     *
      * @return ItemFixture
      */
     protected function getItemFixture($name, $feedType)
@@ -173,7 +175,7 @@ abstract class AbstractFeedTypeTest extends TestCase
             $this->markTestSkipped(sprintf('Add an origin with a %s feed to the database first', $feedType));
         }
 
-        $actual   = $this->getActualItemFixture($feed, $name, $feedType);
+        $actual = $this->getActualItemFixture($feed, $name, $feedType);
         $expected = $this->getExpectedItemFixture($feed, $name, $feedType);
 
         return new ItemFixture($actual, $expected);
@@ -195,11 +197,11 @@ abstract class AbstractFeedTypeTest extends TestCase
         $dispatcher = $this->createEventDispatcher();
 
         $options = $this->getReaderTypeOptions($feedEntity);
-        $reader  = $this->createReader($feedEntity, $name, $dispatcher, $options);
+        $reader = $this->createReader($feedEntity, $name, $dispatcher, $options);
 
         $builder = new FeedBuilder($dispatcher);
         $options = $this->getFeedTypeOptions($feedEntity);
-        $feed    = $builder->build($type, $reader, $options);
+        $feed = $builder->build($type, $reader, $options);
 
         if (null === $item = $feed->getNextItem()) {
             throw new \RuntimeException('Expecting a non-filtered feed item, got nothing.');
@@ -237,7 +239,7 @@ abstract class AbstractFeedTypeTest extends TestCase
     }
 
     /**
-     * Returns a feed entity for a specific feed type
+     * Returns a feed entity for a specific feed type.
      *
      * @param string $type
      *
@@ -293,7 +295,7 @@ abstract class AbstractFeedTypeTest extends TestCase
 
         $transportConfig = TransportFactory::createConfigFromFile($xml);
 
-        $builder = new ReaderBuilder($dispatcher, sys_get_temp_dir().'/'.$feed->getType());
+        $builder = new ReaderBuilder($dispatcher, sys_get_temp_dir() . '/' . $feed->getType());
 
         return $builder->build($readerType, $transportConfig, $builder::RESOURCE_TYPE_MAIN, $options);
     }
@@ -335,8 +337,8 @@ abstract class AbstractFeedTypeTest extends TestCase
     {
         return array_merge(
             [
-                'forced'         => true,
-                'feed'           => $feed,
+                'forced' => true,
+                'feed' => $feed,
                 'default_values' => $feed->getDefaultValues(),
             ],
             $feed->getOptions()
@@ -353,7 +355,7 @@ abstract class AbstractFeedTypeTest extends TestCase
         return array_merge(
             [
                 'partial' => $feed->isPartial(),
-                'forced'  => true,
+                'forced' => true,
             ],
             $feed->getReaderOptions()
         );

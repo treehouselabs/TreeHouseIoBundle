@@ -13,7 +13,7 @@ class RateLimitException extends CrawlException
      * @param string     $url
      * @param string     $message
      * @param \DateTime  $retryDate
-     * @param integer    $code
+     * @param int        $code
      * @param \Exception $previous
      */
     public function __construct($url, $message = '', \DateTime $retryDate = null, $code = 0, \Exception $previous = null)

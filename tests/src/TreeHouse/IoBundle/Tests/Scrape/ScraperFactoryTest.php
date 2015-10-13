@@ -36,7 +36,7 @@ class ScraperFactoryTest extends \PHPUnit_Framework_TestCase
     public function testRegisterCrawler()
     {
         $crawler = $this->getMockForAbstractClass(CrawlerInterface::class);
-        $alias   = 'foo';
+        $alias = 'foo';
 
         $this->factory->registerCrawler($crawler, $alias);
         $this->assertSame($crawler, $this->factory->getCrawler($alias));
@@ -53,7 +53,7 @@ class ScraperFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testRegisterParserType()
     {
-        $type  = $this->getMockForAbstractClass(ParserTypeInterface::class);
+        $type = $this->getMockForAbstractClass(ParserTypeInterface::class);
         $alias = 'foo';
 
         $this->factory->registerParserType($type, $alias);
@@ -72,7 +72,7 @@ class ScraperFactoryTest extends \PHPUnit_Framework_TestCase
     public function testRegisterHandler()
     {
         $handler = $this->getMockForAbstractClass(HandlerInterface::class);
-        $alias   = 'foo';
+        $alias = 'foo';
 
         $this->factory->registerHandler($handler, $alias);
         $this->assertSame($handler, $this->factory->getHandler($alias));

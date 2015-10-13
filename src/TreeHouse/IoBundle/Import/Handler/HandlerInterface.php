@@ -15,16 +15,12 @@ interface HandlerInterface
     public function handle(FeedItemBag $item);
 
     /**
-     * Flushes outstanding changes
-     *
-     * @return void
+     * Flushes outstanding changes.
      */
     public function flush();
 
     /**
-     * Clears caches
-     *
-     * @return void
+     * Clears caches.
      */
     public function clear();
 }

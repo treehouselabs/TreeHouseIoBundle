@@ -2,8 +2,8 @@
 
 namespace TreeHouse\IoBundle\Import\Event;
 
-use TreeHouse\IoBundle\Import\Importer\Importer;
 use TreeHouse\IoBundle\Import\Feed\FeedItemBag;
+use TreeHouse\IoBundle\Import\Importer\Importer;
 
 class InvalidItemEvent extends ItemEvent
 {

@@ -24,7 +24,7 @@ class ScrapeUrlEvent extends Event
     public function __construct(Scraper $scraper, $url)
     {
         $this->scraper = $scraper;
-        $this->url     = $url;
+        $this->url = $url;
     }
 
     /**

@@ -59,9 +59,9 @@ class ScrapedItemBagMapperTest extends \PHPUnit_Framework_TestCase
     public function testMapWithoutCrawler()
     {
         $callback = function () {};
-        $scraper  = new Scraper();
-        $url      = 'http://example.org';
-        $html     = '<html><body>Test</body></html>';
+        $scraper = new Scraper();
+        $url = 'http://example.org';
+        $html = '<html><body>Test</body></html>';
 
         $mapper = new ScrapedItemBagMapper($callback, $callback, $callback);
         $mapper->map(new ScrapedItemBag($scraper, $url, $html));
@@ -69,8 +69,8 @@ class ScrapedItemBagMapperTest extends \PHPUnit_Framework_TestCase
 
     public function testMap()
     {
-        $originalId       = 1234;
-        $originalUrl      = 'http://example.org';
+        $originalId = 1234;
+        $originalUrl = 'http://example.org';
         $modificationDate = new \DateTime();
 
         $mapper = new ScrapedItemBagMapper(
@@ -86,13 +86,13 @@ class ScrapedItemBagMapperTest extends \PHPUnit_Framework_TestCase
         );
 
         $scraper = new Scraper();
-        $url     = 'http://example.org';
-        $html    = '<html><body>Test</body></html>';
+        $url = 'http://example.org';
+        $html = '<html><body>Test</body></html>';
 
         $mapper->setCrawler(new Crawler($html));
 
         /** @var ScrapedItemBag $item */
-        $item    = $mapper->map(new ScrapedItemBag($scraper, $url, $html));
+        $item = $mapper->map(new ScrapedItemBag($scraper, $url, $html));
 
         $this->assertSame($originalId, $item->getOriginalId());
         $this->assertSame($originalUrl, $item->getOriginalUrl());

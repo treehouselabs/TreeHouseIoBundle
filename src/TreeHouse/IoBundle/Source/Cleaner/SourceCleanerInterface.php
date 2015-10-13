@@ -13,7 +13,7 @@ interface SourceCleanerInterface
      * @param DelegatingSourceCleaner $cleaner
      * @param ThresholdVoterInterface $voter
      *
-     * @return integer The number of cleaned sources
+     * @return int The number of cleaned sources
      */
     public function clean(DelegatingSourceCleaner $cleaner, ThresholdVoterInterface $voter);
 }

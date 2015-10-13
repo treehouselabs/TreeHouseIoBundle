@@ -15,13 +15,13 @@ class NodeToTextTransformerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->item = new ParameterBag([
-            'id'   => 1234,
-            'img'  => [
-                '#'    => 'Fill Murray',
+            'id' => 1234,
+            'img' => [
+                '#' => 'Fill Murray',
                 '@src' => 'http://www.fillmurray.com/g/200/300',
             ],
             'link' => [
-                '#'    => 'http://www.fillmurray.com',
+                '#' => 'http://www.fillmurray.com',
                 '@rel' => 'external',
             ],
         ]);
@@ -42,10 +42,10 @@ class NodeToTextTransformerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             [
-                'id'   => 1234,
-                'img'  => 'Fill Murray',
+                'id' => 1234,
+                'img' => 'Fill Murray',
                 'link' => [
-                    '#'    => 'http://www.fillmurray.com',
+                    '#' => 'http://www.fillmurray.com',
                     '@rel' => 'external',
                 ],
             ],
@@ -60,8 +60,8 @@ class NodeToTextTransformerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             [
-                'id'   => 1234,
-                'img'  => 'Fill Murray',
+                'id' => 1234,
+                'img' => 'Fill Murray',
                 'link' => 'http://www.fillmurray.com',
             ],
             $this->item->all()
@@ -75,13 +75,13 @@ class NodeToTextTransformerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             [
-                'id'   => 1234,
-                'img'  => [
-                    '#'    => 'Fill Murray',
+                'id' => 1234,
+                'img' => [
+                    '#' => 'Fill Murray',
                     '@src' => 'http://www.fillmurray.com/g/200/300',
                 ],
                 'link' => [
-                    '#'    => 'http://www.fillmurray.com',
+                    '#' => 'http://www.fillmurray.com',
                     '@rel' => 'external',
                 ],
             ],

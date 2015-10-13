@@ -161,7 +161,7 @@ class SourceModificationListenerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests that the modification datetime is updated when the source is modified
+     * Tests that the modification datetime is updated when the source is modified.
      */
     public function testSetModifiedDate()
     {
@@ -171,7 +171,7 @@ class SourceModificationListenerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests that the modification datetime is *not* updated when the source is only visited
+     * Tests that the modification datetime is *not* updated when the source is only visited.
      */
     public function testDontSetModifiedDate()
     {
@@ -181,7 +181,7 @@ class SourceModificationListenerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests that a source is scheduled for processing if it's modified
+     * Tests that a source is scheduled for processing if it's modified.
      */
     public function testScheduleSourceProcessOnSourceModified()
     {
@@ -197,7 +197,7 @@ class SourceModificationListenerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests that a source is scheduled for processing if it's unlinked
+     * Tests that a source is scheduled for processing if it's unlinked.
      */
     public function testScheduleSourceProcessOnSourceUnlinked()
     {
@@ -240,7 +240,7 @@ class SourceModificationListenerTest extends \PHPUnit_Framework_TestCase
                     'fieldB' => [
                         'fieldC' => (int) 2.45,
                     ],
-                    'fieldD' => (double) 2
+                    'fieldD' => (double) 2,
                 ],
             ],
         ];
@@ -248,12 +248,12 @@ class SourceModificationListenerTest extends \PHPUnit_Framework_TestCase
         $changeset2 = [
             'fieldA' => [
                 [
-                    'fieldB' =>  "2.4",
-                    'fieldD' =>  (float) 2.0,
+                    'fieldB' => '2.4',
+                    'fieldD' => (float) 2.0,
                 ],
                 [
                     'fieldB' => (float) 2.4,
-                    'fieldD' => (int) 2
+                    'fieldD' => (int) 2,
                 ],
             ],
         ];
@@ -261,12 +261,12 @@ class SourceModificationListenerTest extends \PHPUnit_Framework_TestCase
         $changeset3 = [
             'fieldA' => [
                 [
-                    'fieldB' =>  "2.5",
-                    'fieldD' =>  (float) 2.0,
+                    'fieldB' => '2.5',
+                    'fieldD' => (float) 2.0,
                 ],
                 [
                     'fieldB' => (float) 2.3,
-                    'fieldD' => (int) 2
+                    'fieldD' => (int) 2,
                 ],
             ],
         ];
@@ -274,10 +274,10 @@ class SourceModificationListenerTest extends \PHPUnit_Framework_TestCase
         $changeset4 = [
             'fieldA' => [
                 [
-                    'fieldB' =>  [2],
+                    'fieldB' => [2],
                 ],
                 [
-                    'fieldB' => (float) 2.3
+                    'fieldB' => (float) 2.3,
                 ],
             ],
         ];
@@ -286,10 +286,10 @@ class SourceModificationListenerTest extends \PHPUnit_Framework_TestCase
             [$changeset1, []],
             [$changeset2, []],
             [$changeset3, [
-                'fieldA' => ['fieldB' => "2.5"]
+                'fieldA' => ['fieldB' => '2.5'],
             ]],
             [$changeset4, [
-                'fieldA' => ['fieldB' => [2]]
+                'fieldA' => ['fieldB' => [2]],
             ]],
         ];
     }

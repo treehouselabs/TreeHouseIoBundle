@@ -41,7 +41,6 @@ use Symfony\Component\Finder\Finder;
  *     ]
  *   ];
  * </code>
- *
  */
 abstract class DefaultFeedTypeTest extends AbstractFeedTypeTest
 {
@@ -75,6 +74,7 @@ abstract class DefaultFeedTypeTest extends AbstractFeedTypeTest
 
     /**
      * @dataProvider getFixtureNames
+     *
      * @param string $name
      */
     public function testFixtures($name)

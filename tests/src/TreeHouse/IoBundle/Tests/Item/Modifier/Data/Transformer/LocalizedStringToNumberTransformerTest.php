@@ -29,7 +29,7 @@ class LocalizedStringToNumberTransformerTest extends \PHPUnit_Framework_TestCase
         return [
             ['2 apples', 2],
             ['there are 5 apples', 5],
-            ['volume: 123m3', 123]
+            ['volume: 123m3', 123],
         ];
     }
 }

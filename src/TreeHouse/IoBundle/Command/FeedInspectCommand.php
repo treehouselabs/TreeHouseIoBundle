@@ -46,7 +46,7 @@ class FeedInspectCommand extends Command
     protected function interact(InputInterface $input, OutputInterface $output)
     {
         if (!$input->getOption('node')) {
-            $helper   = new QuestionHelper();
+            $helper = new QuestionHelper();
             $question = new Question('Enter the name of the node that contains a property in this feed: ');
 
             $node = $helper->ask($input, $output, $question);
@@ -59,8 +59,8 @@ class FeedInspectCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $url   = $input->getArgument('url');
-        $node  = $input->getOption('node');
+        $url = $input->getArgument('url');
+        $node = $input->getOption('node');
         $limit = $input->getOption('limit');
 
         $feed = $this->getFeed($url, $node);
@@ -103,7 +103,7 @@ class FeedInspectCommand extends Command
                     $this->data[$key][$hash] = 0;
                 }
 
-                $this->data[$key][$hash]++;
+                ++$this->data[$key][$hash];
 
                 if (!array_key_exists($hash, $this->values)) {
                     $this->values[$hash] = $value;
@@ -114,7 +114,7 @@ class FeedInspectCommand extends Command
 
     /**
      * @param OutputInterface $output
-     * @param integer         $limit
+     * @param int             $limit
      */
     protected function report(OutputInterface $output, $limit)
     {
@@ -137,7 +137,7 @@ class FeedInspectCommand extends Command
 
             foreach ($hashes as $hash => $count) {
                 if ($counter > $limit) {
-                    $notShown++;
+                    ++$notShown;
                     continue;
                 }
 
@@ -152,15 +152,15 @@ class FeedInspectCommand extends Command
 
                 foreach (array_slice($lines, 0, 2) as $n => $line) {
                     $ellipses = '';
-                    if ($lineLimit-1 === $n) {
+                    if ($lineLimit - 1 === $n) {
                         $ellipses = $numLines > 2 ? ' (...)' : '';
                         $line = substr($line, 0, -5);
                     }
 
-                    $output->writeln($line.$ellipses);
+                    $output->writeln($line . $ellipses);
                 }
 
-                $counter++;
+                ++$counter;
             }
 
             if ($notShown > 0) {

@@ -46,7 +46,7 @@ class CrawlerLogCommand extends Command
     {
         $date = $input->getOption('all') ? null : new \DateTime('-' . $input->getOption('since'));
 
-        $crawler  = $this->findCrawler($input->getArgument('crawler'));
+        $crawler = $this->findCrawler($input->getArgument('crawler'));
 
         $output->writeln(
             sprintf(
@@ -60,7 +60,7 @@ class CrawlerLogCommand extends Command
 
         $output->writeln(sprintf('Found <info>%d</info> requests:', sizeof($requests)));
 
-        foreach ($requests as list ($timestamp, $request)) {
+        foreach ($requests as list($timestamp, $request)) {
             $output->writeln(
                 sprintf(
                     '[<info>%s</info>]: <comment>%s</comment>',

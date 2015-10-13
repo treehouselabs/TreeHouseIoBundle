@@ -9,7 +9,7 @@ use TreeHouse\IoBundle\Import\ImportResult;
 class ImportRepository extends EntityRepository
 {
     /**
-     * Find scheduled imports by feed
+     * Find scheduled imports by feed.
      *
      * @param Feed $feed
      *
@@ -27,7 +27,7 @@ class ImportRepository extends EntityRepository
     }
 
     /**
-     * Find latest started import
+     * Find latest started import.
      *
      * @return Import
      */
@@ -43,7 +43,7 @@ class ImportRepository extends EntityRepository
     }
 
     /**
-     * Find latest started import by feed
+     * Find latest started import by feed.
      *
      * @param Feed $feed
      *
@@ -63,7 +63,7 @@ class ImportRepository extends EntityRepository
     }
 
     /**
-     * Find imports by feed, ordered by descending start date
+     * Find imports by feed, ordered by descending start date.
      *
      * @param Feed $feed
      *
@@ -83,10 +83,10 @@ class ImportRepository extends EntityRepository
     }
 
     /**
-     * Find imports by number of parts
+     * Find imports by number of parts.
      *
-     * @param integer $number   The number of parts
-     * @param string  $operator The operator to use. Possible values are `=`, `<`, `>`, `<=`, and `>=`
+     * @param int    $number   The number of parts
+     * @param string $operator The operator to use. Possible values are `=`, `<`, `>`, `<=`, and `>=`
      *
      * @return Import[]
      */
@@ -101,7 +101,7 @@ class ImportRepository extends EntityRepository
     }
 
     /**
-     * Find imports that have started but not yet finished
+     * Find imports that have started but not yet finished.
      *
      * @return Import[]
      */
@@ -117,8 +117,8 @@ class ImportRepository extends EntityRepository
     }
 
     /**
-     * @param Import  $import
-     * @param boolean $autoFlush
+     * @param Import $import
+     * @param bool   $autoFlush
      */
     public function save(Import $import, $autoFlush = true)
     {
@@ -131,7 +131,7 @@ class ImportRepository extends EntityRepository
 
     /**
      * @param ImportPart $part
-     * @param boolean    $autoFlush
+     * @param bool       $autoFlush
      */
     public function savePart(ImportPart $part, $autoFlush = true)
     {
@@ -146,7 +146,7 @@ class ImportRepository extends EntityRepository
      * @param Import    $import
      * @param array     $transport
      * @param \DateTime $scheduleDate
-     * @param integer   $position
+     * @param int       $position
      *
      * @return ImportPart
      */
@@ -166,7 +166,7 @@ class ImportRepository extends EntityRepository
                 }
             }
 
-            $position++;
+            ++$position;
         }
 
         $part = new ImportPart();
@@ -197,7 +197,7 @@ class ImportRepository extends EntityRepository
      * @throws \RuntimeException
      * @throws UnfinishedImportException
      *
-     * @return boolean
+     * @return bool
      */
     public function finishImport(Import $import)
     {
@@ -251,14 +251,14 @@ class ImportRepository extends EntityRepository
     }
 
     /**
-     * Checks if the import has any parts that are unfinished
+     * Checks if the import has any parts that are unfinished.
      *
-     * @param Import  $import  The import
-     * @param boolean $refresh Whether to refresh the checked parts first. This
-     *                         is useful when time has passed since the import
-     *                         start, and you want to avoid race conditions
+     * @param Import $import  The import
+     * @param bool   $refresh Whether to refresh the checked parts first. This
+     *                        is useful when time has passed since the import
+     *                        start, and you want to avoid race conditions
      *
-     * @return boolean
+     * @return bool
      */
     public function importHasUnfinishedParts(Import $import, $refresh = true)
     {
@@ -292,9 +292,9 @@ class ImportRepository extends EntityRepository
         ;
 
         $query->execute([
-            'id'      => $import->getId(),
+            'id' => $import->getId(),
             'success' => $result->getSuccess(),
-            'failed'  => $result->getFailed(),
+            'failed' => $result->getFailed(),
             'skipped' => $result->getSkipped(),
         ]);
 

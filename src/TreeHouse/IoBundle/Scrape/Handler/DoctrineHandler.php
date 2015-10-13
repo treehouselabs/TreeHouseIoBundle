@@ -28,7 +28,7 @@ class DoctrineHandler implements HandlerInterface
     public function __construct(CachedSourceManager $sourceManager, ValidatorInterface $validator)
     {
         $this->sourceManager = $sourceManager;
-        $this->validator     = $validator;
+        $this->validator = $validator;
     }
 
     /**

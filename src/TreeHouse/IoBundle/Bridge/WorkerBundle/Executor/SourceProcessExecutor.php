@@ -49,8 +49,8 @@ class SourceProcessExecutor extends AbstractExecutor implements ObjectPayloadInt
     public function __construct(SourceManagerInterface $sourceManager, SourceProcessorInterface $processor, LoggerInterface $logger)
     {
         $this->sourceManager = $sourceManager;
-        $this->processor     = $processor;
-        $this->logger        = $logger;
+        $this->processor = $processor;
+        $this->logger = $logger;
     }
 
     /**

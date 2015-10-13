@@ -8,14 +8,14 @@ use TreeHouse\IoBundle\Entity\Feed;
 interface OriginInterface
 {
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId();
 
     /**
-     * Set name
+     * Set name.
      *
      * @param string $name
      *
@@ -24,14 +24,14 @@ interface OriginInterface
     public function setName($name);
 
     /**
-     * Get name
+     * Get name.
      *
      * @return string
      */
     public function getName();
 
     /**
-     * Set title
+     * Set title.
      *
      * @param string $title
      *
@@ -40,30 +40,30 @@ interface OriginInterface
     public function setTitle($title);
 
     /**
-     * Get title
+     * Get title.
      *
      * @return string
      */
     public function getTitle();
 
     /**
-     * Set priority
+     * Set priority.
      *
-     * @param integer $priority
+     * @param int $priority
      *
      * @return $this
      */
     public function setPriority($priority);
 
     /**
-     * Get priority
+     * Get priority.
      *
-     * @return integer
+     * @return int
      */
     public function getPriority();
 
     /**
-     * Add feeds
+     * Add feeds.
      *
      * @param Feed $feeds
      *
@@ -72,16 +72,14 @@ interface OriginInterface
     public function addFeed(Feed $feeds);
 
     /**
-     * Remove feeds
+     * Remove feeds.
      *
      * @param Feed $feeds
-     *
-     * @return void
      */
     public function removeFeed(Feed $feeds);
 
     /**
-     * Get feeds
+     * Get feeds.
      *
      * @return Collection|Feed[]
      */

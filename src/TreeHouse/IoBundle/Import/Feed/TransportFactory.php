@@ -12,7 +12,7 @@ class TransportFactory
 {
     const TYPE_FILE = 'file';
     const TYPE_HTTP = 'http';
-    const TYPE_FTP  = 'ftp';
+    const TYPE_FTP = 'ftp';
 
     /**
      * @param array $config
@@ -42,7 +42,7 @@ class TransportFactory
                     $config->get('file'),
                     [
                         'mode' => $config->get('mode', 'binary'),
-                        'pasv' => $config->get('pasv', true)
+                        'pasv' => $config->get('pasv', true),
                     ]
                 );
             case self::TYPE_FILE:

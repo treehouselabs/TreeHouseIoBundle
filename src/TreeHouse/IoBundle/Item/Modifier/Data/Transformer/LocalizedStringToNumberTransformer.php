@@ -32,15 +32,15 @@ class LocalizedStringToNumberTransformer extends BaseTransformer
         $this->grouping = false;
 
         $formatter = $this->getNumberFormatter();
-        $groupSep  = $formatter->getSymbol(\NumberFormatter::GROUPING_SEPARATOR_SYMBOL);
-        $decSep    = $formatter->getSymbol(\NumberFormatter::DECIMAL_SEPARATOR_SYMBOL);
+        $groupSep = $formatter->getSymbol(\NumberFormatter::GROUPING_SEPARATOR_SYMBOL);
+        $decSep = $formatter->getSymbol(\NumberFormatter::DECIMAL_SEPARATOR_SYMBOL);
 
         // remove grouping separator
         $value = str_replace($groupSep, '', $value);
 
         // try to match something like 1234 or 1234<dec>45
         // discard alphanumeric characters altogether
-        if (!preg_match('/(\-?\d+('.preg_quote($decSep).'\d+)?)/', $value, $matches)) {
+        if (!preg_match('/(\-?\d+(' . preg_quote($decSep) . '\d+)?)/', $value, $matches)) {
             // could not find any digit
             return null;
         }

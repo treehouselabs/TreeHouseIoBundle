@@ -27,7 +27,7 @@ class ImportPartRepository extends EntityRepository
      */
     public function findOverdueParts($time = '30 minutes')
     {
-        $date = new \Datetime('-'.$time);
+        $date = new \Datetime('-' . $time);
 
         $builder = $this->createQueryBuilder('p')
             ->where('p.datetimeStarted IS NULL')
@@ -40,7 +40,7 @@ class ImportPartRepository extends EntityRepository
     }
 
     /**
-     * @param integer $importId
+     * @param int $importId
      *
      * @return ImportPart[]
      */

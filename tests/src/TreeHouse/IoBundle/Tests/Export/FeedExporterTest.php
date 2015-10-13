@@ -2,8 +2,8 @@
 
 namespace TreeHouse\IoBundle\Tests\Export;
 
-use Symfony\Component\Templating\TemplateReference;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Templating\TemplateReference;
 use TreeHouse\IoBundle\Export\FeedExporter;
 use TreeHouse\IoBundle\Export\FeedType\FeedTypeInterface;
 use TreeHouse\IoBundle\Export\FeedWriter;
@@ -15,7 +15,7 @@ class FeedExporterTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->tmpDir = sys_get_temp_dir().'/exporter';
+        $this->tmpDir = sys_get_temp_dir() . '/exporter';
 
         $filesystem = new Filesystem();
         $filesystem->mkdir($this->tmpDir);
@@ -110,7 +110,7 @@ class FeedExporterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests that the item cache filename reflects different aspects of the used template and type
+     * Tests that the item cache filename reflects different aspects of the used template and type.
      */
     public function testCacheItemFilenameReflectsTemplate()
     {

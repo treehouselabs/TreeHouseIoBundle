@@ -59,7 +59,7 @@ abstract class AbstractParserTypeTest extends TestCase
         $fixtures = [];
 
         $refl = new \ReflectionClass(get_class($this));
-        $dir  = sprintf('%s/fixtures/%s', dirname($refl->getFilename()), $this->getParserType());
+        $dir = sprintf('%s/fixtures/%s', dirname($refl->getFilename()), $this->getParserType());
 
         $files = Finder::create()->files()->name('*.html')->in($dir);
 
@@ -112,7 +112,7 @@ abstract class AbstractParserTypeTest extends TestCase
         $this->assertOriginalId($fixture);
         $this->assertOriginalUrl($fixture);
         $expected = $fixture->getExpectedItem()->all();
-        $actual   = $fixture->getActualItem()->all();
+        $actual = $fixture->getActualItem()->all();
         foreach ($expected as $key => $expectedValue) {
             $this->assertArrayHasKey(
                 $key,
@@ -132,7 +132,7 @@ abstract class AbstractParserTypeTest extends TestCase
     }
 
     /**
-     * Asserts a value
+     * Asserts a value.
      *
      * @param $key
      * @param $expectedValue
@@ -155,7 +155,7 @@ abstract class AbstractParserTypeTest extends TestCase
     }
 
     /**
-     * Normalizes values before asserting them
+     * Normalizes values before asserting them.
      *
      * @param string $key
      * @param mixed  $expectedValue
@@ -194,7 +194,7 @@ abstract class AbstractParserTypeTest extends TestCase
             $this->markTestSkipped(sprintf('Add an origin with a %s scraper to the database first', $parserType));
         }
 
-        $actual   = $this->getActualItemFixture($scraper, $parserType, $fixtureName);
+        $actual = $this->getActualItemFixture($scraper, $parserType, $fixtureName);
         $expected = $this->getExpectedItemFixture($scraper, $parserType, $fixtureName);
 
         return new ItemFixture($actual, $expected);

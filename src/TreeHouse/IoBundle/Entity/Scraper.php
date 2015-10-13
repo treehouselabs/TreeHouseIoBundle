@@ -14,7 +14,7 @@ use TreeHouse\IoBundle\Model\SourceInterface;
 class Scraper
 {
     /**
-     * @var integer $id
+     * @var int
      *
      * @ORM\Column(type="integer")
      * @ORM\Id
@@ -23,81 +23,81 @@ class Scraper
     protected $id;
 
     /**
-     * The frequency to start the scraper, in hours
+     * The frequency to start the scraper, in hours.
      *
-     * @var integer $startFrequency
+     * @var int
      *
      * @ORM\Column(type="integer")
      */
     protected $startFrequency;
 
     /**
-     * The frequency to revisit sources, in hours
+     * The frequency to revisit sources, in hours.
      *
-     * @var integer $revisitFrequency
+     * @var int
      *
      * @ORM\Column(type="integer")
      */
     protected $revisitFrequency;
 
     /**
-     * One of the configured crawler types
+     * One of the configured crawler types.
      *
-     * @var string $type
+     * @var string
      *
      * @ORM\Column(type="string")
      */
     protected $crawler;
 
     /**
-     * Options to be passed to the crawler type
+     * Options to be passed to the crawler type.
      *
-     * @var array $options
+     * @var array
      *
      * @ORM\Column(type="json_array", nullable=true)
      */
     protected $crawlerOptions;
 
     /**
-     * One of the configured parser types
+     * One of the configured parser types.
      *
-     * @var string $type
+     * @var string
      *
      * @ORM\Column(type="string")
      */
     protected $parser;
 
     /**
-     * Options to be passed to the parser type
+     * Options to be passed to the parser type.
      *
-     * @var array $options
+     * @var array
      *
      * @ORM\Column(type="json_array", nullable=true)
      */
     protected $parserOptions;
 
     /**
-     * One of the configured handlers
+     * One of the configured handlers.
      *
-     * @var string $type
+     * @var string
      *
      * @ORM\Column(type="string")
      */
     protected $handler;
 
     /**
-     * The root url
+     * The root url.
      *
-     * @var string $url
+     * @var string
      *
      * @ORM\Column(type="string")
      */
     protected $url;
 
     /**
-     * Can contain key/value pairs to be used as defaults if the scraped pages doesn't supply them
+     * Can contain key/value pairs to be used as defaults if the scraped pages doesn't supply them.
      *
-     * @var array $defaultValues
+     * @var array
      *
      * @ORM\Column(type="json_array", nullable=true)
      */
@@ -125,7 +125,7 @@ class Scraper
     protected $sources;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -141,7 +141,7 @@ class Scraper
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -149,7 +149,7 @@ class Scraper
     }
 
     /**
-     * @param integer $startFrequency
+     * @param int $startFrequency
      *
      * @return $this
      */
@@ -161,7 +161,7 @@ class Scraper
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function getStartFrequency()
     {
@@ -169,7 +169,7 @@ class Scraper
     }
 
     /**
-     * @param integer $revisitFrequency
+     * @param int $revisitFrequency
      *
      * @return $this
      */
@@ -181,7 +181,7 @@ class Scraper
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function getRevisitFrequency()
     {

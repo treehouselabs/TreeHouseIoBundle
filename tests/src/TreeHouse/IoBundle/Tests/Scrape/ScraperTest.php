@@ -54,9 +54,9 @@ class ScraperTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->crawler    = $this->getMockForAbstractClass(CrawlerInterface::class);
-        $this->parser     = $this->getMockForAbstractClass(ParserInterface::class);
-        $this->handler    = $this->getMockForAbstractClass(HandlerInterface::class);
+        $this->crawler = $this->getMockForAbstractClass(CrawlerInterface::class);
+        $this->parser = $this->getMockForAbstractClass(ParserInterface::class);
+        $this->handler = $this->getMockForAbstractClass(HandlerInterface::class);
         $this->dispatcher = $this->getMockForAbstractClass(EventDispatcherInterface::class);
 
         $this->scraper = new Scraper($this->crawler, $this->parser, $this->handler, $this->dispatcher);
@@ -131,7 +131,6 @@ class ScraperTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('dispatch')
             ->with(ScraperEvents::ITEM_SKIPPED, $this->isInstanceOf(SkippedItemEvent::class));
-        ;
 
         $this->scraper->scrape(new ScraperEntity(), 'http://example.org');
     }
@@ -154,7 +153,6 @@ class ScraperTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('dispatch')
             ->with(ScraperEvents::ITEM_FAILED, $this->isInstanceOf(FailedItemEvent::class));
-        ;
 
         $this->scraper->scrape(new ScraperEntity(), 'http://example.org');
     }
@@ -177,7 +175,6 @@ class ScraperTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('dispatch')
             ->with(ScraperEvents::ITEM_FAILED, $this->isInstanceOf(FailedItemEvent::class));
-        ;
 
         $this->scraper->scrape(new ScraperEntity(), 'http://example.org');
     }
@@ -213,7 +210,6 @@ class ScraperTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('dispatch')
             ->with(ScraperEvents::RATE_LIMIT_REACHED, $this->isInstanceOf(RateLimitEvent::class));
-        ;
 
         $this->scraper->scrape(new ScraperEntity(), 'http://example.org');
     }
@@ -233,7 +229,6 @@ class ScraperTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('dispatch')
             ->with(ScraperEvents::SCRAPE_URL_NOT_OK, $this->isInstanceOf(ScrapeResponseEvent::class));
-        ;
 
         $this->scraper->scrape(new ScraperEntity(), 'http://example.org');
     }
@@ -253,7 +248,6 @@ class ScraperTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('dispatch')
             ->with(ScraperEvents::SCRAPE_URL_NOT_OK, $this->isInstanceOf(ScrapeResponseEvent::class));
-        ;
 
         $this->scraper->scrape(new ScraperEntity(), 'http://example.org');
     }
@@ -264,7 +258,6 @@ class ScraperTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('dispatch')
             ->with(ScraperEvents::SCRAPE_NEXT_URL, $this->isInstanceOf(ScrapeUrlEvent::class));
-        ;
 
         $this->scraper->scrapeAfter(new ScraperEntity(), 'http://example.org', new \DateTime());
     }
@@ -272,7 +265,7 @@ class ScraperTest extends \PHPUnit_Framework_TestCase
     public function testScrapeNext()
     {
         $entity = new ScraperEntity();
-        $url    = 'http://www.treehouse.nl';
+        $url = 'http://www.treehouse.nl';
 
         $this->crawler
             ->expects($this->once())
@@ -300,7 +293,7 @@ class ScraperTest extends \PHPUnit_Framework_TestCase
     public function testScrapeNextAsync()
     {
         $entity = new ScraperEntity();
-        $url    = 'http://www.treehouse.nl';
+        $url = 'http://www.treehouse.nl';
 
         $this->crawler
             ->expects($this->once())

@@ -12,10 +12,10 @@ class FeedCleanupHaltEvent extends CleanupHaltEvent
     protected $feed;
 
     /**
-     * @param Feed    $feed
-     * @param integer $count
-     * @param integer $total
-     * @param integer $max
+     * @param Feed $feed
+     * @param int  $count
+     * @param int  $total
+     * @param int  $max
      */
     public function __construct(Feed $feed, $count, $total, $max)
     {

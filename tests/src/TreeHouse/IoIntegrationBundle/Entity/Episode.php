@@ -13,7 +13,7 @@ use TreeHouse\IoBundle\Model\SourceInterface;
 class Episode
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Id
      * @ORM\Column(type="integer")
@@ -22,7 +22,7 @@ class Episode
     protected $id;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(type="integer", unique=true)
      */
@@ -50,7 +50,7 @@ class Episode
     protected $body;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(type="integer")
      */
@@ -92,16 +92,16 @@ class Episode
     protected $sources;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
         $this->sources = new ArrayCollection();
     }
     /**
-     * Set id
+     * Set id.
      *
-     * @param integer $id
+     * @param int $id
      *
      * @return Episode
      */
@@ -113,9 +113,9 @@ class Episode
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -123,7 +123,7 @@ class Episode
     }
 
     /**
-     * @param integer $number
+     * @param int $number
      *
      * @return $this
      */
@@ -135,7 +135,7 @@ class Episode
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function getNumber()
     {
@@ -143,7 +143,7 @@ class Episode
     }
 
     /**
-     * Set title
+     * Set title.
      *
      * @param string $title
      *
@@ -157,7 +157,7 @@ class Episode
     }
 
     /**
-     * Get title
+     * Get title.
      *
      * @return string
      */
@@ -167,7 +167,7 @@ class Episode
     }
 
     /**
-     * Set summary
+     * Set summary.
      *
      * @param string $summary
      *
@@ -181,7 +181,7 @@ class Episode
     }
 
     /**
-     * Get summary
+     * Get summary.
      *
      * @return string
      */
@@ -191,7 +191,7 @@ class Episode
     }
 
     /**
-     * Set body
+     * Set body.
      *
      * @param string $body
      *
@@ -205,7 +205,7 @@ class Episode
     }
 
     /**
-     * Get body
+     * Get body.
      *
      * @return string
      */
@@ -215,9 +215,9 @@ class Episode
     }
 
     /**
-     * Set duration
+     * Set duration.
      *
-     * @param integer $duration
+     * @param int $duration
      *
      * @return Episode
      */
@@ -229,9 +229,9 @@ class Episode
     }
 
     /**
-     * Get duration
+     * Get duration.
      *
-     * @return integer
+     * @return int
      */
     public function getDuration()
     {
@@ -239,7 +239,7 @@ class Episode
     }
 
     /**
-     * Set imageUrl
+     * Set imageUrl.
      *
      * @param string $imageUrl
      *
@@ -253,7 +253,7 @@ class Episode
     }
 
     /**
-     * Get imageUrl
+     * Get imageUrl.
      *
      * @return string
      */
@@ -263,7 +263,7 @@ class Episode
     }
 
     /**
-     * Set audioUrl
+     * Set audioUrl.
      *
      * @param string $audioUrl
      *
@@ -277,7 +277,7 @@ class Episode
     }
 
     /**
-     * Get audioUrl
+     * Get audioUrl.
      *
      * @return string
      */
@@ -287,7 +287,7 @@ class Episode
     }
 
     /**
-     * Set datetimePublished
+     * Set datetimePublished.
      *
      * @param \DateTime $datetimePublished
      *
@@ -301,7 +301,7 @@ class Episode
     }
 
     /**
-     * Get datetimePublished
+     * Get datetimePublished.
      *
      * @return \DateTime
      */
@@ -311,7 +311,7 @@ class Episode
     }
 
     /**
-     * Set author
+     * Set author.
      *
      * @param Author $author
      *
@@ -325,7 +325,7 @@ class Episode
     }
 
     /**
-     * Get author
+     * Get author.
      *
      * @return Author
      */

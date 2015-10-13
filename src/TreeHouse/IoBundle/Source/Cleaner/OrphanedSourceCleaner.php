@@ -16,7 +16,7 @@ class OrphanedSourceCleaner implements SourceCleanerInterface
      */
     public function __construct(SourceManagerInterface $sourceManager)
     {
-        $this->sourceManager   = $sourceManager;
+        $this->sourceManager = $sourceManager;
     }
 
     /**

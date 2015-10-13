@@ -16,7 +16,7 @@ use TreeHouse\IoBundle\Model\SourceInterface;
 class Source implements SourceInterface
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Id
      * @ORM\Column(type="integer")

@@ -32,7 +32,7 @@ class ImportOutputSubscriber implements EventSubscriberInterface
     protected $progress;
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $progressActive = false;
 
@@ -41,7 +41,7 @@ class ImportOutputSubscriber implements EventSubscriberInterface
      */
     public function __construct(OutputInterface $output)
     {
-        $this->output   = $output;
+        $this->output = $output;
         $this->progress = new ProgressBar($output);
     }
 
@@ -51,22 +51,22 @@ class ImportOutputSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            FeedEvents::FETCH_CACHED             => 'onFetchCached',
-            FeedEvents::FETCH_PROGRESS           => 'onFetchProgress',
-            FeedEvents::PRE_FETCH                => 'onPreFetch',
-            FeedEvents::POST_FETCH               => 'onPostFetch',
-            FeedEvents::RESOURCE_START           => 'onResourceStart',
+            FeedEvents::FETCH_CACHED => 'onFetchCached',
+            FeedEvents::FETCH_PROGRESS => 'onFetchProgress',
+            FeedEvents::PRE_FETCH => 'onPreFetch',
+            FeedEvents::POST_FETCH => 'onPostFetch',
+            FeedEvents::RESOURCE_START => 'onResourceStart',
             FeedEvents::ITEM_MODIFICATION_FAILED => 'onItemModificationFailure',
-            ImportEvents::ITEM_SUCCESS           => 'onItemSuccess',
-            ImportEvents::ITEM_FAILED            => 'onItemFailed',
-            ImportEvents::ITEM_SKIPPED           => 'onItemSkipped',
-            ImportEvents::PART_CREATED           => 'onPartCreated',
-            ImportEvents::PART_FINISH            => 'onPartFinished',
+            ImportEvents::ITEM_SUCCESS => 'onItemSuccess',
+            ImportEvents::ITEM_FAILED => 'onItemFailed',
+            ImportEvents::ITEM_SKIPPED => 'onItemSkipped',
+            ImportEvents::PART_CREATED => 'onPartCreated',
+            ImportEvents::PART_FINISH => 'onPartFinished',
         ];
     }
 
     /**
-     * FeedEvents::FETCH_CACHED event
+     * FeedEvents::FETCH_CACHED event.
      */
     public function onFetchCached()
     {

@@ -42,8 +42,8 @@ class ScrapeUrlExecutor extends AbstractExecutor
     public function __construct(ManagerRegistry $doctrine, ScraperFactory $factory, LoggerInterface $logger)
     {
         $this->doctrine = $doctrine;
-        $this->factory  = $factory;
-        $this->logger   = $logger;
+        $this->factory = $factory;
+        $this->logger = $logger;
 
         $this->factory->getEventDispatcher()->addSubscriber(new ScrapeLoggingSubscriber($this->logger));
     }

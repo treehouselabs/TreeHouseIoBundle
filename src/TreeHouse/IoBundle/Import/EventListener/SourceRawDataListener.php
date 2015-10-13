@@ -12,14 +12,14 @@ use TreeHouse\IoBundle\Import\Event\SuccessItemEvent;
 class SourceRawDataListener
 {
     /**
-     * Raw source string
+     * Raw source string.
      *
      * @var string
      */
     protected $rawData;
 
     /**
-     * Catches the raw xml for an item
+     * Catches the raw xml for an item.
      *
      * @param ResourceSerializeEvent $e
      */
@@ -36,7 +36,7 @@ class SourceRawDataListener
     }
 
     /**
-     * Sets the raw data on the resulting Source
+     * Sets the raw data on the resulting Source.
      *
      * @param SuccessItemEvent $e
      */
@@ -50,7 +50,7 @@ class SourceRawDataListener
     }
 
     /**
-     * Cleanup previous raw data
+     * Cleanup previous raw data.
      *
      * @param ItemEvent $e
      */

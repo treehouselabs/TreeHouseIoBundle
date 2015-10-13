@@ -13,33 +13,29 @@ use TreeHouse\IoBundle\Model\SourceInterface;
 interface SourceProcessorInterface
 {
     /**
-     * Links a source to an entity
+     * Links a source to an entity.
      *
      * @param SourceInterface $source
      *
      * @throws SourceLinkException When source could not be linked
-     *
-     * @return void
      */
     public function link(SourceInterface $source);
 
     /**
-     * Unlinks a source from an entity
+     * Unlinks a source from an entity.
      *
      * @param SourceInterface $source
      *
      * @throws SourceLinkException When source could not be unlinked
-     *
-     * @return void
      */
     public function unlink(SourceInterface $source);
 
     /**
-     * Checks if a source is linked by the processor
+     * Checks if a source is linked by the processor.
      *
      * @param SourceInterface $source
      *
-     * @return boolean
+     * @return bool
      */
     public function isLinked(SourceInterface $source);
 
@@ -50,17 +46,15 @@ interface SourceProcessorInterface
      * @param SourceInterface $source
      *
      * @throws SourceProcessException When source could not be processed
-     *
-     * @return void
      */
     public function process(SourceInterface $source);
 
     /**
-     * Checks if a source is supported by the processor
+     * Checks if a source is supported by the processor.
      *
      * @param SourceInterface $source
      *
-     * @return boolean
+     * @return bool
      */
     public function supports(SourceInterface $source);
 }
