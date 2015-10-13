@@ -66,7 +66,6 @@ class ImportJobTest extends WebTestCase
         $importFactory = $this->getImportFactory();
 
         $import = $importFactory->createImport($this->getFeed(), new \DateTime(), $force);
-
         foreach ($import->getParts() as $part) {
             $job = $importFactory->createImportJob($part);
             $job->run();

@@ -1,5 +1,7 @@
-/composer.phar
+/.php_cs.cache
 /composer.lock
+/build/
+/docs/
 /tests/app/cache
 /tests/app/logs
 /tests/app/var

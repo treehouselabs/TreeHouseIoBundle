@@ -1,6 +1,6 @@
 <?php
 
-namespace TreeHouse\IoBundle\Bridge\WorkerBundle\Tests\Executor;
+namespace TreeHouse\IoBundle\Tests\Bridge\WorkerBundle\Executor;
 
 use Psr\Log\LogLevel;
 use Psr\Log\NullLogger;
@@ -12,7 +12,6 @@ use TreeHouse\IoBundle\Model\SourceInterface;
 use TreeHouse\IoBundle\Source\Processor\DelegatingSourceProcessor;
 use TreeHouse\IoBundle\Source\SourceManagerInterface;
 use TreeHouse\IoBundle\Tests\Mock\SourceMock;
-use TreeHouse\WorkerBundle\Executor\ExecutorInterface;
 
 class SourceProcessExecutorTest extends \PHPUnit_Framework_TestCase
 {

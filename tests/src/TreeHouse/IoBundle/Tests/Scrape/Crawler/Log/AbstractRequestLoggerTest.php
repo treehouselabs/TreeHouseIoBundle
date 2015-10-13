@@ -18,10 +18,6 @@ abstract class AbstractRequestLoggerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $redis = new \Redis();
-        $redis->connect('localhost');
-        $redis->flushDB();
-
         $this->logger = $this->getLogger();
 
         $this->requests = [

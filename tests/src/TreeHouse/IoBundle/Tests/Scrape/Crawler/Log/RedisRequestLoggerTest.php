@@ -11,8 +11,17 @@ class RedisRequestLoggerTest extends AbstractRequestLoggerTest
      */
     protected function getLogger()
     {
+        if (!extension_loaded('redis')) {
+            $this->markTestSkipped('Redis extension not loaded');
+        }
+
         $redis = new \Redis();
-        $redis->connect('localhost');
+
+        if (false === $redis->connect('localhost', 6379, 1)) {
+            $this->markTestSkipped('Could not connect to Redis server');
+        }
+
+        $redis->flushDB();
 
         return new RedisRequestLogger($redis);
     }

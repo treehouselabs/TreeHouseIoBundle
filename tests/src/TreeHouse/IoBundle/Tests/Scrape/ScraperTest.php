@@ -2,8 +2,8 @@
 
 namespace TreeHouse\IoBundle\Tests\Scrape;
 
+use GuzzleHttp\Psr7\Response;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\HttpFoundation\Response;
 use TreeHouse\Feeder\Exception\FilterException;
 use TreeHouse\Feeder\Exception\ModificationException;
 use TreeHouse\Feeder\Exception\ValidationException;
