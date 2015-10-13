@@ -9,7 +9,7 @@ use TreeHouse\IoBundle\Model\SourceInterface;
 class SourceRepository extends EntityRepository
 {
     /**
-     * Queries number of sources for a feed
+     * Queries number of sources for a feed.
      *
      * @param Feed $feed
      *
@@ -28,7 +28,7 @@ class SourceRepository extends EntityRepository
      *
      * @param Feed $feed
      *
-     * @return integer
+     * @return int
      */
     public function countByFeed(Feed $feed)
     {
@@ -39,7 +39,7 @@ class SourceRepository extends EntityRepository
     }
 
     /**
-     * Queries number of sources for a scraper
+     * Queries number of sources for a scraper.
      *
      * @param Scraper $scraper
      *
@@ -58,7 +58,7 @@ class SourceRepository extends EntityRepository
      *
      * @param Scraper $scraper
      *
-     * @return integer
+     * @return int
      */
     public function countByScraper(Scraper $scraper)
     {
@@ -104,7 +104,7 @@ class SourceRepository extends EntityRepository
      * @param Feed      $feed
      * @param \DateTime $dateLastVisited
      *
-     * @return integer
+     * @return int
      */
     public function countByFeedAndUnvisitedSince(Feed $feed, \DateTime $dateLastVisited)
     {
@@ -150,7 +150,7 @@ class SourceRepository extends EntityRepository
      * @param Scraper   $scraper
      * @param \DateTime $dateLastVisited
      *
-     * @return integer
+     * @return int
      */
     public function countByScraperAndUnvisitedSince(Scraper $scraper, \DateTime $dateLastVisited)
     {

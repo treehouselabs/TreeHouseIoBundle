@@ -17,7 +17,7 @@ class PurifiedHtmlTransformer implements TransformerInterface
      */
     public function __construct(\HTMLPurifier $purifier)
     {
-        $this->purifier  = $purifier;
+        $this->purifier = $purifier;
     }
 
     /**

@@ -12,8 +12,8 @@ interface FeedBuilderInterface
 {
     /**
      * @param ModifierInterface $modifier
-     * @param integer           $position Defaults to the next highest position
-     * @param boolean           $continue Will be determined based on modifier type
+     * @param int               $position Defaults to the next highest position
+     * @param bool              $continue Will be determined based on modifier type
      *
      * @throws \InvalidArgumentException If there already is a modifier at the given position
      */
@@ -25,31 +25,31 @@ interface FeedBuilderInterface
     public function getModifiers();
 
     /**
-     * Shortcut for adding a field-value transformer
+     * Shortcut for adding a field-value transformer.
      *
      * @param TransformerInterface $transformer
      * @param string               $field
-     * @param integer              $position
-     * @param boolean              $continue
+     * @param int                  $position
+     * @param bool                 $continue
      */
     public function addTransformer(TransformerInterface $transformer, $field, $position = null, $continue = true);
 
     /**
-     * @param integer $position
+     * @param int $position
      *
-     * @return boolean
+     * @return bool
      */
     public function hasModifierAt($position);
 
     /**
-     * Removes existing modifier
+     * Removes existing modifier.
      *
      * @param ModifierInterface $modifier
      */
     public function removeModifier(ModifierInterface $modifier);
 
     /**
-     * Removes modifier at an existing position
+     * Removes modifier at an existing position.
      *
      * @param $position
      *

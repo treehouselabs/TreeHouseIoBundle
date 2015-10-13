@@ -7,7 +7,7 @@ use TreeHouse\Feeder\Exception\UnexpectedTypeException;
 use TreeHouse\Feeder\Modifier\Item\Transformer\TransformerInterface;
 
 /**
- * Transforms serialized (XML) node into a text field:
+ * Transforms serialized (XML) node into a text field:.
  *
  * Example:
  *
@@ -32,7 +32,7 @@ class NodeToTextTransformer implements TransformerInterface
     protected $field;
 
     /**
-     * @param string  $field Transform a specific field, if omitted, all root-level fields are transformed
+     * @param string $field Transform a specific field, if omitted, all root-level fields are transformed
      *
      * @throws UnexpectedTypeException
      */

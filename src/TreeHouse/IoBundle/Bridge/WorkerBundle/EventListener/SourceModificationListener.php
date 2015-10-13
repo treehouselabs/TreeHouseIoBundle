@@ -2,9 +2,9 @@
 
 namespace TreeHouse\IoBundle\Bridge\WorkerBundle\EventListener;
 
-use TreeHouse\WorkerBundle\QueueManager;
-use TreeHouse\IoBundle\Event\SourceEvent;
 use TreeHouse\IoBundle\Bridge\WorkerBundle\Executor\SourceProcessExecutor;
+use TreeHouse\IoBundle\Event\SourceEvent;
+use TreeHouse\WorkerBundle\QueueManager;
 
 class SourceModificationListener
 {

@@ -37,8 +37,9 @@ class ArrayToStringTransformer implements TransformerInterface
     }
 
     /**
-     * @param  array|\Traversable $array
-     * @param  string             $glue
+     * @param array|\Traversable $array
+     * @param string             $glue
+     *
      * @return string
      */
     protected function implodeRecursive($array, $glue)
@@ -57,11 +58,13 @@ class ArrayToStringTransformer implements TransformerInterface
     }
 
     /**
-     * Casts/converts given item to a string, if possible
+     * Casts/converts given item to a string, if possible.
      *
-     * @param  mixed                         $item
-     * @return string
+     * @param mixed $item
+     *
      * @throws TransformationFailedException
+     * @return string
+     *
      */
     protected function toString($item)
     {

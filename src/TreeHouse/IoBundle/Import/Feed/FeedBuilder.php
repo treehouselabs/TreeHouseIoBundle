@@ -83,7 +83,7 @@ class FeedBuilder implements FeedBuilderInterface
      */
     public function removeModifier(ModifierInterface $modifier)
     {
-        foreach ($this->modifiers as $position => list($mod,)) {
+        foreach ($this->modifiers as $position => list($mod)) {
             if ($mod === $modifier) {
                 unset($this->modifiers[$position]);
             }

@@ -8,7 +8,7 @@ use TreeHouse\IoBundle\Import\ImportStorage;
 use TreeHouse\IoBundle\Import\Log\ItemLoggerInterface;
 
 /**
- * Removes associated stuff when an import is removed
+ * Removes associated stuff when an import is removed.
  */
 class ImportRemovalListener
 {
@@ -29,7 +29,7 @@ class ImportRemovalListener
     public function __construct(ImportStorage $importStorage, ItemLoggerInterface $itemLogger = null)
     {
         $this->importStorage = $importStorage;
-        $this->itemLogger    = $itemLogger;
+        $this->itemLogger = $itemLogger;
     }
 
     /**

@@ -56,7 +56,7 @@ abstract class AbstractParserType implements ParserTypeInterface
      */
     public function __construct(ManagerRegistry $doctrine, CachedSourceManager $sourceManager)
     {
-        $this->doctrine      = $doctrine;
+        $this->doctrine = $doctrine;
         $this->sourceManager = $sourceManager;
     }
 
@@ -74,9 +74,9 @@ abstract class AbstractParserType implements ParserTypeInterface
         ]);
 
         $resolver->setDefaults([
-            'forced'         => false,
-            'date_locale'    => 'en',
-            'number_locale'  => 'en',
+            'forced' => false,
+            'date_locale' => 'en',
+            'number_locale' => 'en',
             'default_values' => [],
         ]);
 
@@ -133,7 +133,7 @@ abstract class AbstractParserType implements ParserTypeInterface
     abstract protected function getMapping();
 
     /**
-     * Returns mapping for an association, or null if it does not exist
+     * Returns mapping for an association, or null if it does not exist.
      *
      * @param string $association
      *
@@ -142,7 +142,7 @@ abstract class AbstractParserType implements ParserTypeInterface
     abstract protected function getAssociationMapping($association);
 
     /**
-     * Returns mapping for a field, or null if it does not exist
+     * Returns mapping for a field, or null if it does not exist.
      *
      * @param string $field
      *
@@ -159,7 +159,7 @@ abstract class AbstractParserType implements ParserTypeInterface
     abstract protected function getEntityFields();
 
     /**
-     * Specify a mapping here from foreign configuration to our configuration
+     * Specify a mapping here from foreign configuration to our configuration.
      *
      * @return array
      */
@@ -228,7 +228,7 @@ abstract class AbstractParserType implements ParserTypeInterface
     }
 
     /**
-     * Override this method to add custom modifiers to the feed
+     * Override this method to add custom modifiers to the feed.
      *
      * @param ParserBuilderInterface $parser
      * @param array                  $options
@@ -238,11 +238,11 @@ abstract class AbstractParserType implements ParserTypeInterface
     }
 
     /**
-     * Automatically adds modifiers based on entity field/association mapping
+     * Automatically adds modifiers based on entity field/association mapping.
      *
      * @param ParserBuilderInterface $parser
-     * @param integer                $startIndex
-     * @param integer                $endIndex
+     * @param int                    $startIndex
+     * @param int                    $endIndex
      */
     protected function addEntityModifiers(ParserBuilderInterface $parser, $startIndex, $endIndex)
     {
@@ -270,10 +270,10 @@ abstract class AbstractParserType implements ParserTypeInterface
      * @param ParserBuilderInterface $parser
      * @param string                 $association The association name
      * @param array                  $mapping     The association mapping
-     * @param integer                $startIndex
-     * @param integer                $endIndex
+     * @param int                    $startIndex
+     * @param int                    $endIndex
      *
-     * @return integer The updated index
+     * @return int The updated index
      */
     protected function addAssociationModifiers(
         ParserBuilderInterface $parser,
@@ -295,8 +295,8 @@ abstract class AbstractParserType implements ParserTypeInterface
      * @param ParserBuilderInterface $parser
      * @param string                 $field      The field name
      * @param array                  $mapping    The field mapping
-     * @param integer                $startIndex
-     * @param integer                $endIndex
+     * @param int                    $startIndex
+     * @param int                    $endIndex
      */
     protected function addFieldModifiers(
         ParserBuilderInterface $parser,
@@ -319,8 +319,8 @@ abstract class AbstractParserType implements ParserTypeInterface
      * @param ParserBuilderInterface $parser
      * @param string                 $field      The field name
      * @param array                  $mapping    The field mapping
-     * @param integer                $startIndex
-     * @param integer                $endIndex
+     * @param int                    $startIndex
+     * @param int                    $endIndex
      */
     protected function addFieldTypeModifiers(ParserBuilderInterface $parser, $field, array $mapping, $startIndex, $endIndex)
     {
@@ -389,8 +389,8 @@ abstract class AbstractParserType implements ParserTypeInterface
 
     /**
      * @param ParserBuilderInterface $parser
-     * @param integer                $startStartIndex
-     * @param integer                $endIndex
+     * @param int                    $startStartIndex
+     * @param int                    $endIndex
      */
     protected function addFinalModifiers(ParserBuilderInterface $parser, $startStartIndex, $endIndex)
     {
@@ -433,7 +433,7 @@ abstract class AbstractParserType implements ParserTypeInterface
     }
 
     /**
-     * Specify fields here that are explicitly not mapped
+     * Specify fields here that are explicitly not mapped.
      *
      * @return array
      */
@@ -443,7 +443,7 @@ abstract class AbstractParserType implements ParserTypeInterface
     }
 
     /**
-     * Specify fields here that are not mapped directly, but need to stay in the resulting item
+     * Specify fields here that are not mapped directly, but need to stay in the resulting item.
      *
      * @return array
      */

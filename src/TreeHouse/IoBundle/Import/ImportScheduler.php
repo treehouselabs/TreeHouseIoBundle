@@ -35,15 +35,15 @@ class ImportScheduler
      */
     public function __construct(ManagerRegistry $doctrine, ImportFactory $importFactory, EventDispatcherInterface $dispatcher)
     {
-        $this->doctrine        = $doctrine;
-        $this->importFactory   = $importFactory;
+        $this->doctrine = $doctrine;
+        $this->importFactory = $importFactory;
         $this->eventDispatcher = $dispatcher;
     }
 
     /**
-     * Finds a feed by id
+     * Finds a feed by id.
      *
-     * @param integer $id
+     * @param int $id
      *
      * @return Feed
      */
@@ -53,7 +53,7 @@ class ImportScheduler
     }
 
     /**
-     * Finds all feeds, with id's as keys and priorities as values
+     * Finds all feeds, with id's as keys and priorities as values.
      *
      * @return array<integer, integer>
      */
@@ -70,7 +70,7 @@ class ImportScheduler
     }
 
     /**
-     * Finds given feeds, with id's as keys and priorities as values
+     * Finds given feeds, with id's as keys and priorities as values.
      *
      * @param array $ids
      *
@@ -90,9 +90,9 @@ class ImportScheduler
     }
 
     /**
-     * Finds eligible feeds, with id's as keys and priorities as values
+     * Finds eligible feeds, with id's as keys and priorities as values.
      *
-     * @param integer $minutes
+     * @param int $minutes
      *
      * @return array<integer, integer>
      */
@@ -216,7 +216,7 @@ class ImportScheduler
      *
      * @throws \InvalidArgumentException When given date is in the past
      *
-     * @return double
+     * @return float
      */
     protected function getFeedPriority(Feed $feed, \DateTime $date)
     {
@@ -235,12 +235,12 @@ class ImportScheduler
             return INF;
         }
 
-        $last  = $import->getDatetimeStarted();
+        $last = $import->getDatetimeStarted();
         $since = $date->getTimestamp() - $last->getTimestamp();
 
         $frequency = $feed->getFrequency() * 3600; // frequency in seconds
-        $delta     = $frequency * 0.1;             // 10% of the frequency
-        $eligible  = $frequency - $delta;          // 90% of the frequency
+        $delta = $frequency * 0.1;             // 10% of the frequency
+        $eligible = $frequency - $delta;          // 90% of the frequency
 
         return ($since - $eligible) / $delta * 100;
     }

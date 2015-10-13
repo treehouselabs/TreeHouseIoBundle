@@ -17,7 +17,7 @@ abstract class AbstractItemLogger implements ItemLoggerInterface
     {
         return [
             ImportEvents::ITEM_SUCCESS => 'logSuccessItem',
-            ImportEvents::ITEM_FAILED  => 'logFailedItem',
+            ImportEvents::ITEM_FAILED => 'logFailedItem',
             ImportEvents::ITEM_SKIPPED => 'logSkippedItem',
         ];
     }
@@ -27,12 +27,12 @@ abstract class AbstractItemLogger implements ItemLoggerInterface
      */
     public function logSuccessItem(SuccessItemEvent $event)
     {
-        $ident      = $this->getLogIdent($event->getImporter()->getImport());
-        $source     = $event->getResult();
+        $ident = $this->getLogIdent($event->getImporter()->getImport());
+        $source = $event->getResult();
         $originalId = $event->getItem()->getOriginalId();
-        $context    = [
+        $context = [
             'result' => 'success',
-            'item'   => (string) $event->getItem(),
+            'item' => (string) $event->getItem(),
             'source' => $source->getId(),
         ];
 
@@ -44,11 +44,11 @@ abstract class AbstractItemLogger implements ItemLoggerInterface
      */
     public function logFailedItem(FailedItemEvent $event)
     {
-        $ident      = $this->getLogIdent($event->getImporter()->getImport());
+        $ident = $this->getLogIdent($event->getImporter()->getImport());
         $originalId = $event->getItem()->getOriginalId();
-        $context    = [
+        $context = [
             'result' => 'failed',
-            'item'   => (string) $event->getItem(),
+            'item' => (string) $event->getItem(),
             'reason' => $event->getReason(),
         ];
 
@@ -60,11 +60,11 @@ abstract class AbstractItemLogger implements ItemLoggerInterface
      */
     public function logSkippedItem(SkippedItemEvent $event)
     {
-        $ident      = $this->getLogIdent($event->getImporter()->getImport());
+        $ident = $this->getLogIdent($event->getImporter()->getImport());
         $originalId = $event->getItem()->getOriginalId();
-        $context    = [
+        $context = [
             'result' => 'skipped',
-            'item'   => (string) $event->getItem(),
+            'item' => (string) $event->getItem(),
             'reason' => $event->getReason(),
         ];
 

@@ -24,8 +24,8 @@ class MultiLineToSingleLineTransformer implements TransformerInterface
             );
         }
 
-        $value = preg_replace('/\n{1,}/', " ", $value); // replace newlines with single newline
-        $value = preg_replace('/ {2,}/', " ", $value);  // replace double spaces with single space
+        $value = preg_replace('/\n{1,}/', ' ', $value); // replace newlines with single newline
+        $value = preg_replace('/ {2,}/', ' ', $value);  // replace double spaces with single space
         $value = trim($value);                          // trim leading and trailing spaces
 
         return $value;

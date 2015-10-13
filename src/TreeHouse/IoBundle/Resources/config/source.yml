@@ -1,31 +1,35 @@
 parameters:
-  tree_house.io.source.manager.cached.class: TreeHouse\IoBundle\Source\Manager\CachedSourceManager
-  tree_house.io.source.cleaner.delegating.class: TreeHouse\IoBundle\Source\Cleaner\DelegatingSourceCleaner
-  tree_house.io.source.cleaner.orphaned.class: TreeHouse\IoBundle\Source\Cleaner\OrphanedSourceCleaner
-  tree_house.io.source.cleaner.idle.class: TreeHouse\IoBundle\Source\Cleaner\IdleSourceCleaner
-  tree_house.io.source.processor.delegating.class: TreeHouse\IoBundle\Source\Processor\DelegatingSourceProcessor
+  tree_house.io.source.manager.cached.class:
+  tree_house.io.source.cleaner.delegating.class:
+  tree_house.io.source.cleaner.orphaned.class:
+  tree_house.io.source.cleaner.idle.class:
+  tree_house.io.source.processor.delegating.class:
 
 services:
   tree_house.io.source.manager.cached:
-    class: %tree_house.io.source.manager.cached.class%
+    public: false
+    class: TreeHouse\IoBundle\Source\Manager\CachedSourceManager
     arguments:
       - @tree_house.io.source_manager
 
   tree_house.io.source.cleaner.delegating:
-    class: %tree_house.io.source.cleaner.delegating.class%
+    public: false
+    class: TreeHouse\IoBundle\Source\Cleaner\DelegatingSourceCleaner
     arguments:
       - @tree_house.io.source_manager
       - @tree_house.io.event_dispatcher
 
   tree_house.io.source.cleaner.orphaned:
-    class: %tree_house.io.source.cleaner.orphaned.class%
+    public: false
+    class: TreeHouse\IoBundle\Source\Cleaner\OrphanedSourceCleaner
     arguments:
       - @tree_house.io.source_manager
     tags:
       - { name: tree_house.io.source_cleaner }
 
   tree_house.io.source.cleaner.idle:
-    class: %tree_house.io.source.cleaner.idle.class%
+    public: false
+    class: TreeHouse\IoBundle\Source\Cleaner\IdleSourceCleaner
     arguments:
       - @doctrine
       - @tree_house.io.source_manager
@@ -36,4 +40,5 @@ services:
       - { name: monolog.logger, channel: io }
 
   tree_house.io.source.processor.delegating:
-    class: %tree_house.io.source.processor.delegating.class%
+    public: false
+    class: TreeHouse\IoBundle\Source\Processor\DelegatingSourceProcessor

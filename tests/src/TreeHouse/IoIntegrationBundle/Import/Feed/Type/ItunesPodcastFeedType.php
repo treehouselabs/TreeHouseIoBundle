@@ -57,14 +57,14 @@ class ItunesPodcastFeedType extends DefaultFeedType
     public function getMapping()
     {
         return [
-            'title'          => 'title',
-            'itunessummary'  => 'summary',
-            'description'    => 'body',
-            'pubdate'        => 'datetime_published',
-            'itunesauthor'   => 'author',
+            'title' => 'title',
+            'itunessummary' => 'summary',
+            'description' => 'body',
+            'pubdate' => 'datetime_published',
+            'itunesauthor' => 'author',
             'itunesduration' => 'duration',
-            'itunesimage'    => 'image_url',
-            'enclosure'      => 'audio_url',
+            'itunesimage' => 'image_url',
+            'enclosure' => 'audio_url',
         ];
     }
 
@@ -207,15 +207,15 @@ class ItunesPodcastFeedType extends DefaultFeedType
     protected function getPurifierConfig()
     {
         return [
-            'Attr.AllowedClasses'                     => [],
-            'AutoFormat.AutoParagraph'                => true,
-            'AutoFormat.RemoveEmpty'                  => true,
-            'AutoFormat.RemoveEmpty.RemoveNbsp'       => true,
+            'Attr.AllowedClasses' => [],
+            'AutoFormat.AutoParagraph' => true,
+            'AutoFormat.RemoveEmpty' => true,
+            'AutoFormat.RemoveEmpty.RemoveNbsp' => true,
             'AutoFormat.RemoveSpansWithoutAttributes' => true,
-            'Core.RemoveProcessingInstructions'       => true,
-            'Cache.SerializerPermissions'             => 0775,
-            'HTML.Allowed'                            => 'div,p,span,br,em,strong,b,i,small,cite,blockquote,q,code,var,samp,kbd,dfn,abbr,sup,sub,h1,h2,h3,ul,li',
-            'HTML.Doctype'                            => 'HTML 4.01 Strict',
+            'Core.RemoveProcessingInstructions' => true,
+            'Cache.SerializerPermissions' => 0775,
+            'HTML.Allowed' => 'div,p,span,br,em,strong,b,i,small,cite,blockquote,q,code,var,samp,kbd,dfn,abbr,sup,sub,h1,h2,h3,ul,li',
+            'HTML.Doctype' => 'HTML 4.01 Strict',
         ];
     }
 }

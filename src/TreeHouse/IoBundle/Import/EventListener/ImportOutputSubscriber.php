@@ -33,7 +33,7 @@ class ImportOutputSubscriber implements EventSubscriberInterface
     protected $progress;
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $progressActive = false;
 
@@ -42,7 +42,7 @@ class ImportOutputSubscriber implements EventSubscriberInterface
      */
     public function __construct(OutputInterface $output)
     {
-        $this->output   = $output;
+        $this->output = $output;
         $this->progress = new ProgressBar($output);
     }
 
@@ -52,23 +52,23 @@ class ImportOutputSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            FeedEvents::FETCH_CACHED             => 'onFetchCached',
-            FeedEvents::FETCH_PROGRESS           => 'onFetchProgress',
-            FeedEvents::PRE_FETCH                => 'onPreFetch',
-            FeedEvents::POST_FETCH               => 'onPostFetch',
-            FeedEvents::RESOURCE_START           => 'onResourceStart',
+            FeedEvents::FETCH_CACHED => 'onFetchCached',
+            FeedEvents::FETCH_PROGRESS => 'onFetchProgress',
+            FeedEvents::PRE_FETCH => 'onPreFetch',
+            FeedEvents::POST_FETCH => 'onPostFetch',
+            FeedEvents::RESOURCE_START => 'onResourceStart',
             FeedEvents::ITEM_MODIFICATION_FAILED => 'onItemModificationFailure',
-            ImportEvents::ITEM_SUCCESS           => 'onItemSuccess',
-            ImportEvents::ITEM_FAILED            => 'onItemFailed',
-            ImportEvents::ITEM_SKIPPED           => 'onItemSkipped',
-            ImportEvents::PART_CREATED           => 'onPartCreated',
-            ImportEvents::PART_FINISH            => 'onPartFinished',
-            ImportEvents::EXCEPTION              => 'onException',
+            ImportEvents::ITEM_SUCCESS => 'onItemSuccess',
+            ImportEvents::ITEM_FAILED => 'onItemFailed',
+            ImportEvents::ITEM_SKIPPED => 'onItemSkipped',
+            ImportEvents::PART_CREATED => 'onPartCreated',
+            ImportEvents::PART_FINISH => 'onPartFinished',
+            ImportEvents::EXCEPTION => 'onException',
         ];
     }
 
     /**
-     * FeedEvents::FETCH_CACHED event
+     * FeedEvents::FETCH_CACHED event.
      */
     public function onFetchCached()
     {
@@ -196,8 +196,8 @@ class ImportOutputSubscriber implements EventSubscriberInterface
         $importer = $event->getImporter();
         $result = $importer->getResult();
 
-        $total      = $result->getTotal();
-        $processed  = $result->getProcessed();
+        $total = $result->getTotal();
+        $processed = $result->getProcessed();
         $percentage = $total > 0 ? ($processed / $total * 100) : 0;
 
         $this->output->writeln(sprintf('Import ended in %s seconds', round($result->getElapsedTime())));

@@ -11,12 +11,12 @@ use TreeHouse\IoBundle\Import\Reader\ReaderBuilderInterface;
 class XmlMultiPartReaderType extends XmlReaderType
 {
     /**
-     * @var integer
+     * @var int
      */
     protected $defaultPartSize = 1000;
 
     /**
-     * @return integer
+     * @return int
      */
     public function getDefaultPartSize()
     {
@@ -24,7 +24,7 @@ class XmlMultiPartReaderType extends XmlReaderType
     }
 
     /**
-     * @param integer $defaultPartSize
+     * @param int $defaultPartSize
      *
      * @return $this
      */

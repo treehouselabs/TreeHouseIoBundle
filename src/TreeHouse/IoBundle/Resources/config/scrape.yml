@@ -1,21 +1,13 @@
-parameters:
-  tree_house.io.scrape.crawler.abstract.class: TreeHouse\IoBundle\Scrape\Crawler\AbstractCrawler
-  tree_house.io.scrape.crawler.client.guzzle_client.class: GuzzleHttp\Client
-  tree_house.io.scrape.crawler.client.guzzle.class: TreeHouse\IoBundle\Scrape\Crawler\Client\GuzzleClient
-  tree_house.io.scrape.scraper_factory.class: TreeHouse\IoBundle\Scrape\ScraperFactory
-  tree_house.io.scrape.handler.doctrine.class: TreeHouse\IoBundle\Scrape\Handler\DoctrineHandler
-  tree_house.io.scrape.parser_type.abstract.class: TreeHouse\IoBundle\Scrape\Parser\Type\AbstractParserType
-  tree_house.io.scrape.source.revisitor.class: TreeHouse\IoBundle\Scrape\SourceRevisitor
-
 services:
   tree_house.io.scrape.scraper_factory:
-    class: %tree_house.io.scrape.scraper_factory.class%
+    public: false
+    class: TreeHouse\IoBundle\Scrape\ScraperFactory
     arguments:
       - @tree_house.io.event_dispatcher
 
   tree_house.io.scrape.crawler.client.guzzle_client:
     public: false
-    class: %tree_house.io.scrape.crawler.client.guzzle_client.class%
+    class: GuzzleHttp\Client
     arguments:
       defaults:
         timeout: 20
@@ -23,7 +15,7 @@ services:
 
   tree_house.io.scrape.crawler.client.guzzle:
     public: false
-    class: %tree_house.io.scrape.crawler.client.guzzle.class%
+    class: TreeHouse\IoBundle\Scrape\Crawler\Client\GuzzleClient
     arguments:
       - @tree_house.io.scrape.crawler.client.guzzle_client
     calls:
@@ -33,13 +25,14 @@ services:
 
   tree_house.io.scrape.crawler.abstract:
     abstract: true
-    class: %tree_house.io.scrape.crawler.abstract.class%
+    public: false
+    class: TreeHouse\IoBundle\Scrape\Crawler\AbstractCrawler
     tags:
       - { name: monolog.logger, channel: io }
 
   tree_house.io.scrape.handler.doctrine:
     public: false
-    class: %tree_house.io.scrape.handler.doctrine.class%
+    class: TreeHouse\IoBundle\Scrape\Handler\DoctrineHandler
     arguments:
       - @tree_house.io.source.manager.cached
       - @validator
@@ -48,13 +41,15 @@ services:
 
   tree_house.io.scrape.parser_type.abstract:
     abstract: true
-    class: %tree_house.io.scrape.parser_type.abstract.class%
+    public: false
+    class: TreeHouse\IoBundle\Scrape\Parser\Type\AbstractParserType
     arguments:
       - @doctrine
       - @tree_house.io.source.manager.cached
 
   tree_house.io.scrape.source.revisitor:
-    class: %tree_house.io.scrape.source.revisitor.class%
+    public: false
+    class: TreeHouse\IoBundle\Scrape\SourceRevisitor
     arguments:
       - @tree_house.io.source_manager
       - @tree_house.io.scrape.scraper_factory

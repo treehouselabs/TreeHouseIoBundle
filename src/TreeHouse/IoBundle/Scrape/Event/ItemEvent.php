@@ -25,7 +25,7 @@ class ItemEvent extends Event
     public function __construct(Scraper $scraper, ItemBag $item)
     {
         $this->scraper = $scraper;
-        $this->item    = $item;
+        $this->item = $item;
     }
 
     /**

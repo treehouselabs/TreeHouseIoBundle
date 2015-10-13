@@ -2,9 +2,9 @@
 
 namespace TreeHouse\IoBundle\Scrape\EventListener;
 
+use GuzzleHttp\Psr7\Response;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpFoundation\Response;
 use TreeHouse\Feeder\Event\FailedItemModificationEvent;
 use TreeHouse\Feeder\FeedEvents;
 use TreeHouse\IoBundle\Scrape\Event\FailedItemEvent;
@@ -37,12 +37,12 @@ class ScrapeLoggingSubscriber implements EventSubscriberInterface
     {
         return [
             FeedEvents::ITEM_MODIFICATION_FAILED => 'onItemModificationFailure',
-            ScraperEvents::ITEM_SUCCESS          => 'onItemSuccess',
-            ScraperEvents::ITEM_FAILED           => 'onItemFailed',
-            ScraperEvents::ITEM_SKIPPED          => 'onItemSkipped',
-            ScraperEvents::SCRAPE_NEXT_URL       => 'onScrapeNextUrl',
-            ScraperEvents::RATE_LIMIT_REACHED    => 'onRateLimitReached',
-            ScraperEvents::SCRAPE_URL_NOT_OK     => 'onScrapeUrlNotOk',
+            ScraperEvents::ITEM_SUCCESS => 'onItemSuccess',
+            ScraperEvents::ITEM_FAILED => 'onItemFailed',
+            ScraperEvents::ITEM_SKIPPED => 'onItemSkipped',
+            ScraperEvents::SCRAPE_NEXT_URL => 'onScrapeNextUrl',
+            ScraperEvents::RATE_LIMIT_REACHED => 'onRateLimitReached',
+            ScraperEvents::SCRAPE_URL_NOT_OK => 'onScrapeUrlNotOk',
         ];
     }
 
@@ -105,7 +105,7 @@ class ScrapeLoggingSubscriber implements EventSubscriberInterface
         $response = $event->getResponse();
 
         $code = $response->getStatusCode();
-        $text = Response::$statusTexts[$code];
+        $text = (new Response($code))->getReasonPhrase();
 
         $this->logger->debug(sprintf('Server replied with response %d (%s)', $code, $text));
     }

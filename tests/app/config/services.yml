@@ -30,8 +30,3 @@ services:
       - @doctrine
     tags:
       - { name: tree_house.io.export.feed_type, alias: podcast }
-
-  redis:
-    class: Redis
-    calls:
-      - ['connect', ['localhost']]

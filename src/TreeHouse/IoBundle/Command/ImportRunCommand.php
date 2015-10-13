@@ -41,9 +41,9 @@ class ImportRunCommand extends Command
      */
     public function __construct(ManagerRegistry $doctrine, ImportFactory $importFactory, LoggerInterface $logger)
     {
-        $this->doctrine      = $doctrine;
+        $this->doctrine = $doctrine;
         $this->importFactory = $importFactory;
-        $this->logger        = $logger;
+        $this->logger = $logger;
 
         parent::__construct();
     }
@@ -99,7 +99,7 @@ class ImportRunCommand extends Command
     /**
      * @param OutputInterface $output
      * @param Feed            $feed
-     * @param boolean         $force
+     * @param bool            $force
      */
     protected function runImport(OutputInterface $output, Feed $feed, $force = false)
     {
@@ -124,7 +124,7 @@ class ImportRunCommand extends Command
     }
 
     /**
-     * Checks feed for unfinished imports and gives the user an option to close them first
+     * Checks feed for unfinished imports and gives the user an option to close them first.
      *
      * @param Feed            $feed
      * @param InputInterface  $input

@@ -71,7 +71,7 @@ class ScraperFactory
         if (!array_key_exists($alias, $this->crawlers)) {
             throw new \OutOfBoundsException(
                 sprintf(
-                    'Crawler "%s" is not registered. You can add it by creating a service which implements %s, '.
+                    'Crawler "%s" is not registered. You can add it by creating a service which implements %s, ' .
                     'and tag it with tree_house.io.scrape.crawler',
                     $alias,
                     CrawlerInterface::class
@@ -108,7 +108,7 @@ class ScraperFactory
         if (!array_key_exists($alias, $this->parserTypes)) {
             throw new \OutOfBoundsException(
                 sprintf(
-                    'Parser type "%s" is not registered. You can add it by creating a service which implements %s, '.
+                    'Parser type "%s" is not registered. You can add it by creating a service which implements %s, ' .
                     'and tag it with tree_house.io.scrape.parser_type',
                     $alias,
                     ParserTypeInterface::class
@@ -145,7 +145,7 @@ class ScraperFactory
         if (!array_key_exists($alias, $this->handlers)) {
             throw new \OutOfBoundsException(
                 sprintf(
-                    'Handler "%s" is not registered. You can add it by creating a service which implements %s, '.
+                    'Handler "%s" is not registered. You can add it by creating a service which implements %s, ' .
                     'and tag it with tree_house.io.scrape.handler',
                     $alias,
                     HandlerInterface::class
@@ -171,7 +171,7 @@ class ScraperFactory
      */
     public function createScraper(ScraperEntity $scraper)
     {
-        $parser  = $this->getParser($scraper);
+        $parser = $this->getParser($scraper);
         $crawler = $this->getCrawler($scraper->getCrawler());
         $handler = $this->getHandler($scraper->getHandler());
 
@@ -181,7 +181,7 @@ class ScraperFactory
     }
 
     /**
-     * Returns a cached copy of the parser for the given scraper
+     * Returns a cached copy of the parser for the given scraper.
      *
      * @param ScraperEntity $scraper
      *
@@ -209,7 +209,7 @@ class ScraperFactory
         );
 
         $parserType = $this->getParserType($scraper->getParser());
-        $builder    = new ParserBuilder($this->eventDispatcher);
+        $builder = new ParserBuilder($this->eventDispatcher);
 
         return $builder->build($parserType, $options);
     }

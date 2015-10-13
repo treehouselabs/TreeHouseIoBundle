@@ -27,7 +27,7 @@ class SourceProcessCommand extends Command
      */
     public function __construct(SourceManagerInterface $sourceManager, SourceProcessorInterface $sourceProcessor)
     {
-        $this->sourceManager   = $sourceManager;
+        $this->sourceManager = $sourceManager;
         $this->sourceProcessor = $sourceProcessor;
 
         parent::__construct();

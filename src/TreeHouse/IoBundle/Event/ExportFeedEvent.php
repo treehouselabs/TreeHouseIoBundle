@@ -13,7 +13,7 @@ class ExportFeedEvent extends Event
     protected $file;
 
     /**
-     * @var integer
+     * @var int
      */
     protected $total;
 
@@ -23,9 +23,9 @@ class ExportFeedEvent extends Event
     protected $type;
 
     /**
-     * @param string           $file
+     * @param string            $file
      * @param FeedTypeInterface $type
-     * @param integer          $total
+     * @param int               $total
      */
     public function __construct($file, FeedTypeInterface $type, $total)
     {
@@ -43,7 +43,7 @@ class ExportFeedEvent extends Event
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function getTotal()
     {

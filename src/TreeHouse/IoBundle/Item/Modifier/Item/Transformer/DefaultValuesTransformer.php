@@ -7,7 +7,7 @@ use TreeHouse\Feeder\Modifier\Data\Transformer\EmptyValueToNullTransformer;
 use TreeHouse\Feeder\Modifier\Item\Transformer\TransformerInterface;
 
 /**
- * Sets default values when they are not present or empty in feed
+ * Sets default values when they are not present or empty in feed.
  */
 class DefaultValuesTransformer implements TransformerInterface
 {

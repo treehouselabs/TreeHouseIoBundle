@@ -22,7 +22,7 @@ class SourceRevisitor
     protected $factory;
 
     /**
-     * Array of cached scrapers
+     * Array of cached scrapers.
      *
      * @var Scraper[]
      */
@@ -35,7 +35,7 @@ class SourceRevisitor
     public function __construct(SourceManagerInterface $sourceManager, ScraperFactory $factory)
     {
         $this->sourceManager = $sourceManager;
-        $this->factory       = $factory;
+        $this->factory = $factory;
     }
 
     /**
@@ -44,12 +44,12 @@ class SourceRevisitor
      * url was not found.
      *
      * @param SourceInterface $source       The source to revisit.
-     * @param boolean         $async        If true, makes the scrape action asynchronous.
+     * @param bool            $async        If true, makes the scrape action asynchronous.
      *                                      The revisit action will happen right away, but any
      *                                      consecutive scrape actions will be queued. Use this
      *                                      when calling the revisit action from an asynchronous
      *                                      context.
-     * @param boolean         $disableLimit Whether to disable the rate limit when revisiting.
+     * @param bool            $disableLimit Whether to disable the rate limit when revisiting.
      */
     public function revisit(SourceInterface $source, $async = false, $disableLimit = false)
     {
@@ -100,7 +100,7 @@ class SourceRevisitor
 
     /**
      * @param ScraperEntity $scraperEntity
-     * @param boolean       $disableLimit
+     * @param bool          $disableLimit
      *
      * @return ScraperInterface
      */
@@ -127,7 +127,7 @@ class SourceRevisitor
      *
      * @param SourceInterface $source
      *
-     * @return boolean
+     * @return bool
      */
     protected function isFresh(SourceInterface $source)
     {

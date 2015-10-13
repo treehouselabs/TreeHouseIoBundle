@@ -3,7 +3,7 @@
 namespace TreeHouse\IoBundle\Export\FeedType;
 
 /**
- * Abstract class to create a new Feed Type with specific settings
+ * Abstract class to create a new Feed Type with specific settings.
  */
 abstract class AbstractFeedType implements FeedTypeInterface
 {

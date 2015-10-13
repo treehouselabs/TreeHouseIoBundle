@@ -39,10 +39,10 @@ class ImportRotator
     }
 
     /**
-     * Rotates imported feeds
+     * Rotates imported feeds.
      *
-     * @param Feed    $feed The feed to rotate imports for
-     * @param integer $max  The number of imports to keep
+     * @param Feed $feed The feed to rotate imports for
+     * @param int  $max  The number of imports to keep
      */
     public function rotate(Feed $feed, $max = 4)
     {

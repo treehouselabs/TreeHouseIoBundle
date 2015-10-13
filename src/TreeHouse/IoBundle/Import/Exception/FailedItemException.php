@@ -14,7 +14,7 @@ class FailedItemException extends \RuntimeException
     /**
      * @param SourceInterface $source
      * @param string          $message
-     * @param integer         $code
+     * @param int             $code
      * @param \Exception      $previous
      */
     public function __construct(SourceInterface $source, $message = null, $code = 0, \Exception $previous = null)

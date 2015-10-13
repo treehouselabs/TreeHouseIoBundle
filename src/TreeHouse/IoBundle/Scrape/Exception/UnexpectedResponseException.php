@@ -2,23 +2,23 @@
 
 namespace TreeHouse\IoBundle\Scrape\Exception;
 
-use Symfony\Component\HttpFoundation\Response;
+use Psr\Http\Message\ResponseInterface;
 
 class UnexpectedResponseException extends CrawlException
 {
     /**
-     * @var Response
+     * @var ResponseInterface
      */
     protected $response;
 
     /**
-     * @param string     $url
-     * @param Response   $response
-     * @param string     $message
-     * @param integer    $code
-     * @param \Exception $previous
+     * @param string            $url
+     * @param ResponseInterface $response
+     * @param string            $message
+     * @param int               $code
+     * @param \Exception        $previous
      */
-    public function __construct($url, Response $response, $message = '', $code = 0, \Exception $previous = null)
+    public function __construct($url, ResponseInterface $response, $message = '', $code = 0, \Exception $previous = null)
     {
         if (empty($message)) {
             $message = sprintf('Got a %d response instead of a 200 OK response', $response->getStatusCode());
@@ -30,7 +30,7 @@ class UnexpectedResponseException extends CrawlException
     }
 
     /**
-     * @return Response
+     * @return ResponseInterface
      */
     public function getResponse()
     {

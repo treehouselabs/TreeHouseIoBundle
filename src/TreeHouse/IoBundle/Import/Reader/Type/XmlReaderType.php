@@ -28,7 +28,7 @@ class XmlReaderType implements ReaderTypeInterface
 
         $resolver->setDefaults([
             'remove_control_characters' => true,
-            'remove_byte_order_marks'   => true,
+            'remove_byte_order_marks' => true,
         ]);
     }
 

@@ -35,12 +35,12 @@ class FeedWriter
     public function __construct(EngineInterface $templating, $rootNode, $itemNode)
     {
         $this->templating = $templating;
-        $this->rootNode   = $rootNode;
-        $this->itemNode   = $itemNode;
+        $this->rootNode = $rootNode;
+        $this->itemNode = $itemNode;
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isStarted()
     {
@@ -95,7 +95,7 @@ class FeedWriter
     }
 
     /**
-     * @param object $item
+     * @param object                            $item
      * @param string|TemplateReferenceInterface $template
      *
      * @throws \RuntimeException
@@ -117,7 +117,7 @@ class FeedWriter
     }
 
     /**
-     * Writes the XML prolog
+     * Writes the XML prolog.
      *
      * @param string $namespaces
      */

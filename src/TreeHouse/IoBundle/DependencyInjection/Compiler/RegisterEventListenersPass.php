@@ -30,7 +30,7 @@ class RegisterEventListenersPass implements CompilerPassInterface
                 }
 
                 if (!isset($event['method'])) {
-                    $event['method'] = 'on'.str_replace(' ', '', ucwords(strtr(preg_replace('/^tree_house.io\./', '', $event['event']), '_-.', '   ')));
+                    $event['method'] = 'on' . str_replace(' ', '', ucwords(strtr(preg_replace('/^tree_house.io\./', '', $event['event']), '_-.', '   ')));
                 }
 
                 $definition->addMethodCall('addListenerService', [$event['event'], [$id, $event['method']]]);

@@ -42,9 +42,9 @@ class ImportPartExecutor extends AbstractExecutor implements ObjectPayloadInterf
      */
     public function __construct(ManagerRegistry $doctrine, ImportFactory $importFactory, LoggerInterface $logger)
     {
-        $this->doctrine      = $doctrine;
+        $this->doctrine = $doctrine;
         $this->importFactory = $importFactory;
-        $this->logger        = $logger;
+        $this->logger = $logger;
 
         $importFactory->getEventDispatcher()->addSubscriber(new ImportLoggingSubscriber($logger));
     }

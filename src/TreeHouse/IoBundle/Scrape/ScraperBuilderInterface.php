@@ -9,7 +9,7 @@ use TreeHouse\IoBundle\Scrape\Parser\ParserInterface;
 interface ScraperBuilderInterface
 {
     /**
-     * Builds a scraper
+     * Builds a scraper.
      *
      * @param CrawlerInterface $crawler
      * @param ParserInterface  $parser

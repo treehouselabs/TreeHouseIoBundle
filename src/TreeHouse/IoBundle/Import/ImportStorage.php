@@ -23,7 +23,7 @@ class ImportStorage
      */
     public function __construct($feedDir, Filesystem $filesystem = null)
     {
-        $this->feedDir    = $feedDir;
+        $this->feedDir = $feedDir;
         $this->filesystem = $filesystem ?: new Filesystem();
     }
 

@@ -6,7 +6,7 @@ use TreeHouse\Feeder\Exception\TransformationFailedException;
 use TreeHouse\Feeder\Modifier\Data\Transformer\TransformerInterface;
 
 /**
- * Normalizes an input to be a guaranteed string
+ * Normalizes an input to be a guaranteed string.
  */
 class NormalizedStringTransformer implements TransformerInterface
 {

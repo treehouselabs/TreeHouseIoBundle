@@ -41,7 +41,7 @@ class ReaderBuilder implements ReaderBuilderInterface
     public function __construct(EventDispatcherInterface $dispatcher, $destinationDir)
     {
         $this->eventDispatcher = $dispatcher;
-        $this->destinationDir  = $destinationDir;
+        $this->destinationDir = $destinationDir;
     }
 
     /**

@@ -7,34 +7,34 @@ use Symfony\Component\EventDispatcher\Event;
 class CleanupHaltEvent extends Event
 {
     /**
-     * @var integer
+     * @var int
      */
     protected $count;
 
     /**
-     * @var integer
+     * @var int
      */
     protected $total;
 
     /**
-     * @var integer
+     * @var int
      */
     protected $max;
 
     /**
-     * @param integer $count
-     * @param integer $total
-     * @param integer $max
+     * @param int $count
+     * @param int $total
+     * @param int $max
      */
     public function __construct($count, $total, $max)
     {
-        $this->count  = $count;
-        $this->total  = $total;
-        $this->max    = $max;
+        $this->count = $count;
+        $this->total = $total;
+        $this->max = $max;
     }
 
     /**
-     * @param integer $count
+     * @param int $count
      */
     public function setCount($count)
     {
@@ -42,7 +42,7 @@ class CleanupHaltEvent extends Event
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function getCount()
     {
@@ -50,7 +50,7 @@ class CleanupHaltEvent extends Event
     }
 
     /**
-     * @param integer $total
+     * @param int $total
      */
     public function setTotal($total)
     {
@@ -58,7 +58,7 @@ class CleanupHaltEvent extends Event
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function getTotal()
     {
@@ -66,7 +66,7 @@ class CleanupHaltEvent extends Event
     }
 
     /**
-     * @param integer $max
+     * @param int $max
      */
     public function setMax($max)
     {
@@ -74,7 +74,7 @@ class CleanupHaltEvent extends Event
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function getMax()
     {

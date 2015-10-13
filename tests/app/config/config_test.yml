@@ -49,5 +49,4 @@ tree_house_io:
   source_manager_id: source_manager
   import:
     item_logger:
-      type: redis
-      client: redis
+      type: array

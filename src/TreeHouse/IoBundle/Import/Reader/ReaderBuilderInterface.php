@@ -9,17 +9,17 @@ use TreeHouse\IoBundle\Import\Reader\Type\ReaderTypeInterface;
 interface ReaderBuilderInterface
 {
     /**
-     * XML reader
+     * XML reader.
      */
     const READER_TYPE_XML = 'xml';
 
     /**
-     * Main resource; transformers can modify it to create the import parts
+     * Main resource; transformers can modify it to create the import parts.
      */
     const RESOURCE_TYPE_MAIN = 'main';
 
     /**
-     * Part resource; transformers can modify the part resource
+     * Part resource; transformers can modify the part resource.
      */
     const RESOURCE_TYPE_PART = 'part';
 
@@ -34,14 +34,14 @@ interface ReaderBuilderInterface
     public function build(ReaderTypeInterface $type, array $transportConfig, $resourceType, array $options);
 
     /**
-     * Returns transformers for the main feed resource (before parts are created)
+     * Returns transformers for the main feed resource (before parts are created).
      *
      * @param ResourceTransformerInterface $transformer
      */
     public function addResourceTransformer(ResourceTransformerInterface $transformer);
 
     /**
-     * Returns transformers for each part of the feed
+     * Returns transformers for each part of the feed.
      *
      * @param ResourceTransformerInterface $transformer
      */

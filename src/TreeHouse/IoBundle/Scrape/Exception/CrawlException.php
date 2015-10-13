@@ -3,7 +3,7 @@
 namespace TreeHouse\IoBundle\Scrape\Exception;
 
 /**
- * Base class for all crawling related exceptions
+ * Base class for all crawling related exceptions.
  */
 class CrawlException extends \RuntimeException
 {
@@ -15,7 +15,7 @@ class CrawlException extends \RuntimeException
     /**
      * @param string     $url
      * @param string     $message
-     * @param integer    $code
+     * @param int        $code
      * @param \Exception $previous
      */
     public function __construct($url, $message = '', $code = 0, \Exception $previous = null)

@@ -38,21 +38,21 @@ class ImportLoggingSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            FeedEvents::FETCH_CACHED             => 'onFetchCached',
-            FeedEvents::PRE_FETCH                => 'onPreFetch',
-            FeedEvents::POST_FETCH               => 'onPostFetch',
-            FeedEvents::RESOURCE_START           => 'onResourceStart',
+            FeedEvents::FETCH_CACHED => 'onFetchCached',
+            FeedEvents::PRE_FETCH => 'onPreFetch',
+            FeedEvents::POST_FETCH => 'onPostFetch',
+            FeedEvents::RESOURCE_START => 'onResourceStart',
             FeedEvents::ITEM_MODIFICATION_FAILED => 'onItemModificationFailure',
-            ImportEvents::ITEM_SUCCESS           => 'onItemSuccess',
-            ImportEvents::ITEM_FAILED            => 'onItemFailed',
-            ImportEvents::ITEM_SKIPPED           => 'onItemSkipped',
-            ImportEvents::PART_CREATED           => 'onPartCreated',
-            ImportEvents::EXCEPTION              => 'onException',
+            ImportEvents::ITEM_SUCCESS => 'onItemSuccess',
+            ImportEvents::ITEM_FAILED => 'onItemFailed',
+            ImportEvents::ITEM_SKIPPED => 'onItemSkipped',
+            ImportEvents::PART_CREATED => 'onPartCreated',
+            ImportEvents::EXCEPTION => 'onException',
         ];
     }
 
     /**
-     * FeedEvents::FETCH_CACHED event
+     * FeedEvents::FETCH_CACHED event.
      */
     public function onFetchCached()
     {
@@ -163,8 +163,8 @@ class ImportLoggingSubscriber implements EventSubscriberInterface
         $importer = $event->getImporter();
         $result = $importer->getResult();
 
-        $total      = $result->getTotal();
-        $processed  = $result->getProcessed();
+        $total = $result->getTotal();
+        $processed = $result->getProcessed();
         $percentage = $total > 0 ? ($processed / $total * 100) : 0;
 
         $this->logger->info(sprintf('Import ended in %s seconds', round($result->getElapsedTime())));

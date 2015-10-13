@@ -82,7 +82,7 @@ class FeedListCommand extends Command
         foreach ($query->iterate() as list($feed)) {
             $row = [];
             foreach ($fields as $field) {
-                $value       = $meta->getFieldValue($feed, $field);
+                $value = $meta->getFieldValue($feed, $field);
                 $row[$field] = $this->formatValue($value);
             }
 

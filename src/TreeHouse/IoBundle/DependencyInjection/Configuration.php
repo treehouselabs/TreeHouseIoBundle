@@ -57,7 +57,7 @@ class Configuration implements ConfigurationInterface
                         ->end()
                         ->children()
                             ->enumNode('type')
-                                ->values(['redis', 'predis'])
+                                ->values(['array', 'redis', 'predis'])
                             ->end()
                             ->scalarNode('client')
                             ->end()

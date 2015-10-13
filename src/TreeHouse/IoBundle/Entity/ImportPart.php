@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 class ImportPart
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Id
      * @ORM\Column(type="integer")
@@ -20,21 +20,21 @@ class ImportPart
     protected $id;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(type="integer")
      */
     protected $position;
 
     /**
-     * @var array $transportConfig
+     * @var array
      *
      * @ORM\Column(type="json_array")
      */
     protected $transportConfig;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(type="integer", nullable=true)
      */
@@ -48,7 +48,7 @@ class ImportPart
     protected $error;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(type="integer")
      */
@@ -91,7 +91,7 @@ class ImportPart
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -99,7 +99,7 @@ class ImportPart
     }
 
     /**
-     * @param integer $position
+     * @param int $position
      *
      * @return $this
      */
@@ -111,7 +111,7 @@ class ImportPart
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function getPosition()
     {
@@ -179,7 +179,7 @@ class ImportPart
     }
 
     /**
-     * @param integer $retries
+     * @param int $retries
      *
      * @return $this
      */
@@ -191,7 +191,7 @@ class ImportPart
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function getRetries()
     {
@@ -279,7 +279,7 @@ class ImportPart
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isStarted()
     {
@@ -287,7 +287,7 @@ class ImportPart
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isFinished()
     {
@@ -297,7 +297,7 @@ class ImportPart
     /**
      * @throws \InvalidArgumentException When the part does not have a valid pid
      *
-     * @return boolean
+     * @return bool
      */
     public function isRunning()
     {

@@ -33,7 +33,7 @@ class ImportScheduleCommand extends Command
      */
     public function __construct(ImportFactory $importFactory, ImportScheduler $importScheduler)
     {
-        $this->importFactory   = $importFactory;
+        $this->importFactory = $importFactory;
         $this->importScheduler = $importScheduler;
 
         parent::__construct();
@@ -84,8 +84,8 @@ class ImportScheduleCommand extends Command
      * @param InputInterface  $input
      * @param OutputInterface $output
      * @param Feed[]          $feeds
-     * @param integer         $minutes
-     * @param boolean         $force
+     * @param int             $minutes
+     * @param bool            $force
      *
      * @return int
      */
@@ -141,7 +141,7 @@ class ImportScheduleCommand extends Command
     }
 
     /**
-     * Checks feed for unfinished imports and gives the user an option to close them first
+     * Checks feed for unfinished imports and gives the user an option to close them first.
      *
      * @param Feed            $feed
      * @param InputInterface  $input

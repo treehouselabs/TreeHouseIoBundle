@@ -2,9 +2,9 @@
 
 namespace TreeHouse\IoBundle\Bridge\WorkerBundle\EventListener;
 
-use TreeHouse\WorkerBundle\QueueManager;
 use TreeHouse\IoBundle\Bridge\WorkerBundle\Executor\ScrapeUrlExecutor;
 use TreeHouse\IoBundle\Scrape\Event\RateLimitEvent;
+use TreeHouse\WorkerBundle\QueueManager;
 
 class ScrapeRateLimitListener
 {

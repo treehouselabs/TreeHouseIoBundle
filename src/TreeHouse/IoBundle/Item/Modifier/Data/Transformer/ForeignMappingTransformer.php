@@ -23,7 +23,7 @@ class ForeignMappingTransformer implements TransformerInterface
      */
     public function __construct($name, array $mapping)
     {
-        $this->name    = $name;
+        $this->name = $name;
         $this->mapping = $mapping;
     }
 

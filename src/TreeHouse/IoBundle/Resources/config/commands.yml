@@ -1,46 +1,25 @@
-parameters:
-  tree_house.io.command.feed.list.class: TreeHouse\IoBundle\Command\FeedListCommand
-  tree_house.io.command.feed.inspect.class: TreeHouse\IoBundle\Command\FeedInspectCommand
-  tree_house.io.command.import.close.class: TreeHouse\IoBundle\Command\ImportCloseCommand
-  tree_house.io.command.import.run.class: TreeHouse\IoBundle\Command\ImportRunCommand
-  tree_house.io.command.import.part.class: TreeHouse\IoBundle\Command\ImportPartCommand
-  tree_house.io.command.import.schedule.class: TreeHouse\IoBundle\Command\ImportScheduleCommand
-  tree_house.io.command.import.reschedule.class: TreeHouse\IoBundle\Command\ImportRescheduleCommand
-  tree_house.io.command.import.rotate.class: TreeHouse\IoBundle\Command\ImportRotateCommand
-  tree_house.io.command.import.cleanup.class: TreeHouse\IoBundle\Command\ImportCleanupCommand
-  tree_house.io.command.export.create.class: TreeHouse\IoBundle\Command\ExportCreateCommand
-  tree_house.io.command.export.cache_clear.class: TreeHouse\IoBundle\Command\ExportCacheClearCommand
-  tree_house.io.command.export.inspect.class: TreeHouse\IoBundle\Command\ExportInspectCommand
-  tree_house.io.command.export.validate.class: TreeHouse\IoBundle\Command\ExportValidateCommand
-  tree_house.io.command.scrape.url.class: TreeHouse\IoBundle\Command\ScrapeUrlCommand
-  tree_house.io.command.scrape.start.class: TreeHouse\IoBundle\Command\ScrapeStartCommand
-  tree_house.io.command.scrape.revisit.class: TreeHouse\IoBundle\Command\ScrapeRevisitCommand
-  tree_house.io.command.crawler.log.class: TreeHouse\IoBundle\Command\CrawlerLogCommand
-  tree_house.io.command.source.process.class: TreeHouse\IoBundle\Command\SourceProcessCommand
-  tree_house.io.command.source.cleanup.class: TreeHouse\IoBundle\Command\SourceCleanupCommand
-
 services:
   tree_house.io.command.feed.list:
-    class: %tree_house.io.command.feed.list.class%
+    class: TreeHouse\IoBundle\Command\FeedListCommand
     arguments:
       - @doctrine
     tags:
       - { name: console.command }
 
   tree_house.io.command.feed.inspect:
-    class: %tree_house.io.command.feed.inspect.class%
+    class: TreeHouse\IoBundle\Command\FeedInspectCommand
     tags:
       - { name: console.command }
 
   tree_house.io.command.import.close:
-    class: %tree_house.io.command.import.close.class%
+    class: TreeHouse\IoBundle\Command\ImportCloseCommand
     arguments:
       - @doctrine
     tags:
       - { name: console.command }
 
   tree_house.io.command.import.run:
-    class: %tree_house.io.command.import.run.class%
+    class: TreeHouse\IoBundle\Command\ImportRunCommand
     arguments:
       - @doctrine
       - @tree_house.io.import.import_factory
@@ -49,7 +28,7 @@ services:
       - { name: console.command }
 
   tree_house.io.command.import.part:
-    class: %tree_house.io.command.import.part.class%
+    class: TreeHouse\IoBundle\Command\ImportPartCommand
     arguments:
       - @doctrine
       - @tree_house.io.import.import_factory
@@ -58,7 +37,7 @@ services:
       - { name: console.command }
 
   tree_house.io.command.import.schedule:
-    class: %tree_house.io.command.import.schedule.class%
+    class: TreeHouse\IoBundle\Command\ImportScheduleCommand
     arguments:
       - @tree_house.io.import.import_factory
       - @tree_house.io.import.import_scheduler
@@ -66,7 +45,7 @@ services:
       - { name: console.command }
 
   tree_house.io.command.import.reschedule:
-    class: %tree_house.io.command.import.reschedule.class%
+    class: TreeHouse\IoBundle\Command\ImportRescheduleCommand
     arguments:
       - @tree_house.io.import.import_scheduler
       - @tree_house.io.import.processor.posix
@@ -74,7 +53,7 @@ services:
       - { name: console.command }
 
   tree_house.io.command.import.rotate:
-    class: %tree_house.io.command.import.rotate.class%
+    class: TreeHouse\IoBundle\Command\ImportRotateCommand
     arguments:
       - @doctrine
       - @tree_house.io.import.import_rotator
@@ -82,7 +61,7 @@ services:
       - { name: console.command }
 
   tree_house.io.command.import.cleanup:
-    class: %tree_house.io.command.import.cleanup.class%
+    class: TreeHouse\IoBundle\Command\ImportCleanupCommand
     arguments:
       - @doctrine
       - @tree_house.io.import.import_rotator
@@ -90,33 +69,33 @@ services:
       - { name: console.command }
 
   tree_house.io.command.export.create:
-    class: %tree_house.io.command.export.create.class%
+    class: TreeHouse\IoBundle\Command\ExportCreateCommand
     arguments:
       - @tree_house.io.export.feed_exporter
     tags:
       - { name: console.command }
 
   tree_house.io.command.export.cache_clear:
-    class: %tree_house.io.command.export.cache_clear.class%
+    class: TreeHouse\IoBundle\Command\ExportCacheClearCommand
     arguments:
       - @tree_house.io.export.feed_exporter
     tags:
       - { name: console.command }
 
   tree_house.io.command.export.inspect:
-    class: %tree_house.io.command.export.inspect.class%
+    class: TreeHouse\IoBundle\Command\ExportInspectCommand
     arguments:
       - @tree_house.io.export.feed_exporter
     tags:
       - { name: console.command }
 
   tree_house.io.command.export.validate:
-    class: %tree_house.io.command.export.validate.class%
+    class: TreeHouse\IoBundle\Command\ExportValidateCommand
     arguments:
       - @tree_house.io.export.feed_exporter
 
   tree_house.io.command.scrape.url:
-    class: %tree_house.io.command.scrape.url.class%
+    class: TreeHouse\IoBundle\Command\ScrapeUrlCommand
     arguments:
       - @doctrine
       - @tree_house.io.scrape.scraper_factory
@@ -124,7 +103,7 @@ services:
       - { name: console.command }
 
   tree_house.io.command.scrape.start:
-    class: %tree_house.io.command.scrape.start.class%
+    class: TreeHouse\IoBundle\Command\ScrapeStartCommand
     arguments:
       - @doctrine
       - @tree_house.io.scrape.scraper_factory
@@ -132,7 +111,7 @@ services:
       - { name: console.command }
 
   tree_house.io.command.scrape.revisit:
-    class: %tree_house.io.command.scrape.revisit.class%
+    class: TreeHouse\IoBundle\Command\ScrapeRevisitCommand
     arguments:
       - @doctrine
       - @tree_house.io.source_manager
@@ -141,14 +120,14 @@ services:
       - { name: console.command }
 
   tree_house.io.command.crawler.log:
-    class: %tree_house.io.command.crawler.log.class%
+    class: TreeHouse\IoBundle\Command\CrawlerLogCommand
     arguments:
       - @tree_house.io.scrape.scraper_factory
     tags:
       - { name: console.command }
 
   tree_house.io.command.source.process:
-    class: %tree_house.io.command.source.process.class%
+    class: TreeHouse\IoBundle\Command\SourceProcessCommand
     arguments:
       - @tree_house.io.source_manager
       - @tree_house.io.source_processor
@@ -156,7 +135,7 @@ services:
       - { name: console.command }
 
   tree_house.io.command.source.cleanup:
-    class: %tree_house.io.command.source.cleanup.class%
+    class: TreeHouse\IoBundle\Command\SourceCleanupCommand
     arguments:
       - @tree_house.io.source_cleaner
       - @tree_house.io.origin_manager

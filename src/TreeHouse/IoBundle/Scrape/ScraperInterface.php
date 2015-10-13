@@ -25,12 +25,12 @@ interface ScraperInterface
      * Makes the scraper asynchronous. Where available, an async scraper is
      * non-blocking and tries to delegate as much work using events (see ScraperEvents).
      *
-     * @param boolean $async
+     * @param bool $async
      */
     public function setAsync($async);
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isAsync();
 
@@ -39,7 +39,7 @@ interface ScraperInterface
      *
      * @param ScraperEntity $scraper  A scraper entity with a defined crawler, parser, and handler
      * @param string        $url      The url to scrape
-     * @param boolean       $continue Whether to continue scraping the links found on the current page
+     * @param bool          $continue Whether to continue scraping the links found on the current page
      *
      * @throws RateLimitException          When the rate limit has been reached
      * @throws UnexpectedResponseException When the result was not the page we expected

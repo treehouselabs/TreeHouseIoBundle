@@ -14,16 +14,16 @@ class ThresholdVoter implements ThresholdVoterInterface
      */
     public function __construct(\Closure $callback)
     {
-        $this->callback        = $callback;
+        $this->callback = $callback;
     }
 
     /**
-     * @param integer $count
-     * @param integer $total
-     * @param integer $max
-     * @param string  $message
+     * @param int    $count
+     * @param int    $total
+     * @param int    $max
+     * @param string $message
      *
-     * @return boolean
+     * @return bool
      */
     public function vote($count, $total, $max, $message = '')
     {

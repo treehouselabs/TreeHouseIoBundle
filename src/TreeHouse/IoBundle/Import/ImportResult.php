@@ -5,32 +5,32 @@ namespace TreeHouse\IoBundle\Import;
 class ImportResult
 {
     /**
-     * @var integer
+     * @var int
      */
     protected $startTime;
 
     /**
-     * @var integer
+     * @var int
      */
     protected $endTime;
 
     /**
-     * @var integer
+     * @var int
      */
     protected $success = 0;
 
     /**
-     * @var integer
+     * @var int
      */
     protected $failed = 0;
 
     /**
-     * @var integer
+     * @var int
      */
     protected $skipped = 0;
 
     /**
-     * @param integer $startTime
+     * @param int $startTime
      */
     public function __construct($startTime = null)
     {
@@ -70,11 +70,11 @@ class ImportResult
     }
 
     /**
-     * Adds 1 to success
+     * Adds 1 to success.
      */
     public function incrementSuccess()
     {
-        $this->success++;
+        ++$this->success;
     }
 
     /**
@@ -94,11 +94,11 @@ class ImportResult
     }
 
     /**
-     * Adds 1 to failed
+     * Adds 1 to failed.
      */
     public function incrementFailed()
     {
-        $this->failed++;
+        ++$this->failed;
     }
 
     /**
@@ -134,17 +134,17 @@ class ImportResult
     }
 
     /**
-     * Adds 1 to skipped
+     * Adds 1 to skipped.
      */
     public function incrementSkipped()
     {
-        $this->skipped++;
+        ++$this->skipped;
     }
 
     /**
      * Returns the total number of items that were in the feed, whether they were processed or skipped.
      *
-     * @return integer
+     * @return int
      */
     public function getTotal()
     {
@@ -154,7 +154,7 @@ class ImportResult
     /**
      * Returns the number of items that were actually handled by the import, as opposed to skipped items.
      *
-     * @return integer
+     * @return int
      */
     public function getProcessed()
     {

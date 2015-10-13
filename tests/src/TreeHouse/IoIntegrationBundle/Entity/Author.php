@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Author
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Id
      * @ORM\Column(type="integer")
@@ -35,7 +35,7 @@ class Author
     protected $episodes;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -43,9 +43,9 @@ class Author
     }
 
     /**
-     * Set id
+     * Set id.
      *
-     * @param integer $id
+     * @param int $id
      *
      * @return Author
      */
@@ -57,9 +57,9 @@ class Author
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -67,7 +67,7 @@ class Author
     }
 
     /**
-     * Set name
+     * Set name.
      *
      * @param string $name
      *
@@ -81,7 +81,7 @@ class Author
     }
 
     /**
-     * Get name
+     * Get name.
      *
      * @return string
      */
@@ -91,7 +91,7 @@ class Author
     }
 
     /**
-     * Add episodes
+     * Add episodes.
      *
      * @param Episode $episodes
      *
@@ -105,7 +105,7 @@ class Author
     }
 
     /**
-     * Remove episodes
+     * Remove episodes.
      *
      * @param Episode $episodes
      */
@@ -115,7 +115,7 @@ class Author
     }
 
     /**
-     * Get episodes
+     * Get episodes.
      *
      * @return ArrayCollection|Episode[]
      */

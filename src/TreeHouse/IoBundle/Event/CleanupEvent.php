@@ -7,12 +7,12 @@ use Symfony\Component\EventDispatcher\Event;
 class CleanupEvent extends Event
 {
     /**
-     * @var integer
+     * @var int
      */
     protected $numCleaned;
 
     /**
-     * @param integer $numCleaned
+     * @param int $numCleaned
      */
     public function __construct($numCleaned)
     {
@@ -20,7 +20,7 @@ class CleanupEvent extends Event
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function getNumCleaned()
     {

@@ -83,7 +83,7 @@ abstract class DefaultFeedType extends AbstractFeedType
     }
 
     /**
-     * Returns mapping for an association, or null if it does not exist
+     * Returns mapping for an association, or null if it does not exist.
      *
      * @param string $association
      *
@@ -92,7 +92,7 @@ abstract class DefaultFeedType extends AbstractFeedType
     abstract protected function getAssociationMapping($association);
 
     /**
-     * Returns mapping for a field, or null if it does not exist
+     * Returns mapping for a field, or null if it does not exist.
      *
      * @param string $field
      *
@@ -109,7 +109,7 @@ abstract class DefaultFeedType extends AbstractFeedType
     abstract protected function getEntityFields();
 
     /**
-     * Override this method to add custom modifiers to the feed
+     * Override this method to add custom modifiers to the feed.
      *
      * @param FeedBuilderInterface $builder
      * @param array                $options
@@ -150,7 +150,7 @@ abstract class DefaultFeedType extends AbstractFeedType
     }
 
     /**
-     * Specify fields here that are explicitly not mapped
+     * Specify fields here that are explicitly not mapped.
      *
      * @return array
      */
@@ -160,7 +160,7 @@ abstract class DefaultFeedType extends AbstractFeedType
     }
 
     /**
-     * Specify fields here that are not mapped directly, but need to stay in the resulting item
+     * Specify fields here that are not mapped directly, but need to stay in the resulting item.
      *
      * @return array
      */
@@ -170,7 +170,7 @@ abstract class DefaultFeedType extends AbstractFeedType
     }
 
     /**
-     * Specify a mapping here from foreign configuration to our configuration
+     * Specify a mapping here from foreign configuration to our configuration.
      *
      * @return array
      */
@@ -180,11 +180,11 @@ abstract class DefaultFeedType extends AbstractFeedType
     }
 
     /**
-     * Automatically adds modifiers based on entity field/association mapping
+     * Automatically adds modifiers based on entity field/association mapping.
      *
      * @param FeedBuilderInterface $builder
-     * @param integer              $startIndex
-     * @param integer              $endIndex
+     * @param int                  $startIndex
+     * @param int                  $endIndex
      */
     protected function addEntityModifiers(FeedBuilderInterface $builder, $startIndex, $endIndex)
     {
@@ -212,10 +212,10 @@ abstract class DefaultFeedType extends AbstractFeedType
      * @param FeedBuilderInterface $builder
      * @param string               $association The association name
      * @param array                $mapping     The association mapping
-     * @param integer              $startIndex
-     * @param integer              $endIndex
+     * @param int                  $startIndex
+     * @param int                  $endIndex
      *
-     * @return integer The updated index
+     * @return int The updated index
      */
     protected function addAssociationModifiers(
         FeedBuilderInterface $builder,
@@ -237,8 +237,8 @@ abstract class DefaultFeedType extends AbstractFeedType
      * @param FeedBuilderInterface $builder
      * @param string               $field      The field name
      * @param array                $mapping    The field mapping
-     * @param integer              $startIndex
-     * @param integer              $endIndex
+     * @param int                  $startIndex
+     * @param int                  $endIndex
      */
     protected function addFieldModifiers(
         FeedBuilderInterface $builder,
@@ -264,8 +264,8 @@ abstract class DefaultFeedType extends AbstractFeedType
      * @param FeedBuilderInterface $builder
      * @param string               $field      The field name
      * @param array                $mapping    The field mapping
-     * @param integer              $startIndex
-     * @param integer              $endIndex
+     * @param int                  $startIndex
+     * @param int                  $endIndex
      */
     protected function addFieldTypeModifiers(FeedBuilderInterface $builder, $field, array $mapping, $startIndex, $endIndex)
     {
@@ -336,8 +336,8 @@ abstract class DefaultFeedType extends AbstractFeedType
 
     /**
      * @param FeedBuilderInterface $builder
-     * @param integer              $startStartIndex
-     * @param integer              $endIndex
+     * @param int                  $startStartIndex
+     * @param int                  $endIndex
      *
      * @internal param int $index The index to start adding modifiers with
      */

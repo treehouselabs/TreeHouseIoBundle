@@ -12,7 +12,6 @@ use TreeHouse\IoBundle\Import\Feed\FeedBuilderInterface;
 use TreeHouse\IoBundle\Item\Modifier\Item\Filter\BlockedSourceFilter;
 use TreeHouse\IoBundle\Item\Modifier\Item\Filter\ModifiedItemFilter;
 use TreeHouse\IoBundle\Item\Modifier\Item\Mapper\FeedItemBagMapper;
-use TreeHouse\IoBundle\Item\Modifier\Item\Transformer as IoTransformer;
 use TreeHouse\IoBundle\Item\Modifier\Item\Validator\OriginIdValidator;
 use TreeHouse\IoBundle\Source\Manager\CachedSourceManager;
 
@@ -52,9 +51,9 @@ abstract class AbstractFeedType implements FeedTypeInterface
         $resolver->setAllowedTypes('default_values', 'array');
 
         $resolver->setDefaults([
-            'forced'         => false,
-            'date_locale'    => 'en',
-            'number_locale'  => 'en',
+            'forced' => false,
+            'date_locale' => 'en',
+            'number_locale' => 'en',
             'default_values' => [],
         ]);
     }
@@ -135,13 +134,13 @@ abstract class AbstractFeedType implements FeedTypeInterface
     }
 
     /**
-     * Adds the given modifier between the start and end index, if there is a vacant position
+     * Adds the given modifier between the start and end index, if there is a vacant position.
      *
      * @param FeedBuilderInterface $builder
      * @param ModifierInterface    $modifier
-     * @param integer              $startIndex
-     * @param integer              $endIndex
-     * @param boolean              $continue
+     * @param int                  $startIndex
+     * @param int                  $endIndex
+     * @param bool                 $continue
      *
      * @throws \OutOfBoundsException
      */
@@ -152,7 +151,7 @@ abstract class AbstractFeedType implements FeedTypeInterface
         $endIndex,
         $continue = null
     ) {
-        for ($position = $startIndex; $position <= $endIndex; $position++) {
+        for ($position = $startIndex; $position <= $endIndex; ++$position) {
             if (!$builder->hasModifierAt($position)) {
                 $builder->addModifier($modifier, $position, $continue);
 
@@ -164,14 +163,14 @@ abstract class AbstractFeedType implements FeedTypeInterface
     }
 
     /**
-     * Adds the given transformer between the start and end index, if there is a vacant position
+     * Adds the given transformer between the start and end index, if there is a vacant position.
      *
      * @param FeedBuilderInterface $builder
      * @param TransformerInterface $transformer
      * @param string               $field
-     * @param integer              $startIndex
-     * @param integer              $endIndex
-     * @param boolean              $continue
+     * @param int                  $startIndex
+     * @param int                  $endIndex
+     * @param bool                 $continue
      *
      * @throws \OutOfBoundsException
      */

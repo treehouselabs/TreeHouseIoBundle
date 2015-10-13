@@ -8,15 +8,15 @@ use TreeHouse\Feeder\Modifier\Data\Transformer\TransformerInterface;
 class DutchStringToDateTimeTransformer implements TransformerInterface
 {
     protected $monthNames = [
-        1 =>  'januari',
-        2 =>  'februari',
-        3 =>  'maart',
-        4 =>  'april',
-        5 =>  'mei',
-        6 =>  'juni',
-        7 =>  'juli',
-        8 =>  'augustus',
-        9 =>  'september',
+        1 => 'januari',
+        2 => 'februari',
+        3 => 'maart',
+        4 => 'april',
+        5 => 'mei',
+        6 => 'juni',
+        7 => 'juli',
+        8 => 'augustus',
+        9 => 'september',
         10 => 'oktober',
         11 => 'november',
         12 => 'december',
@@ -70,17 +70,17 @@ class DutchStringToDateTimeTransformer implements TransformerInterface
         }
 
         // [12] oktober 2012|'12
-        $regex = '/^(?P<day>\d*\s?)?(?P<month>'.$this->monthRegex.')\s+(?P<year>\d{4}|\\\'\d{2})/i';
+        $regex = '/^(?P<day>\d*\s?)?(?P<month>' . $this->monthRegex . ')\s+(?P<year>\d{4}|\\\'\d{2})/i';
         if (preg_match($regex, $value, $matches)) {
-            $year  = $matches['year'];
+            $year = $matches['year'];
             $month = array_search(mb_strtolower($matches['month']), $this->monthNames);
-            $day   = (isset($matches['day']) && ($matches['day'] !== '')) ? $matches['day'] : 1;
+            $day = (isset($matches['day']) && ($matches['day'] !== '')) ? $matches['day'] : 1;
 
             return $this->createDate($year, $month, $day);
         }
 
         // 12 oktober [2012|'12]
-        $regex = '/^(?P<day>\d{1,2})\s?(?P<month>'.$this->monthRegex.')(\s+(?P<year>\d{4}|\\\'\d{2}))?/i';
+        $regex = '/^(?P<day>\d{1,2})\s?(?P<month>' . $this->monthRegex . ')(\s+(?P<year>\d{4}|\\\'\d{2}))?/i';
         if (preg_match($regex, $value, $matches)) {
             $year = isset($matches['year']) ? $matches['year'] : date('Y');
             $month = array_search(mb_strtolower($matches['month']), $this->monthNames);
@@ -90,7 +90,7 @@ class DutchStringToDateTimeTransformer implements TransformerInterface
         }
 
         // oktober [12|2012]
-        $regex = '/^(?P<month>'.$this->monthRegex.')(\s+(?P<day_or_year>\d{4}|\d{1,2}))?/i';
+        $regex = '/^(?P<month>' . $this->monthRegex . ')(\s+(?P<day_or_year>\d{4}|\d{1,2}))?/i';
         if (preg_match($regex, $value, $matches)) {
             $month = array_search(mb_strtolower($matches['month']), $this->monthNames);
             $year = date('Y');
@@ -108,7 +108,7 @@ class DutchStringToDateTimeTransformer implements TransformerInterface
         }
 
         // [begin|eind] mei [2013]
-        $regex = '/^(?P<day>begin|eind)?\s?(?P<month>'.$this->monthRegex.')(?P<year>\s+\d{4})?/i';
+        $regex = '/^(?P<day>begin|eind)?\s?(?P<month>' . $this->monthRegex . ')(?P<year>\s+\d{4})?/i';
         if (preg_match($regex, $value, $matches)) {
             $year = isset($matches['year']) ? $matches['year'] : date('Y');
             $month = array_search(mb_strtolower($matches['month']), $this->monthNames);
@@ -135,9 +135,9 @@ class DutchStringToDateTimeTransformer implements TransformerInterface
         foreach ($regexes as $regex => $defaults) {
             if (preg_match($regex, $value, $matches)) {
                 list($defaultYear, $defaultMonth, $defaultDay) = $defaults;
-                $year  = isset($matches['year'])  ? $matches['year']  : $defaultYear;
+                $year = isset($matches['year'])  ? $matches['year']  : $defaultYear;
                 $month = isset($matches['month']) ? $matches['month'] : $defaultMonth;
-                $day   = isset($matches['day'])   ? $matches['day']   : $defaultDay;
+                $day = isset($matches['day'])   ? $matches['day']   : $defaultDay;
 
                 return $this->createDate($year, $month, $day);
             }
@@ -183,7 +183,7 @@ class DutchStringToDateTimeTransformer implements TransformerInterface
         if (strlen($year) === 2) {
             // use the 21st century until 2020, after that use the 20th century (1921-1999)
             $prefix = $year <= 20 ? 20 : 19;
-            $year = (int) $prefix.$year;
+            $year = (int) $prefix . $year;
         }
 
         // test if year seems valid

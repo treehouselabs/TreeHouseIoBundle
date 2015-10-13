@@ -34,7 +34,7 @@ class ScrapeUrlCommand extends Command
     public function __construct(ManagerRegistry $doctrine, ScraperFactory $factory)
     {
         $this->doctrine = $doctrine;
-        $this->factory  = $factory;
+        $this->factory = $factory;
 
         parent::__construct();
     }
@@ -62,7 +62,7 @@ class ScrapeUrlCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        if (null === $entity  = $this->findScraper($input->getArgument('scraper'))) {
+        if (null === $entity = $this->findScraper($input->getArgument('scraper'))) {
             throw new \RuntimeException(sprintf('Scraper %d not found', $input->getArgument('scraper')));
         }
 
@@ -96,7 +96,7 @@ class ScrapeUrlCommand extends Command
     }
 
     /**
-     * @param integer $scraperId
+     * @param int $scraperId
      *
      * @return ScraperEntity
      */

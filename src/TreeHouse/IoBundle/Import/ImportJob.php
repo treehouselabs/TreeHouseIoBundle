@@ -58,12 +58,12 @@ class ImportJob implements LoggerAwareInterface
         Importer $importer,
         ImportRepository $repository
     ) {
-        $this->feed       = $feed;
-        $this->part       = $part;
-        $this->processor  = $processor;
-        $this->importer   = $importer;
+        $this->feed = $feed;
+        $this->part = $part;
+        $this->processor = $processor;
+        $this->importer = $importer;
         $this->repository = $repository;
-        $this->logger     = new NullLogger();
+        $this->logger = new NullLogger();
 
         $import = $part->getImport();
 
@@ -93,7 +93,7 @@ class ImportJob implements LoggerAwareInterface
 
             $this->logger->warning(
                 sprintf(
-                    'Part %d of import %d has already started, but the process (%s) is no longer running. '.
+                    'Part %d of import %d has already started, but the process (%s) is no longer running. ' .
                     'Resuming the part now.',
                     $this->part->getPosition(),
                     $import->getId(),
@@ -135,7 +135,7 @@ class ImportJob implements LoggerAwareInterface
     }
 
     /**
-     * Starts the import part
+     * Starts the import part.
      */
     protected function start()
     {

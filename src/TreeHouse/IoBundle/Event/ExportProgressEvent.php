@@ -7,18 +7,18 @@ use Symfony\Component\EventDispatcher\Event;
 class ExportProgressEvent extends Event
 {
     /**
-     * @var integer
+     * @var int
      */
     protected $current;
 
     /**
-     * @var integer
+     * @var int
      */
     protected $total;
 
     /**
-     * @param integer $current
-     * @param integer $total
+     * @param int $current
+     * @param int $total
      */
     public function __construct($current, $total)
     {
@@ -27,7 +27,7 @@ class ExportProgressEvent extends Event
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function getCurrent()
     {
@@ -35,7 +35,7 @@ class ExportProgressEvent extends Event
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function getTotal()
     {

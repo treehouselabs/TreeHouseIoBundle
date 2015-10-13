@@ -37,9 +37,9 @@ class FeedItemBagMapper implements MapperInterface
      */
     public function __construct(Feed $feed, $originalIdCallback, $originalUrlCallback, $modificationDateCallback
     ) {
-        $this->feed                     = $feed;
-        $this->originalIdCallback       = $originalIdCallback;
-        $this->originalUrlCallback      = $originalUrlCallback;
+        $this->feed = $feed;
+        $this->originalIdCallback = $originalIdCallback;
+        $this->originalUrlCallback = $originalUrlCallback;
         $this->modificationDateCallback = $modificationDateCallback;
     }
 

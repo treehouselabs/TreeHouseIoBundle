@@ -22,7 +22,7 @@ class DelegatingSourceProcessor implements SourceProcessorInterface
     protected $processors = [];
 
     /**
-     * Registers a processor
+     * Registers a processor.
      *
      * @param SourceProcessorInterface $processor
      */
@@ -40,10 +40,11 @@ class DelegatingSourceProcessor implements SourceProcessorInterface
     }
 
     /**
-     * Checks with all registered processors for the source if it is linked
+     * Checks with all registered processors for the source if it is linked.
      *
-     * @param  SourceInterface $source
-     * @return boolean
+     * @param SourceInterface $source
+     *
+     * @return bool
      */
     public function isLinked(SourceInterface $source)
     {

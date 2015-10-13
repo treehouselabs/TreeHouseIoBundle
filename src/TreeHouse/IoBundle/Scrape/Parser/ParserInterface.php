@@ -20,8 +20,8 @@ interface ParserInterface
 
     /**
      * @param ModifierInterface $modifier
-     * @param integer           $position
-     * @param boolean           $continue
+     * @param int               $position
+     * @param bool              $continue
      *
      * @throws \InvalidArgumentException When position is invalid or duplicate
      */
@@ -33,16 +33,16 @@ interface ParserInterface
     public function removeModifier(ModifierInterface $modifier);
 
     /**
-     * @param integer $position
+     * @param int $position
      *
      * @throws \OutOfBoundsException When modifier at the position does not exist
      */
     public function removeModifierAt($position);
 
     /**
-     * @param integer $position
+     * @param int $position
      *
-     * @return boolean
+     * @return bool
      */
     public function hasModifierAt($position);
 

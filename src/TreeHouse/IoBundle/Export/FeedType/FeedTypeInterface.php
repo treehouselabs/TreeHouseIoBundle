@@ -47,14 +47,14 @@ interface FeedTypeInterface
     public function getNamespaces();
 
     /**
-     * @return integer time-to-live in minutes
+     * @return int time-to-live in minutes
      */
     public function getTtl();
 
     /**
      * @param object $entity
      *
-     * @return boolean
+     * @return bool
      */
     public function supports($entity);
 

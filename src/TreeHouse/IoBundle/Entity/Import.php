@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Import
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Id
      * @ORM\Column(type="integer")
@@ -21,42 +21,42 @@ class Import
     protected $id;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="forced", type="boolean")
      */
     protected $forced;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(type="boolean")
      */
     protected $partial;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(type="integer", nullable=true)
      */
     protected $skipped;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(type="integer", nullable=true)
      */
     protected $success;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(type="integer", nullable=true)
      */
     protected $failed;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(type="integer", nullable=true)
      */
@@ -98,20 +98,20 @@ class Import
     protected $feed;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
         $this->parts = new ArrayCollection();
 
-        $this->skipped    = 0;
+        $this->skipped = 0;
         $this->success = 0;
-        $this->failed     = 0;
-        $this->erroredParts    = 0;
+        $this->failed = 0;
+        $this->erroredParts = 0;
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -119,7 +119,7 @@ class Import
     }
 
     /**
-     * @param boolean $forced
+     * @param bool $forced
      *
      * @return $this
      */
@@ -131,7 +131,7 @@ class Import
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isForced()
     {
@@ -139,7 +139,7 @@ class Import
     }
 
     /**
-     * @param boolean $partial
+     * @param bool $partial
      *
      * @return $this
      */
@@ -151,7 +151,7 @@ class Import
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isPartial()
     {
@@ -159,7 +159,7 @@ class Import
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function getTotalNumberOfItems()
     {
@@ -167,7 +167,7 @@ class Import
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function getNumberOfProcessedItems()
     {
@@ -175,7 +175,7 @@ class Import
     }
 
     /**
-     * @param integer $skipped
+     * @param int $skipped
      *
      * @return $this
      */
@@ -187,7 +187,7 @@ class Import
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function getSkipped()
     {
@@ -195,7 +195,7 @@ class Import
     }
 
     /**
-     * @param integer $success
+     * @param int $success
      *
      * @return $this
      */
@@ -207,7 +207,7 @@ class Import
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function getSuccess()
     {
@@ -215,7 +215,7 @@ class Import
     }
 
     /**
-     * @param integer $failed
+     * @param int $failed
      *
      * @return $this
      */
@@ -227,7 +227,7 @@ class Import
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function getFailed()
     {
@@ -235,7 +235,7 @@ class Import
     }
 
     /**
-     * @param integer $erroredParts
+     * @param int $erroredParts
      *
      * @return $this
      */
@@ -247,7 +247,7 @@ class Import
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function getErroredParts()
     {
@@ -363,7 +363,7 @@ class Import
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isStarted()
     {
@@ -371,7 +371,7 @@ class Import
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isFinished()
     {
@@ -379,9 +379,9 @@ class Import
     }
 
     /**
-     * Checks if any of the parts of the given import has an error
+     * Checks if any of the parts of the given import has an error.
      *
-     * @return boolean
+     * @return bool
      */
     public function hasErrors()
     {

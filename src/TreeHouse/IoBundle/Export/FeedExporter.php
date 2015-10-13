@@ -65,19 +65,19 @@ class FeedExporter
      */
     public function __construct($cacheDir, $exportDir, FeedWriterFactory $writerFactory, Filesystem $filesystem, EventDispatcherInterface $dispatcher = null)
     {
-        $this->cacheDir      = $cacheDir;
-        $this->exportDir     = $exportDir;
+        $this->cacheDir = $cacheDir;
+        $this->exportDir = $exportDir;
         $this->writerFactory = $writerFactory;
-        $this->filesystem    = $filesystem;
-        $this->dispatcher    = $dispatcher;
+        $this->filesystem = $filesystem;
+        $this->dispatcher = $dispatcher;
     }
 
     /**
      * @param object              $item
      * @param FeedTypeInterface[] $types
-     * @param boolean             $force
+     * @param bool                $force
      *
-     * @return boolean
+     * @return bool
      */
     public function cacheItem($item, array $types = [], $force = false)
     {
@@ -90,7 +90,7 @@ class FeedExporter
         }
 
         foreach ($types as $type) {
-            $template  = $type->getTemplate();
+            $template = $type->getTemplate();
             $cacheFile = $this->getItemCacheFilename($item, $type);
 
             if (!file_exists($cacheFile) || $force) {
@@ -105,7 +105,7 @@ class FeedExporter
     }
 
     /**
-     * Clears cached exports for an item
+     * Clears cached exports for an item.
      *
      * @param object              $item
      * @param FeedTypeInterface[] $types
@@ -128,15 +128,15 @@ class FeedExporter
 
     /**
      * @param FeedTypeInterface $type
-     * @param boolean           $force
+     * @param bool              $force
      *
-     * @return boolean
+     * @return bool
      */
     public function exportFeed(FeedTypeInterface $type, $force = false)
     {
-        $file      = $this->getFeedFilename($type, false);
-        $gzFile    = $this->getFeedFilename($type, true);
-        $tmpFile   = $this->getFeedCacheFilename($type);
+        $file = $this->getFeedFilename($type, false);
+        $gzFile = $this->getFeedFilename($type, true);
+        $tmpFile = $this->getFeedCacheFilename($type);
         $gzTmpFile = $tmpFile . '.gz';
 
         // check if we are up-to-date
@@ -144,7 +144,7 @@ class FeedExporter
             return false;
         }
 
-        $qb    = $type->getQueryBuilder('x');
+        $qb = $type->getQueryBuilder('x');
         $count = $this->getNumberOfResults($qb);
 
         $this->dispatch(ExportEvents::PRE_EXPORT_FEED, new ExportFeedEvent($file, $type, $count));
@@ -198,7 +198,7 @@ class FeedExporter
     /**
      * @param object $item
      *
-     * @return boolean
+     * @return bool
      */
     public function supports($item)
     {
@@ -214,9 +214,9 @@ class FeedExporter
     /**
      * @param string $name
      *
+     * @throws \OutOfBoundsException when the type is not registered
      * @return FeedTypeInterface
      *
-     * @throws \OutOfBoundsException when the type is not registered
      */
     public function getType($name)
     {
@@ -237,7 +237,7 @@ class FeedExporter
     /**
      * @param string $name
      *
-     * @return boolean
+     * @return bool
      */
     public function hasType($name)
     {
@@ -265,7 +265,7 @@ class FeedExporter
      * exported feed will be cached and served from.
      *
      * @param FeedTypeInterface $type
-     * @param boolean           $gzip
+     * @param bool              $gzip
      *
      * @return string
      */
@@ -284,7 +284,7 @@ class FeedExporter
      * exporting will take place and where all the separate listing XML files are cached.
      *
      * @param FeedTypeInterface $type
-     * @param boolean           $gzip
+     * @param bool              $gzip
      *
      * @return string
      */
@@ -340,10 +340,10 @@ class FeedExporter
     }
 
     /**
-     * @param string  $file
-     * @param integer $ttl  time to life in minutes
+     * @param string $file
+     * @param int    $ttl  time to life in minutes
      *
-     * @return boolean
+     * @return bool
      */
     protected function isFresh($file, $ttl)
     {
@@ -359,7 +359,7 @@ class FeedExporter
     /**
      * @param QueryBuilder $builder
      *
-     * @return integer
+     * @return int
      */
     protected function getNumberOfResults(QueryBuilder $builder)
     {
@@ -376,12 +376,12 @@ class FeedExporter
             return $countQb->getMaxResults();
         }
 
-        $aliases   = $countQb->getRootAliases();
+        $aliases = $countQb->getRootAliases();
         $rootAlias = reset($aliases);
 
         $query = $countQb->select('COUNT(' . $rootAlias . ')')->getQuery();
 
-        return (int)$query->getSingleScalarResult();
+        return (int) $query->getSingleScalarResult();
     }
 
     /**
@@ -437,7 +437,7 @@ class FeedExporter
     }
 
     /**
-     * Returns cached instance of a FeedWriter for a specific type
+     * Returns cached instance of a FeedWriter for a specific type.
      *
      * @param FeedTypeInterface $type
      *
@@ -453,7 +453,7 @@ class FeedExporter
     }
 
     /**
-     * pings database to keep connection alive
+     * pings database to keep connection alive.
      *
      * @param EntityManager $manager
      */
@@ -470,7 +470,7 @@ class FeedExporter
     }
 
     /**
-     * Encodes a file using gzip compression
+     * Encodes a file using gzip compression.
      *
      * @param string $source      The source file
      * @param string $destination The encoded destination file

@@ -71,9 +71,9 @@ class NodeMapper implements MapperInterface, CrawlerAwareInterface
             );
         }
 
-        $this->mapping[$name]    = $selector;
+        $this->mapping[$name] = $selector;
         $this->extractors[$name] = $extractor;
-        $this->filters[$name]    = 'filter';
+        $this->filters[$name] = 'filter';
 
         if (preg_match('~^//~', $selector) || strpos($selector, 'descendant-or-self::') === 0) {
             $this->filters[$name] = 'filterXpath';
@@ -102,7 +102,7 @@ class NodeMapper implements MapperInterface, CrawlerAwareInterface
         }
 
         foreach ($this->mapping as $name => $selector) {
-            $filter    = $this->filters[$name];
+            $filter = $this->filters[$name];
             $extractor = $this->extractors[$name];
 
             /** @var Crawler $node */

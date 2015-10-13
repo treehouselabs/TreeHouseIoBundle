@@ -21,7 +21,7 @@ class FeedItemBag extends ItemBag
     {
         parent::__construct($parameters);
 
-        $this->feed       = $feed;
+        $this->feed = $feed;
         $this->originalId = $originalId;
     }
 

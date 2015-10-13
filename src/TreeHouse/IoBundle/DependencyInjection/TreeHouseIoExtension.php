@@ -4,6 +4,7 @@ namespace TreeHouse\IoBundle\DependencyInjection;
 
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
@@ -18,7 +19,7 @@ class TreeHouseIoExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
-        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yml');
         $loader->load('source.yml');
         $loader->load('import.yml');
@@ -77,24 +78,27 @@ class TreeHouseIoExtension extends Extension
             return;
         }
 
+        $id = 'tree_house.io.import.item_logger';
+
         $loggerConfig = $config['item_logger'];
         if (isset($loggerConfig['type'])) {
-            if (!isset($loggerConfig['client'])) {
-                throw new \LogicException(sprintf('You must define a "client" when for item_logger type "%s"', $loggerConfig['type']));
+            $loggerClass = $container->getParameter(sprintf('tree_house.io.import.item_logger.%s.class', $loggerConfig['type']));
+            $definition = new Definition($loggerClass);
+
+            if ($loggerConfig['type'] !== 'array') {
+                if (!isset($loggerConfig['client'])) {
+                    throw new \LogicException(sprintf('You must define a "client" when for item_logger type "%s"', $loggerConfig['type']));
+                }
+
+                $definition->addArgument(new Reference($loggerConfig['client']));
             }
 
-            $logger = sprintf('tree_house.io.import.item_logger.%s', $loggerConfig['type']);
-
-            $definition = $container->getDefinition($logger);
-            $definition->replaceArgument(0, new Reference($loggerConfig['client']));
+            $container->setDefinition($id, $definition);
         } elseif ($loggerConfig['service']) {
-            $logger = $loggerConfig['service'];
+            $container->setAlias($id, $loggerConfig['service']);
         } else {
             return;
         }
-
-        $id = 'tree_house.io.import.item_logger';
-        $container->setAlias($id, $logger);
 
         $factory = $container->getDefinition('tree_house.io.import.import_factory');
         $factory->addMethodCall('setItemLogger', [new Reference($id)]);
