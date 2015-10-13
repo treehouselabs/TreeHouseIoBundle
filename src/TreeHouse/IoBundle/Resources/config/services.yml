@@ -1,17 +1,13 @@
-parameters:
-  tree_house.io.event_dispatcher.class: Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher
-  tree_house.io.listener.source_modification.class: TreeHouse\IoBundle\EventListener\SourceModificationListener
-  tree_house.io.listener.source_raw_data.class: TreeHouse\IoBundle\EventListener\SourceRawDataListener
-  tree_house.io.twig.extension.common.class: TreeHouse\IoBundle\Twig\CommonExtension
-
 services:
   tree_house.io.event_dispatcher:
-    class: %tree_house.io.event_dispatcher.class%
+    public: false
+    class: Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher
     arguments:
       - @service_container
 
   tree_house.io.listener.source_modification:
-    class: %tree_house.io.listener.source_modification.class%
+    public: true
+    class: TreeHouse\IoBundle\EventListener\SourceModificationListener
     arguments:
       - @tree_house.io.source_processor
       - @tree_house.io.event_dispatcher
@@ -20,13 +16,15 @@ services:
       - { name: doctrine.event_listener, event: postFlush, lazy: true }
 
   tree_house.io.listener.source_raw_data:
-    class: %tree_house.io.listener.source_raw_data.class%
+    public: true
+    class: TreeHouse\IoBundle\EventListener\SourceRawDataListener
     tags:
       - { name: tree_house.io.event_listener, event: feeder.feed.resource.serialize.pre, method: onResourcePreSerialize }
       - { name: tree_house.io.event_listener, event: io.import.item.success, method: onImportItemSuccess }
       - { name: tree_house.io.event_listener, event: io.scrape.item.success, method: onScrapeItemSuccess }
 
   tree_house.io.twig.extension.common:
-    class: %tree_house.io.twig.extension.common.class%
+    public: false
+    class: TreeHouse\IoBundle\Twig\CommonExtension
     tags:
       - { name: twig.extension }
