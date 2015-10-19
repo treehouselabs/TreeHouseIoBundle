@@ -10,7 +10,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use TreeHouse\IoBundle\EventListener\SourceModificationListener;
 use TreeHouse\IoBundle\IoEvents;
 use TreeHouse\IoBundle\Source\Processor\DelegatingSourceProcessor;
-use TreeHouse\IoBundle\Tests\Mock\SourceMock;
+use TreeHouse\IoBundle\Test\Mock\SourceMock;
 
 class SourceModificationListenerTest extends \PHPUnit_Framework_TestCase
 {

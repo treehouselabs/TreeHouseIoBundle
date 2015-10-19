@@ -23,7 +23,7 @@ use TreeHouse\IoBundle\Scrape\Parser\ParserInterface;
 use TreeHouse\IoBundle\Scrape\Scraper;
 use TreeHouse\IoBundle\Scrape\ScraperEvents;
 use TreeHouse\IoBundle\Scrape\ScraperInterface;
-use TreeHouse\IoBundle\Tests\Mock\SourceMock;
+use TreeHouse\IoBundle\Test\Mock\SourceMock;
 
 class ScraperTest extends \PHPUnit_Framework_TestCase
 {

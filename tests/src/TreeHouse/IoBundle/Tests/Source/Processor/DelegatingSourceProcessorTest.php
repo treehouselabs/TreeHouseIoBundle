@@ -4,7 +4,7 @@ namespace TreeHouse\IoBundle\Tests\Source\Processor;
 
 use TreeHouse\IoBundle\Source\Processor\DelegatingSourceProcessor;
 use TreeHouse\IoBundle\Source\SourceProcessorInterface;
-use TreeHouse\IoBundle\Tests\Mock\SourceMock;
+use TreeHouse\IoBundle\Test\Mock\SourceMock;
 
 class DelegatingSourceProcessorTest extends \PHPUnit_Framework_TestCase
 {

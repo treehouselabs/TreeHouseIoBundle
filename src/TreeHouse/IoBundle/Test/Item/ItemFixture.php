@@ -1,6 +1,6 @@
 <?php
 
-namespace TreeHouse\IoBundle\Tests\Item;
+namespace TreeHouse\IoBundle\Test\Item;
 
 use TreeHouse\IoBundle\Item\ItemBag;
 
