@@ -11,7 +11,7 @@ use TreeHouse\IoBundle\Exception\SourceProcessException;
 use TreeHouse\IoBundle\Model\SourceInterface;
 use TreeHouse\IoBundle\Source\Processor\DelegatingSourceProcessor;
 use TreeHouse\IoBundle\Source\SourceManagerInterface;
-use TreeHouse\IoBundle\Tests\Mock\SourceMock;
+use TreeHouse\IoBundle\Test\Mock\SourceMock;
 
 class SourceProcessExecutorTest extends \PHPUnit_Framework_TestCase
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace TreeHouse\IoBundle\Tests\Mock;
+namespace TreeHouse\IoBundle\Test\Mock;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;

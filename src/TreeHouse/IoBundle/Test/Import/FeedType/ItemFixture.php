@@ -1,6 +1,6 @@
 <?php
 
-namespace TreeHouse\IoBundle\Tests\Import\FeedType;
+namespace TreeHouse\IoBundle\Test\Import\FeedType;
 
 use TreeHouse\IoBundle\Import\Feed\FeedItemBag;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace TreeHouse\IoBundle\Tests\Import\FeedType;
+namespace TreeHouse\IoBundle\Test\Import\FeedType;
 
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -15,17 +15,17 @@ use TreeHouse\IoBundle\Import\Feed\TransportFactory;
 use TreeHouse\IoBundle\Import\ImportRegistry;
 use TreeHouse\IoBundle\Import\Reader\ReaderBuilder;
 use TreeHouse\IoBundle\Item\ItemBag;
-use TreeHouse\IoBundle\Tests\Item\ItemFixture;
-use TreeHouse\IoBundle\Tests\TestCase;
+use TreeHouse\IoBundle\Test\Item\ItemFixture;
+use TreeHouse\IoBundle\Test\TestCase;
 
 /**
  * AbstractFeedTypeTest is the base class for a functional feed type test.
  * It doesn't contain any tests itself, only the basic functionality to
  * test a feed type with fixtures.
  *
- * If you want to test a feed type, extend {@link DefaultFeedTypeTest} instead.
+ * If you want to test a feed type, extend {@link FeedTypeTestCase} instead.
  */
-abstract class AbstractFeedTypeTest extends TestCase
+abstract class AbstractFeedTypeTestCase extends TestCase
 {
     /**
      * @var string[]

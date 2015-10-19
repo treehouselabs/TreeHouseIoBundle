@@ -1,6 +1,6 @@
 <?php
 
-namespace TreeHouse\IoBundle\Tests;
+namespace TreeHouse\IoBundle\Test;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;

@@ -1,16 +1,16 @@
 <?php
 
-namespace TreeHouse\IoBundle\Tests\Scrape\Parser;
+namespace TreeHouse\IoBundle\Test\Scrape\Parser;
 
 use Symfony\Component\Finder\Finder;
 use TreeHouse\IoBundle\Entity\Scraper;
 use TreeHouse\IoBundle\Scrape\Parser\ParserBuilder;
 use TreeHouse\IoBundle\Scrape\Parser\ParserInterface;
 use TreeHouse\IoBundle\Scrape\ScrapedItemBag;
-use TreeHouse\IoBundle\Tests\Item\ItemFixture;
-use TreeHouse\IoBundle\Tests\TestCase;
+use TreeHouse\IoBundle\Test\Item\ItemFixture;
+use TreeHouse\IoBundle\Test\TestCase;
 
-abstract class AbstractParserTypeTest extends TestCase
+abstract class ParserTypeTestCase extends TestCase
 {
     /**
      * @var string

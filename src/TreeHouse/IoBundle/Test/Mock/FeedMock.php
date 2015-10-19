@@ -1,6 +1,6 @@
 <?php
 
-namespace TreeHouse\IoBundle\Tests\Mock;
+namespace TreeHouse\IoBundle\Test\Mock;
 
 use TreeHouse\IoBundle\Entity\Feed;
 use TreeHouse\IoBundle\Model\OriginInterface;

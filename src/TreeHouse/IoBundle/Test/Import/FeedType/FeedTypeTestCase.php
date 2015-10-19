@@ -1,6 +1,6 @@
 <?php
 
-namespace TreeHouse\IoBundle\Tests\Import\FeedType;
+namespace TreeHouse\IoBundle\Test\Import\FeedType;
 
 use Symfony\Component\Finder\Finder;
 
@@ -42,7 +42,7 @@ use Symfony\Component\Finder\Finder;
  *   ];
  * </code>
  */
-abstract class DefaultFeedTypeTest extends AbstractFeedTypeTest
+abstract class FeedTypeTestCase extends AbstractFeedTypeTestCase
 {
     /**
      * @return string

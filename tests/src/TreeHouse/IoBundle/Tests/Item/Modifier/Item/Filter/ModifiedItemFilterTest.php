@@ -6,8 +6,8 @@ use TreeHouse\IoBundle\Import\Feed\FeedItemBag;
 use TreeHouse\IoBundle\Item\Modifier\Item\Filter\ModifiedItemFilter;
 use TreeHouse\IoBundle\Model\SourceInterface;
 use TreeHouse\IoBundle\Source\Manager\CachedSourceManager;
-use TreeHouse\IoBundle\Tests\Mock\FeedMock;
-use TreeHouse\IoBundle\Tests\Mock\SourceMock;
+use TreeHouse\IoBundle\Test\Mock\FeedMock;
+use TreeHouse\IoBundle\Test\Mock\SourceMock;
 
 class ModifiedItemFilterTest extends \PHPUnit_Framework_TestCase
 {

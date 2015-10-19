@@ -4,7 +4,7 @@ namespace TreeHouse\IoBundle\Tests\Item\Modifier\Item\Validator;
 
 use TreeHouse\IoBundle\Import\Feed\FeedItemBag;
 use TreeHouse\IoBundle\Item\Modifier\Item\Validator\OriginIdValidator;
-use TreeHouse\IoBundle\Tests\Mock\FeedMock;
+use TreeHouse\IoBundle\Test\Mock\FeedMock;
 
 class OriginalIdValidatorTest extends \PHPUnit_Framework_TestCase
 {
