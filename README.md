@@ -52,15 +52,15 @@ The MIT License (MIT). Please see [License File](LICENSE.md) for more informatio
 
 [ico-version]: https://img.shields.io/packagist/v/treehouselabs/io-bundle.svg?style=flat-square
 [ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
-[ico-travis]: https://img.shields.io/travis/treehouselabs/feeder/TreeHouseIoBundle.svg?style=flat-square
-[ico-scrutinizer]: https://img.shields.io/scrutinizer/coverage/g/treehouselabs/TreeHouseIoBundle.svg?style=flat-square
-[ico-code-quality]: https://img.shields.io/scrutinizer/g/treehouselabs/TreeHouseIoBundle.svg?style=flat-square
+[ico-travis]: https://img.shields.io/travis/treehouselabs/io-bundle.svg?style=flat-square
+[ico-scrutinizer]: https://img.shields.io/scrutinizer/coverage/g/treehouselabs/io-bundle.svg?style=flat-square
+[ico-code-quality]: https://img.shields.io/scrutinizer/g/treehouselabs/io-bundle.svg?style=flat-square
 [ico-downloads]: https://img.shields.io/packagist/dt/treehouselabs/io-bundle.svg?style=flat-square
 
 [link-packagist]: https://packagist.org/packages/treehouselabs/io-bundle
-[link-travis]: https://travis-ci.org/treehouselabs/TreeHouseIoBundle
-[link-scrutinizer]: https://scrutinizer-ci.com/g/treehouselabs/TreeHouseIoBundle/code-structure
-[link-code-quality]: https://scrutinizer-ci.com/g/treehouselabs/TreeHouseIoBundle
+[link-travis]: https://travis-ci.org/treehouselabs/io-bundle
+[link-scrutinizer]: https://scrutinizer-ci.com/g/treehouselabs/io-bundle/code-structure
+[link-code-quality]: https://scrutinizer-ci.com/g/treehouselabs/io-bundle
 [link-downloads]: https://packagist.org/packages/treehouselabs/io-bundle
 [link-author]: https://github.com/treehouselabs
 [link-contributors]: ../../contributors
