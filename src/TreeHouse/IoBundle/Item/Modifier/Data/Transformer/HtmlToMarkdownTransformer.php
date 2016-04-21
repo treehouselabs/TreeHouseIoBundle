@@ -70,6 +70,19 @@ class HtmlToMarkdownTransformer implements TransformerInterface
             $value = preg_replace($search, $replace, $value);
         }
 
+        // strip tags in headings
+        foreach(range(1, 6) as $headingSize) {
+            $value = preg_replace_callback('/(<h'.$headingSize.'>)(.*)(<\/h'.$headingSize.'>)/iU', function ($matches) {
+                if (count($matches) !== 4) {
+                    return $matches[0];
+                }
+                return $matches[1] . trim(strip_tags(str_replace('<br>', ' ', $matches[2]))) . $matches[3];
+            }, $value);
+        }
+        
+        // remove any double bullets
+        $value = preg_replace('/(<li>\s*)[\*|\-]{1}/im', '\\1', $value);
+
         // convert to markdown
         $value = @$this->converter->parseString($value);
 
