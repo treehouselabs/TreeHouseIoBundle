@@ -48,6 +48,14 @@ class Configuration implements ConfigurationInterface
                         ->defaultValue('%tree_house.io.data_dir%/import')
                     ->end()
 
+                    ->arrayNode('import_part')
+                        ->children()
+                            ->scalarNode('time_to_run')
+                                ->defaultValue(1200)
+                            ->end()
+                        ->end()
+                    ->end()
+
                     ->arrayNode('item_logger')
                         ->beforeNormalization()
                             ->ifString()

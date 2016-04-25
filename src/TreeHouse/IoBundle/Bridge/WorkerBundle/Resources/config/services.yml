@@ -24,6 +24,7 @@ services:
     class: %tree_house.io.worker.listener.import_schedule.class%
     arguments:
       - @tree_house.worker.queue_manager
+      - %tree_house.io.worker.import.import_part.time_to_run%
     tags:
       - { name: tree_house.io.event_listener, event: io.import.part.scheduled, method: onPartScheduled }
 
