@@ -83,7 +83,7 @@ class SourceCleanupCommand extends Command
             function (SourceEvent $event) use ($output) {
                 $source = $event->getSource();
                 $output->writeln(
-                    sprintf('<fg=red>- %s:%s</>', $source->getFeed(), $source->getOriginalId())
+                    sprintf('<fg=red>- %s:%s</fg>', $source->getFeed(), $source->getOriginalId())
                 );
             }
         );
