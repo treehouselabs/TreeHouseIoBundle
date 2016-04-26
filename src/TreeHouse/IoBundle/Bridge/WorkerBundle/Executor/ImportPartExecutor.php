@@ -8,7 +8,7 @@ use Symfony\Component\OptionsResolver\Exception\InvalidArgumentException;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use TreeHouse\IoBundle\Entity\ImportPart;
-use TreeHouse\IoBundle\Import\EventListener\ImportLoggingSubscriber;
+use TreeHouse\IoBundle\EventListener\ImportLoggingSubscriber;
 use TreeHouse\IoBundle\Import\ImportFactory;
 use TreeHouse\WorkerBundle\Executor\AbstractExecutor;
 use TreeHouse\WorkerBundle\Executor\ObjectPayloadInterface;

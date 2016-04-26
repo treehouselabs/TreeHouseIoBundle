@@ -8,7 +8,7 @@ parameters:
 services:
   tree_house.io.import.listener.import_removal:
     public: true
-    class: TreeHouse\IoBundle\Import\EventListener\ImportRemovalListener
+    class: TreeHouse\IoBundle\EventListener\ImportRemovalListener
     arguments:
       - @tree_house.io.import.import_storage
       - @?tree_house.io.import.item_logger

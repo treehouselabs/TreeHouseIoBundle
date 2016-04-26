@@ -10,7 +10,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use TreeHouse\IoBundle\Entity\ImportPart;
-use TreeHouse\IoBundle\Import\EventListener\ImportOutputSubscriber;
+use TreeHouse\IoBundle\EventListener\ImportOutputSubscriber;
 use TreeHouse\IoBundle\Import\ImportFactory;
 
 class ImportPartCommand extends Command
