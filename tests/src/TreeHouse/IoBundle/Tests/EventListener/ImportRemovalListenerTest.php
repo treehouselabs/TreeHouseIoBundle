@@ -5,7 +5,7 @@ namespace TreeHouse\IoBundle\Tests\EventListener;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use TreeHouse\IoBundle\Entity\Import;
-use TreeHouse\IoBundle\Import\EventListener\ImportRemovalListener;
+use TreeHouse\IoBundle\EventListener\ImportRemovalListener;
 use TreeHouse\IoBundle\Import\ImportStorage;
 use TreeHouse\IoBundle\Import\Log\ItemLoggerInterface;
 

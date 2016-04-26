@@ -8,7 +8,7 @@ parameters:
 services:
   tree_house.io.import.listener.import_removal:
     public: true
-    class: TreeHouse\IoBundle\Import\EventListener\ImportRemovalListener
+    class: TreeHouse\IoBundle\EventListener\ImportRemovalListener
     arguments:
       - @tree_house.io.import.import_storage
       - @?tree_house.io.import.item_logger
@@ -76,6 +76,12 @@ services:
       - [setDefaultPartSize, [%tree_house.io.import.reader.multipart.default_part_size%]]
     tags:
       - { name: tree_house.io.reader_type, alias: xml_multi_part }
+
+  tree_house.io.import.reader_type.json_lines:
+    public: false
+    class: TreeHouse\IoBundle\Import\Reader\Type\JsonLinesReaderType
+    tags:
+      - { name: tree_house.io.reader_type, alias: jsonl }
 
   tree_house.io.import.processor.posix:
     public: false
