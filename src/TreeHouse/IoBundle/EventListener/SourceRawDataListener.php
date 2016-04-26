@@ -27,14 +27,7 @@ class SourceRawDataListener
      */
     public function onResourcePreSerialize(ResourceSerializeEvent $e)
     {
-        $xml = $e->getItem();
-
-        $doc = new \DOMDocument();
-        $doc->preserveWhiteSpace = false;
-        $doc->formatOutput = true;
-        $doc->loadXML($xml);
-
-        $this->rawData = $doc->saveXML();
+        $this->rawData = $e->getItem();
     }
 
     /**

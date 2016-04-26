@@ -77,6 +77,12 @@ services:
     tags:
       - { name: tree_house.io.reader_type, alias: xml_multi_part }
 
+  tree_house.io.import.reader_type.json_lines:
+    public: false
+    class: TreeHouse\IoBundle\Import\Reader\Type\JsonLinesReaderType
+    tags:
+      - { name: tree_house.io.reader_type, alias: jsonl }
+
   tree_house.io.import.processor.posix:
     public: false
     class: TreeHouse\IoBundle\Import\Processor\PosixProcessor

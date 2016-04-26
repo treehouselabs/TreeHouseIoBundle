@@ -4,6 +4,7 @@ namespace TreeHouse\IoBundle\Import\Reader;
 
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use TreeHouse\Feeder\Reader\JsonLinesReader;
 use TreeHouse\Feeder\Reader\XmlReader;
 use TreeHouse\Feeder\Resource\FileResource;
 use TreeHouse\Feeder\Resource\ResourceCollection;
@@ -63,6 +64,10 @@ class ReaderBuilder implements ReaderBuilderInterface
         }
 
         switch ($this->readerType) {
+            case self::READER_TYPE_JSONLINES:
+                return new JsonLinesReader($resources, $this->eventDispatcher);
+                break;
+                
             case self::READER_TYPE_XML:
                 // xml is the default, let it fall through
             default:

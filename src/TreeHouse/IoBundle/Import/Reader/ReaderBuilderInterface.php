@@ -14,6 +14,11 @@ interface ReaderBuilderInterface
     const READER_TYPE_XML = 'xml';
 
     /**
+     * JsonLines reader
+     */
+    const READER_TYPE_JSONLINES = 'jsonl';
+
+    /**
      * Main resource; transformers can modify it to create the import parts.
      */
     const RESOURCE_TYPE_MAIN = 'main';
