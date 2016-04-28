@@ -3,6 +3,7 @@
 * Upgraded Guzzle to v6, now using PSR-7
 * Added `ArrayItemLogger`, mostly useful for testing
 * Default time to run went from 300 to 1200 seconds for import.part jobs and is now configurable
+* Added `JsonLinesReaderType`
 
 ### BC breaks
 * While not a direct BC-break, Guzzle has been upgraded, so your project also
