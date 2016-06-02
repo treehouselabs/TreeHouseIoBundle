@@ -4,6 +4,28 @@ services:
     class: Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher
     arguments:
       - @service_container
+    calls:
+      - [ addSubscriber, [ '@tree_house.io.subscriber.feeder_logging' ] ]
+      - [ addSubscriber, [ '@tree_house.io.subscriber.import_logging' ] ]
+      - [ addSubscriber, [ '@tree_house.io.subscriber.scrape_logging' ] ]
+
+  tree_house.io.subscriber.import_logging:
+    public: true
+    class: TreeHouse\IoBundle\EventListener\ImportLoggingSubscriber
+    arguments:
+      - @logger
+
+  tree_house.io.subscriber.feeder_logging:
+    public: true
+    class: TreeHouse\IoBundle\EventListener\FeederLoggingSubscriber
+    arguments:
+      - @logger
+
+  tree_house.io.subscriber.scrape_logging:
+    public: true
+    class: TreeHouse\IoBundle\Scrape\EventListener\ScrapeLoggingSubscriber
+    arguments:
+      - @logger
 
   tree_house.io.listener.source_modification:
     public: true

@@ -8,7 +8,6 @@ use Symfony\Component\OptionsResolver\Exception\InvalidArgumentException;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use TreeHouse\IoBundle\Entity\Scraper as ScraperEntity;
-use TreeHouse\IoBundle\Scrape\EventListener\ScrapeLoggingSubscriber;
 use TreeHouse\IoBundle\Scrape\Exception\CrawlException;
 use TreeHouse\IoBundle\Scrape\Exception\RateLimitException;
 use TreeHouse\IoBundle\Scrape\ScraperFactory;
@@ -44,8 +43,6 @@ class ScrapeUrlExecutor extends AbstractExecutor
         $this->doctrine = $doctrine;
         $this->factory = $factory;
         $this->logger = $logger;
-
-        $this->factory->getEventDispatcher()->addSubscriber(new ScrapeLoggingSubscriber($this->logger));
     }
 
     /**

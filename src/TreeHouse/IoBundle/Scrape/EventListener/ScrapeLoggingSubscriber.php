@@ -36,7 +36,6 @@ class ScrapeLoggingSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            FeedEvents::ITEM_MODIFICATION_FAILED => 'onItemModificationFailure',
             ScraperEvents::ITEM_SUCCESS => 'onItemSuccess',
             ScraperEvents::ITEM_FAILED => 'onItemFailed',
             ScraperEvents::ITEM_SKIPPED => 'onItemSkipped',
@@ -44,14 +43,6 @@ class ScrapeLoggingSubscriber implements EventSubscriberInterface
             ScraperEvents::RATE_LIMIT_REACHED => 'onRateLimitReached',
             ScraperEvents::SCRAPE_URL_NOT_OK => 'onScrapeUrlNotOk',
         ];
-    }
-
-    /**
-     * @param FailedItemModificationEvent $event
-     */
-    public function onItemModificationFailure(FailedItemModificationEvent $event)
-    {
-        $this->logger->warning($event->getException()->getMessage());
     }
 
     /**
