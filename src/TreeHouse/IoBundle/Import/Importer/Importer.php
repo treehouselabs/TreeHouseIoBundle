@@ -12,6 +12,7 @@ use TreeHouse\Feeder\FeedEvents;
 use TreeHouse\IoBundle\Entity\Import;
 use TreeHouse\IoBundle\Import\Event\ExceptionEvent;
 use TreeHouse\IoBundle\Import\Event\FailedItemEvent;
+use TreeHouse\IoBundle\Import\Event\HandledItemEvent;
 use TreeHouse\IoBundle\Import\Event\ItemEvent;
 use TreeHouse\IoBundle\Import\Event\SkippedItemEvent;
 use TreeHouse\IoBundle\Import\Event\SuccessItemEvent;
@@ -170,7 +171,8 @@ class Importer implements EventSubscriberInterface
             $this->eventDispatcher->dispatch(ImportEvents::ITEM_START, $event);
             // import the item
             try {
-                $source = $this->handler->handle($item);
+                $source = $this->handleItem($item);
+
                 $this->successItem($item, $source);
             } catch (FailedItemException $e) {
                 $this->failItem($item, $e->getMessage());
@@ -208,6 +210,27 @@ class Importer implements EventSubscriberInterface
         }
 
         return null;
+    }
+
+    /**
+     * @param FeedItemBag $item
+     *
+     * @return SourceInterface
+     */
+    protected function handleItem(FeedItemBag $item)
+    {
+        $source = $this->handler->handle($item);
+
+        $this->eventDispatcher->dispatch(
+            ImportEvents::ITEM_HANDLED,
+            new HandledItemEvent(
+                $this,
+                $item,
+                $source
+            )
+        );
+
+        return $source;
     }
 
     /**

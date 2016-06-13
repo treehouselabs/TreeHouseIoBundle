@@ -42,7 +42,7 @@ services:
     class: TreeHouse\IoBundle\EventListener\SourceRawDataListener
     tags:
       - { name: tree_house.io.event_listener, event: feeder.feed.resource.serialize.pre, method: onResourcePreSerialize }
-      - { name: tree_house.io.event_listener, event: io.import.item.success, method: onImportItemSuccess }
+      - { name: tree_house.io.event_listener, event: io.import.item.handled, method: onImportItemHandled }
       - { name: tree_house.io.event_listener, event: io.scrape.item.success, method: onScrapeItemSuccess }
 
   tree_house.io.twig.extension.common:

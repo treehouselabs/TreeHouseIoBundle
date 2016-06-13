@@ -30,6 +30,7 @@ final class ImportEvents
     const ITEM_SUCCESS = 'io.import.item.success';
     const ITEM_FAILED = 'io.import.item.failed';
     const ITEM_SKIPPED = 'io.import.item.skipped';
+    const ITEM_HANDLED = 'io.import.item.handled';
 
     // when batch is completed
     const BATCH_PRE_COMPLETE = 'io.import.batch.pre_complete';
