@@ -3,6 +3,7 @@
 namespace TreeHouse\IoBundle\EventListener;
 
 use TreeHouse\Feeder\Event\ResourceSerializeEvent;
+use TreeHouse\IoBundle\Import\Event\HandledItemEvent;
 use TreeHouse\IoBundle\Import\Event\SuccessItemEvent as SuccessImportItemEvent;
 use TreeHouse\IoBundle\Model\SourceInterface;
 use TreeHouse\IoBundle\Scrape\Event\SuccessItemEvent as SuccessScrapeItemEvent;
@@ -33,9 +34,9 @@ class SourceRawDataListener
     /**
      * @param SuccessImportItemEvent $e
      */
-    public function onImportItemSuccess(SuccessImportItemEvent $e)
+    public function onImportItemHandled(HandledItemEvent $e)
     {
-        $this->setRawData($e->getResult());
+        $this->setRawData($e->getSource());
     }
 
     /**
@@ -58,6 +59,7 @@ class SourceRawDataListener
     protected function setRawData(SourceInterface $source)
     {
         $source->setRawData(trim($this->rawData));
+
         $this->rawData = null;
     }
 }
