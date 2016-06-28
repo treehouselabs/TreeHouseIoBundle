@@ -45,6 +45,7 @@ class DoctrineHandler implements HandlerInterface
 
         // save data
         $source->setData($item->all());
+        $source->setOriginalUrl($item->getOriginalUrl());
 
         try {
             $this->validate($source);
