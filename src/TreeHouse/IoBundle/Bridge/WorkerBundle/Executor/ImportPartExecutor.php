@@ -107,17 +107,11 @@ class ImportPartExecutor extends AbstractExecutor implements ObjectPayloadInterf
             )
         );
 
-        try {
-            $job = $this->importFactory->createImportJob($part);
-            $job->setLogger($this->logger);
-            $job->run();
+        $job = $this->importFactory->createImportJob($part);
+        $job->setLogger($this->logger);
+        $job->run();
 
-            return true;
-        } catch (\Exception $e) {
-            $this->logger->error($e->getMessage());
-
-            return false;
-        }
+        return true;
     }
 
     /**
