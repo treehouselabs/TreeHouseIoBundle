@@ -106,6 +106,18 @@ class ImportPartExecutor extends AbstractExecutor implements ObjectPayloadInterf
                 $feed->getOrigin()->getTitle()
             )
         );
+        
+        if ($import->isFinished()) {
+            $this->logger->info(sprintf('Import %d has already finished', $import->getId()));
+
+            return false;
+        }
+
+        if ($part->isFinished()) {
+            $this->logger->info(sprintf('Part %d has already finished', $part->getId()));
+
+            return false;
+        }
 
         $job = $this->importFactory->createImportJob($part);
         $job->setLogger($this->logger);
