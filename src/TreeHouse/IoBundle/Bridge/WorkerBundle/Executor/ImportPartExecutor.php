@@ -8,6 +8,7 @@ use Symfony\Component\OptionsResolver\Exception\InvalidArgumentException;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use TreeHouse\IoBundle\Entity\ImportPart;
+use TreeHouse\IoBundle\Import\Feed\TransportFactory;
 use TreeHouse\IoBundle\Import\ImportFactory;
 use TreeHouse\WorkerBundle\Executor\AbstractExecutor;
 use TreeHouse\WorkerBundle\Executor\ObjectPayloadInterface;
@@ -115,6 +116,15 @@ class ImportPartExecutor extends AbstractExecutor implements ObjectPayloadInterf
 
         if ($part->isFinished()) {
             $this->logger->info(sprintf('Part %d has already finished', $part->getId()));
+
+            return false;
+        }
+
+        // validate that we have a valid transport config
+        try {
+            TransportFactory::createTransportFromConfig($part->getTransportConfig());
+        } catch (\RuntimeException $e) {
+            $part->setError($e->getMessage());
 
             return false;
         }
