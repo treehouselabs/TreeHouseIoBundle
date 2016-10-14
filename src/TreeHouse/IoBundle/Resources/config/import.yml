@@ -14,6 +14,7 @@ services:
       - @?tree_house.io.import.item_logger
     tags:
       - { name: doctrine.event_listener, event: preRemove, lazy: true }
+      - { name: doctrine.event_listener, event: postFlush, lazy: true }
 
   tree_house.io.import.importer_builder_factory:
     public: false
