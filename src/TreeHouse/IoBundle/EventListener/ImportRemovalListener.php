@@ -3,6 +3,7 @@
 namespace TreeHouse\IoBundle\EventListener;
 
 use Doctrine\ORM\Event\LifecycleEventArgs;
+use Doctrine\ORM\Event\PostFlushEventArgs;
 use TreeHouse\IoBundle\Entity\Import;
 use TreeHouse\IoBundle\Import\ImportStorage;
 use TreeHouse\IoBundle\Import\Log\ItemLoggerInterface;
@@ -23,6 +24,11 @@ class ImportRemovalListener
     protected $itemLogger;
 
     /**
+     * @var array
+     */
+    protected $scheduled = [];
+
+    /**
      * @param ImportStorage       $importStorage
      * @param ItemLoggerInterface $itemLogger
      */
@@ -39,6 +45,16 @@ class ImportRemovalListener
     {
         $entity = $args->getEntity();
         if ($entity instanceof Import) {
+            $this->scheduled[] = clone $entity;
+        }
+    }
+
+    /**
+     * @param PostFlushEventArgs $eventArgs
+     */
+    public function postFlush(PostFlushEventArgs $eventArgs)
+    {
+        while (null !== $entity = array_pop($this->scheduled)) {
             $this->removeItemLog($entity);
             $this->removeFeed($entity);
         }
