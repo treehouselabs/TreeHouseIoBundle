@@ -107,7 +107,7 @@ class ImportPartExecutor extends AbstractExecutor implements ObjectPayloadInterf
                 $feed->getOrigin()->getTitle()
             )
         );
-        
+
         if ($import->isFinished()) {
             $this->logger->info(sprintf('Import %d has already finished', $import->getId()));
 
@@ -120,12 +120,7 @@ class ImportPartExecutor extends AbstractExecutor implements ObjectPayloadInterf
             return false;
         }
 
-        // validate that we have a valid transport config
-        try {
-            TransportFactory::createTransportFromConfig($part->getTransportConfig());
-        } catch (\RuntimeException $e) {
-            $part->setError($e->getMessage());
-
+        if (!$this->validate($part)) {
             return false;
         }
 
@@ -144,5 +139,24 @@ class ImportPartExecutor extends AbstractExecutor implements ObjectPayloadInterf
     protected function findImportPart($partId)
     {
         return $this->doctrine->getRepository('TreeHouseIoBundle:ImportPart')->find($partId);
+    }
+
+    /**
+     * @param ImportPart $part
+     *
+     * @return bool
+     */
+    protected function validate(ImportPart $part)
+    {
+        // validate that we have a valid transport config
+        try {
+            TransportFactory::createTransportFromConfig($part->getTransportConfig());
+        } catch (\RuntimeException $e) {
+            $part->setError($e->getMessage());
+
+            return false;
+        }
+
+        return true;
     }
 }
