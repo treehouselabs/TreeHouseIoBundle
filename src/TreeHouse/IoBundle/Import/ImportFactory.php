@@ -196,6 +196,12 @@ class ImportFactory implements EventSubscriberInterface
             $this->addImportParts($import);
         }
 
+        // finish import right away if we have no parts, without parts it would never be started
+        if ($import->getParts()->count() === 0) {
+            $this->getRepository()->startImport($import);
+            $this->getRepository()->finishImport($import);
+        }
+
         return $import;
     }
 
