@@ -71,6 +71,9 @@ class IdleSourceCleaner implements SourceCleanerInterface
             if (false !== $cleaned = $this->cleanFeed($cleaner, $feed, $voter, $numCleaned)) {
                 $numCleaned += $cleaned;
             }
+
+            // cleanup uow after cleaning the feed
+            $this->doctrine->getManager()->clear();
         }
 
         return $numCleaned;
