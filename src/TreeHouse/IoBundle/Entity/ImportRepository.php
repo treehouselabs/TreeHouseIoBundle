@@ -35,6 +35,7 @@ class ImportRepository extends EntityRepository
     {
         $builder = $this->createQueryBuilder('i')
             ->andWhere('i.datetimeStarted IS NOT NULL')
+            ->andWhere('SIZE(i.parts) > 0')
             ->orderBy('i.datetimeStarted', 'DESC')
             ->setMaxResults(1)
         ;
@@ -54,6 +55,7 @@ class ImportRepository extends EntityRepository
         $builder = $this->createQueryBuilder('i')
             ->where('i.feed = :feed')
             ->andWhere('i.datetimeStarted IS NOT NULL')
+            ->andWhere('SIZE(i.parts) > 0')
             ->orderBy('i.datetimeStarted', 'DESC')
             ->setMaxResults(1)
             ->setParameter('feed', $feed)
