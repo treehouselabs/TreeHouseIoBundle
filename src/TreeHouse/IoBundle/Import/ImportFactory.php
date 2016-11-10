@@ -183,6 +183,8 @@ class ImportFactory implements EventSubscriberInterface
         // see if any imports are still unfinished
         $import = $this->findOrCreateImport($feed);
 
+        $exception = null;
+
         // check if it's a new import
         if (!$import->getId()) {
             $import->setForced($forced);
@@ -193,13 +195,21 @@ class ImportFactory implements EventSubscriberInterface
             $this->getRepository()->save($import);
 
             // add parts
-            $this->addImportParts($import);
+            try {
+                $this->addImportParts($import);
+            } catch (\Exception $e) {
+                $exception = $e;
+            }
         }
 
         // finish import right away if we have no parts, without parts it would never be started
         if ($import->getParts()->count() === 0) {
             $this->getRepository()->startImport($import);
             $this->getRepository()->finishImport($import);
+        }
+
+        if ($exception) {
+            throw $exception;
         }
 
         return $import;
