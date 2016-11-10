@@ -30,6 +30,7 @@ install:
 
 before_script:
   - travis_retry composer self-update
+  - echo "memory_limit=2G" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
   - travis_retry composer require symfony/symfony:${SYMFONY_VERSION} --prefer-source
   - travis_retry composer update ${COMPOSER_FLAGS} --no-interaction --prefer-source
 
