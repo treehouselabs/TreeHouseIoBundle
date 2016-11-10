@@ -140,7 +140,7 @@ class ImportScheduler
         $delta = ($cycleMinutes - $totalTime) / $importsInCycle;
         if ($diff < $delta) {
             // delta not yet passed
-            return null;
+            return [];
         }
 
         // how many should we import?
