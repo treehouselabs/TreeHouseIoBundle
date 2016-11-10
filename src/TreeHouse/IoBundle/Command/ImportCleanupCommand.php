@@ -7,6 +7,9 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * @deprecated to be removed in 3.0
+ */
 class ImportCleanupCommand extends Command
 {
     /**
@@ -30,7 +33,7 @@ class ImportCleanupCommand extends Command
     protected function configure()
     {
         $this->setName('io:import:cleanup');
-        $this->setDescription('Cleans up imports that are not correct');
+        $this->setDescription('[DEPRECATED] Cleans up imports that are not correct');
     }
 
     /**

@@ -13,6 +13,9 @@
   but have moved to a different namespace. If you extended classes like `AbstractFeedTypeTest`
   or `DefaultFeedTypeTest`, you need to fix the namespaces. Also these classes
   have been renamed to `*TestCase`.
+* Imports are finished right away if there are no parts, therefor the `io:import:cleanup` 
+  command is no longer needed and should be removed as cronjob. 
+
 
 ## 1.0.4
 ### Changes
