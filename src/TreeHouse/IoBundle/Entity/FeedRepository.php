@@ -32,7 +32,7 @@ class FeedRepository extends EntityRepository
      * @return Feed|null
      */
     public function findOneByOriginAndReaderOptions(
-        int $originId,
+        $originId,
         array $readerOptions
     ) {
         return $this
