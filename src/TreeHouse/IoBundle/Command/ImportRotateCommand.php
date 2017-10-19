@@ -84,6 +84,7 @@ class ImportRotateCommand extends Command
             );
 
             $this->importRotator->rotate($feed, $input->getOption('rotations'));
+            $this->doctrine->getManager()->clear();
         }
 
         $lockHandler->release();
