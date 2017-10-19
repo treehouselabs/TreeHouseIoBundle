@@ -10,6 +10,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
+use Symfony\Component\Filesystem\LockHandler;
 use TreeHouse\IoBundle\Entity\Feed;
 use TreeHouse\IoBundle\EventListener\ImportOutputSubscriber;
 use TreeHouse\IoBundle\Import\ImportFactory;
@@ -57,8 +58,20 @@ class ImportScheduleCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $name = $this->getName();
+        $lockHandler = new LockHandler($name);
+        if (!$lockHandler->lock()) {
+            $output->writeln(
+                sprintf('<info>%s</info> is still running, exiting.', $name)
+            );
+
+            return 0;
+        }
+
         $minutes = (int) $input->getOption('minutes');
         if ($minutes < 1) {
+            $lockHandler->release();
+
             throw new \InvalidArgumentException('Minutes has to be a positive number');
         }
 
@@ -77,7 +90,11 @@ class ImportScheduleCommand extends Command
 
         $force = $input->getOption('force');
 
-        return $this->scheduleImports($input, $output, $feeds, $minutes, $force);
+        $exitCode = $this->scheduleImports($input, $output, $feeds, $minutes, $force);
+
+        $lockHandler->release();
+
+        return $exitCode;
     }
 
     /**

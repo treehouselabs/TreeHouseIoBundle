@@ -7,6 +7,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Filesystem\LockHandler;
 use TreeHouse\IoBundle\Entity\Feed;
 use TreeHouse\IoBundle\Import\Event\ImportEvent;
 use TreeHouse\IoBundle\Import\ImportEvents;
@@ -51,6 +52,16 @@ class ImportRotateCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $name = $this->getName();
+        $lockHandler = new LockHandler($name);
+        if (!$lockHandler->lock()) {
+            $output->writeln(
+                sprintf('<info>%s</info> is still running, exiting.', $name)
+            );
+
+            return 0;
+        }
+
         $dispatcher = $this->importRotator->getEventDispatcher();
         $dispatcher->addListener(ImportEvents::IMPORT_ROTATE, function (ImportEvent $event) use ($output) {
             $output->writeln(sprintf('<fg=red;option=bold>- import %d</>', $event->getImport()->getId()));
@@ -74,5 +85,7 @@ class ImportRotateCommand extends Command
 
             $this->importRotator->rotate($feed, $input->getOption('rotations'));
         }
+
+        $lockHandler->release();
     }
 }
