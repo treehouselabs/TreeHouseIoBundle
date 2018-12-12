@@ -1,6 +1,13 @@
 io-bundle
 =========
 
+# DEPRECATED
+
+This library is not maintained anymore. It only supports Symfony 2.8 and there are no 
+plans to support newer versions. You should roll your own import code, or look for something
+in [Packagist](https://packagist.org/?query=import).
+
+
 [![Latest Version on Packagist][ico-version]][link-packagist]
 [![Software License][ico-license]](LICENSE.md)
 [![Build Status][ico-travis]][link-travis]
@@ -12,7 +19,7 @@ Bundle that facilitates importing/exporting data
 ## Installation
 
 ```sh
-composer require treehouselabs/io-bundle:~2.0
+composer require treehouselabs/io-bundle:^3.0
 ```
 
 ## Documentation
