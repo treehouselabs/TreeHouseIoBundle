@@ -1,3 +1,14 @@
+## 3.0.0
+### NOTE
+This will be the last major release for this library: it is deprecated and you should move on from it.
+
+### Changes
+* Set fallback time for modification date (#37)
+
+### BC breaks
+* Dropped support for PHP 5.5 and 5.6: only PHP 7 is supported now
+* Dropped support for Symfony versions older than 2.8
+
 ## 2.0.0
 ### Changes
 * Upgraded Guzzle to v6, now using PSR-7
