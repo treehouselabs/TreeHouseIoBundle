@@ -126,7 +126,15 @@ abstract class AbstractFeedType implements FeedTypeInterface
     {
         return function (ParameterBag $item) {
             if ($date = $item->get($this->getModificationDateField(), null, true)) {
-                return new \DateTime($date);
+                try {
+                    $datetime = new \DateTime($date);
+                    if ($datetime->format('H:i:s') === '00:00:00') {
+                        $datetime->setTime(23, 59, 59);
+                    }
+
+                    return $datetime;
+                } catch (\Exception $e) {
+                }
             }
 
             return null;
