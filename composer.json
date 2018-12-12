@@ -15,10 +15,10 @@
     }
   ],
   "require": {
-    "php":                                ">=5.5",
+    "php":                                ">=7.0",
     "psr/log":                            "~1.0",
     "psr/http-message":                   "~1.0",
-    "symfony/symfony":                    "~2.6",
+    "symfony/symfony":                    "~2.8",
     "symfony/monolog-bundle":             "~2.6",
     "doctrine/orm":                       "~2.3",
     "doctrine/doctrine-bundle":           "~1.2",
