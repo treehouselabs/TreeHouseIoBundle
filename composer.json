@@ -14,6 +14,7 @@
       "email": "jeroen@treehouse.nl"
     }
   ],
+  "abandoned": true,
   "require": {
     "php":                                ">=7.0",
     "psr/log":                            "~1.0",
