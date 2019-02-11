@@ -13,6 +13,8 @@ class TransportFactory
     const TYPE_FILE = 'file';
     const TYPE_HTTP = 'http';
     const TYPE_FTP = 'ftp';
+    const REALWORKS_API_URL = '';
+    const REALWORKS_FEED_XML = 'xml-publish.realworks.nl';
 
     /**
      * @param array $config
@@ -77,6 +79,10 @@ class TransportFactory
      */
     public static function createTransportFromUrl($url, $user = null, $pass = null)
     {
+        if (stripos($url, self::REALWORKS_FEED_XML)) {
+            $url = str_replace(self::REALWORKS_FEED_XML, self::REALWORKS_API_URL, $url);
+        }
+
         return HttpTransport::create($url, $user, $pass);
     }
 
