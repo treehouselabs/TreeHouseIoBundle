@@ -2,6 +2,7 @@
 
 namespace TreeHouse\IoBundle\Item\Modifier\Item\Filter;
 
+use DateTime;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use TreeHouse\Feeder\Exception\FilterException;
 use TreeHouse\Feeder\Modifier\Item\Filter\FilterInterface;
@@ -45,10 +46,11 @@ class ModifiedItemFilter implements FilterInterface
 
         // first try modification date
         if (null !== $mutationDate = $item->getDatetimeModified()) {
-            if ($source->getDatetimeModified() > $mutationDate) {
+            if ($source->getDatetimeImported() > $mutationDate) {
                 throw new FilterException('Item is not modified');
             }
         }
+        $source->setDatetimeImported(new DateTime());
 
         // item is modified or we don't have enough information to determine that, either way continue.
     }

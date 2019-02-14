@@ -107,6 +107,13 @@ class Source implements SourceInterface
      *
      * @ORM\Column(type="datetime")
      */
+    protected $datetimeImported;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime")
+     */
     protected $datetimeLastVisited;
 
     /**
@@ -328,6 +335,29 @@ class Source implements SourceInterface
         $this->datetimeModified = $datetimeModified;
 
         return $this;
+    }
+
+    /**
+     * Set datetimeImported.
+     *
+     * @param \DateTime $datetimeImported
+     *
+     * @return $this
+     */
+    public function setDatetimeImported(\DateTime $datetimeImported)
+    {
+        $this->datetimeImported = $datetimeImported;
+        return $this;
+    }
+
+    /**
+     * Get datetimeImported.
+     *
+     * @return \DateTime
+     */
+    public function getDatetimeImported()
+    {
+        return $this->datetimeImported;
     }
 
     /**

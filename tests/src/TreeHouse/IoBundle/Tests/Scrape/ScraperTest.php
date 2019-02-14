@@ -2,6 +2,7 @@
 
 namespace TreeHouse\IoBundle\Tests\Scrape;
 
+use DateTime;
 use GuzzleHttp\Psr7\Response;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use TreeHouse\Feeder\Exception\FilterException;
@@ -187,7 +188,7 @@ class ScraperTest extends \PHPUnit_Framework_TestCase
         $this->crawler
             ->expects($this->once())
             ->method('crawl')
-            ->will($this->throwException(new RateLimitException('http://example.org', '', new \DateTime())))
+            ->will($this->throwException(new RateLimitException('http://example.org', '', new DateTime('+3 seconds'))))
         ;
 
         $this->scraper->scrape(new ScraperEntity(), 'http://example.org');
@@ -259,7 +260,7 @@ class ScraperTest extends \PHPUnit_Framework_TestCase
             ->method('dispatch')
             ->with(ScraperEvents::SCRAPE_NEXT_URL, $this->isInstanceOf(ScrapeUrlEvent::class));
 
-        $this->scraper->scrapeAfter(new ScraperEntity(), 'http://example.org', new \DateTime());
+        $this->scraper->scrapeAfter(new ScraperEntity(), 'http://example.org', new DateTime());
     }
 
     public function testScrapeNext()
@@ -312,7 +313,7 @@ class ScraperTest extends \PHPUnit_Framework_TestCase
         $scraper
             ->expects($this->once())
             ->method('scrapeAfter')
-            ->with($entity, $url, $this->greaterThanOrEqual(new \DateTime()))
+            ->with($entity, $url, $this->greaterThanOrEqual(new DateTime()))
         ;
 
         $scraper->setAsync(true);

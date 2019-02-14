@@ -182,6 +182,22 @@ interface SourceInterface
     public function getDatetimeModified();
 
     /**
+     * Set datetimeImported.
+     *
+     * @param \DateTime $datetimeImported
+     *
+     * @return $this
+     */
+    public function setDatetimeImported(\DateTime $datetimeImported);
+
+    /**
+     * Get datetimeImported.
+     *
+     * @return \DateTime
+     */
+    public function getDatetimeImported();
+
+    /**
      * Set datetimeLastVisited.
      *
      * @param \DateTime $datetimeLastVisited
