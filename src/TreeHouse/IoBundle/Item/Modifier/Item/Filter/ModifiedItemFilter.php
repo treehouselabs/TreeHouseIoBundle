@@ -45,7 +45,7 @@ class ModifiedItemFilter implements FilterInterface
 
         // first try modification date
         if (null !== $mutationDate = $item->getDatetimeModified()) {
-            if ($source->getDatetimeModified() > $mutationDate) {
+            if ($source->getDatetimeImported() > $mutationDate) {
                 throw new FilterException('Item is not modified');
             }
         }

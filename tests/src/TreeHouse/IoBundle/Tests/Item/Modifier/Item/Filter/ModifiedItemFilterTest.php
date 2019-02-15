@@ -45,7 +45,7 @@ class ModifiedItemFilterTest extends \PHPUnit_Framework_TestCase
      */
     public function testUnmodifiedItems(\DateTime $sourceDate, \DateTime $itemDate = null)
     {
-        $this->source->setDatetimeModified($sourceDate);
+        $this->source->setDatetimeImported($sourceDate);
         $item = new FeedItemBag(new FeedMock(1234), '123abc');
         $item->setDatetimeModified($itemDate);
 
@@ -65,7 +65,7 @@ class ModifiedItemFilterTest extends \PHPUnit_Framework_TestCase
      */
     public function testModifiedItems(\DateTime $sourceDate, \DateTime $itemDate = null)
     {
-        $this->source->setDatetimeModified($sourceDate);
+        $this->source->setDatetimeImported($sourceDate);
         $item = new FeedItemBag(new FeedMock(1234), '123abc');
         $item->setDatetimeModified($itemDate);
 

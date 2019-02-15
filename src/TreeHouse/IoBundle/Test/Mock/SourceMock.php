@@ -60,6 +60,11 @@ class SourceMock implements SourceInterface
     protected $datetimeModified;
 
     /**
+     * @var \DateTime
+     */
+    protected $datetimeImported;
+
+    /**
      * @var OriginInterface
      */
     protected $origin;
@@ -252,6 +257,29 @@ class SourceMock implements SourceInterface
     public function getDatetimeModified()
     {
         return $this->datetimeModified;
+    }
+
+    /**
+     * Set datetimeImported.
+     *
+     * @param \DateTime $datetimeImported
+     *
+     * @return $this
+     */
+    public function setDatetimeImported(\DateTime $datetimeImported)
+    {
+        $this->datetimeImported = $datetimeImported;
+        return $this;
+    }
+
+    /**
+     * Get datetimeImported.
+     *
+     * @return \DateTime
+     */
+    public function getDatetimeImported()
+    {
+        return $this->datetimeImported;
     }
 
     /**

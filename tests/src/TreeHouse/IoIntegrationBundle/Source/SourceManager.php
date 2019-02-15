@@ -2,6 +2,7 @@
 
 namespace TreeHouse\IoIntegrationBundle\Source;
 
+use DateTime;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use TreeHouse\IoBundle\Entity\Feed;
 use TreeHouse\IoBundle\Entity\Scraper;
@@ -68,8 +69,9 @@ class SourceManager implements SourceManagerInterface
         $source->setOriginalId($originalId);
         $source->setOriginalUrl($originalUrl);
         $source->setBlocked(false);
-        $source->setDatetimeLastVisited(new \DateTime());
-        $source->setDatetimeModified(new \DateTime());
+        $source->setDatetimeLastVisited(new DateTime());
+        $source->setDatetimeModified(new DateTime());
+        $source->setDatetimeImported(new DateTime());
 
         return $source;
     }
@@ -88,8 +90,9 @@ class SourceManager implements SourceManagerInterface
         $source->setOriginalId($originalId);
         $source->setOriginalUrl($originalUrl);
         $source->setBlocked(false);
-        $source->setDatetimeLastVisited(new \DateTime());
-        $source->setDatetimeModified(new \DateTime());
+        $source->setDatetimeLastVisited(new DateTime());
+        $source->setDatetimeModified(new DateTime());
+        $source->setDatetimeImported(new DateTime());
 
         return $source;
     }

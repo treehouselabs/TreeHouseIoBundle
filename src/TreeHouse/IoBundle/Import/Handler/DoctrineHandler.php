@@ -2,6 +2,7 @@
 
 namespace TreeHouse\IoBundle\Import\Handler;
 
+use DateTime;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use TreeHouse\IoBundle\Exception\ValidationException;
 use TreeHouse\IoBundle\Import\Exception\FailedItemException;
@@ -46,6 +47,7 @@ class DoctrineHandler implements HandlerInterface
         // save data
         $source->setData($item->all());
         $source->setOriginalUrl($item->getOriginalUrl());
+        $source->setDatetimeImported(new DateTime());
 
         try {
             $this->validate($source);
