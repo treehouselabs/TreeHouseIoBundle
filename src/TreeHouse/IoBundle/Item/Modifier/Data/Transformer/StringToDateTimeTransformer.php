@@ -2,22 +2,24 @@
 
 namespace TreeHouse\IoBundle\Item\Modifier\Data\Transformer;
 
-use TreeHouse\Feeder\Modifier\Data\Transformer\StringToDateTimeTransformer as FallbackTransformer;
+use DateTime;
+use TreeHouse\Feeder\Exception\TransformationFailedException;
 use TreeHouse\Feeder\Modifier\Data\Transformer\TransformerInterface;
 
 class StringToDateTimeTransformer implements TransformerInterface
 {
-    /**
-     * @var \DateTimeZone
-     */
-    protected $timezone;
+    /** @var \DateTimeZone */
+    private $timezone;
+    /** @var int */
+    private $minYear;
 
     /**
      * @param \DateTimeZone $timezone
      */
-    public function __construct(\DateTimeZone $timezone = null)
+    public function __construct(\DateTimeZone $timezone = null, int $minYear = 1900)
     {
         $this->timezone = $timezone ?: new \DateTimeZone('UTC');
+        $this->minYear = $minYear;
     }
 
     /**
@@ -25,22 +27,27 @@ class StringToDateTimeTransformer implements TransformerInterface
      */
     public function transform($value)
     {
-        if (is_null($value) || empty($value)) {
+        if (empty($value)) {
             return null;
         }
 
-        if ($value instanceof \DateTime) {
+        if ($value instanceof DateTime) {
             return $value;
         }
 
-        // check if strtotime matches
-        if (false !== strtotime($value)) {
-            return new \DateTime($value, $this->timezone);
+        try {
+            $date = new DateTime($value, $this->timezone);
+            if ((int) $date->format('Y') < $this->minYear) {
+                throw new TransformationFailedException(
+                    "The given date was older than the minimum year of {$this->minYear}: {$value}"
+                );
+            }
+
+            return $date;
+        } catch (\Exception $exception) {
+            throw new TransformationFailedException(
+                $exception->getMessage()
+            );
         }
-
-        // last resort
-        $transformer = new FallbackTransformer();
-
-        return $transformer->transform($value);
     }
 }
